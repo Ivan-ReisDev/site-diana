@@ -1,26 +1,385 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fffafa;
+  --foreground: #745b58;
+  --baby-pink: #f5a9bf;
+  --baby-blush: #ffdce8;
+  --baby-cream: #fff8ef;
+  --soft-gold: #d5a547;
+  --warm-rose: #c86f87;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-nunito);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito), Arial, Helvetica, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: #ffe4ec;
+  color: #9d6170;
+}
+
+.royal-glass {
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 18px 42px rgba(201, 111, 135, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.simple-card {
+  border: 1px solid rgba(245, 196, 208, 0.42);
+  background: rgba(255,255,255,.82);
+  box-shadow: 0 8px 22px rgba(201, 111, 135, 0.055);
+  transition: transform 420ms ease, box-shadow 420ms ease, border-color 420ms ease;
+}
+
+.simple-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(213, 165, 71, 0.34);
+  box-shadow: 0 12px 26px rgba(201, 111, 135, 0.075);
+}
+
+.simple-panel {
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  background:
+    radial-gradient(circle at 12% 15%, rgba(255, 237, 213, 0.62), transparent 32%),
+    linear-gradient(135deg, rgba(255, 250, 250, 0.97), rgba(255, 224, 235, 0.88));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 10px 28px rgba(201, 133, 149, 0.055);
+}
+
+.royal-rsvp {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background:
+    radial-gradient(circle at 82% 0%, rgba(255, 238, 202, 0.55), transparent 30%),
+    linear-gradient(135deg, #f39ab4 0%, #df7894 52%, #d5a547 100%);
+  box-shadow: 0 22px 50px rgba(201, 111, 135, 0.20);
+}
+
+.royal-button {
+  background: linear-gradient(135deg, #f39ab4 0%, #df7894 58%, #d5a547 100%);
+  box-shadow: 0 14px 28px rgba(201, 111, 135, 0.22);
+  transition: transform 300ms ease, box-shadow 300ms ease, filter 300ms ease;
+}
+
+.royal-button:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.08);
+  box-shadow: 0 18px 36px rgba(201, 111, 135, 0.26);
+}
+
+.soft-button {
+  border: 1px solid rgba(215, 173, 85, 0.34);
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 10px 22px rgba(201, 133, 149, 0.06);
+  backdrop-filter: blur(14px);
+  transition: transform 300ms ease, border-color 300ms ease, color 300ms ease;
+}
+
+.soft-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(201, 111, 135, 0.48);
+  color: #c15f78;
+}
+
+.party-script {
+  font-family: var(--font-pacifico), "Brush Script MT", cursive;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 0 rgba(255,255,255,.95), 0 10px 20px rgba(217, 112, 145, .28);
+}
+
+.watercolor-card {
+  position: relative;
+  border: 10px solid #fff;
+  background:
+    radial-gradient(circle at 9% 9%, rgba(244, 141, 171, .48), transparent 20%),
+    radial-gradient(circle at 91% 12%, rgba(255, 186, 210, .55), transparent 21%),
+    radial-gradient(circle at 14% 92%, rgba(133, 214, 255, .48), transparent 18%),
+    radial-gradient(circle at 82% 82%, rgba(255, 205, 93, .42), transparent 16%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,239,246,.90));
+  box-shadow: 0 28px 80px rgba(205, 105, 138, .18);
+}
+
+.watercolor-card::before,
+.watercolor-card::after {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  pointer-events: none;
+  border: 2px solid rgba(207, 157, 71, .72);
+  clip-path: polygon(13% 0, 87% 0, 100% 18%, 100% 82%, 87% 100%, 13% 100%, 0 82%, 0 18%);
+}
+
+.watercolor-card::after {
+  inset: 36px;
+  transform: rotate(7deg);
+  border-color: rgba(207, 157, 71, .58);
+}
+
+.splatter-bg {
+  background-image:
+    radial-gradient(circle, rgba(223, 120, 148, .30) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(244, 169, 191, .22) 0 3px, transparent 4px),
+    radial-gradient(circle, rgba(213, 165, 71, .22) 0 2px, transparent 3px);
+  background-size: 56px 56px, 88px 88px, 110px 110px;
+  background-position: 0 0, 18px 24px, 48px 12px;
+}
+
+.animate-fade-up {
+  animation: fadeUp 800ms ease both;
+}
+
+.animate-fade-up-delayed {
+  animation: fadeUp 900ms 140ms ease both;
+}
+
+.animate-rise {
+  animation: fadeUp 760ms ease both;
+}
+
+.animate-float-slow {
+  animation: floatSlow 5.8s ease-in-out infinite;
+}
+
+.animate-float-crown {
+  animation: floatCrown 6.4s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2.8s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(7deg); }
+}
+
+@keyframes floatCrown {
+  0%, 100% { transform: translateY(0) rotate(-4deg) scale(1); }
+  50% { transform: translateY(10px) rotate(4deg) scale(1.04); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: .38; transform: scale(.92) rotate(0deg); }
+  50% { opacity: .78; transform: scale(1.12) rotate(12deg); }
+}
+
+
+.floral-wash {
+  background:
+    radial-gradient(circle at 0% 8%, rgba(238, 126, 158, .18), transparent 24%),
+    radial-gradient(circle at 100% 4%, rgba(245, 184, 199, .24), transparent 22%),
+    radial-gradient(circle at 0% 92%, rgba(238, 126, 158, .18), transparent 24%),
+    linear-gradient(180deg, #fff8f6 0%, #fff2f5 48%, #fffaf7 100%);
+}
+
+/* --- Flores decorativas por todo o site --- */
+
+.section-flower-deco {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 2.8rem;
+  line-height: 1;
+  letter-spacing: -0.25em;
+  filter: drop-shadow(0 6px 12px rgba(180, 80, 100, 0.12));
+  opacity: 0.55;
+}
+
+.section-flower-deco-sm {
+  font-size: 2rem;
+  opacity: 0.45;
+}
+
+.flower-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.flower-divider::before,
+.flower-divider::after {
+  content: "—";
+  color: rgba(213, 165, 71, 0.3);
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+}
+
+.flower-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(235, 155, 180, 0.3), transparent);
+}
+
+.flower-scatter {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 1.6rem;
+  opacity: 0.4;
+  line-height: 1;
+}
+
+.flower-cluster {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 1.8rem;
+  opacity: 0.5;
+  letter-spacing: -0.15em;
+  filter: drop-shadow(0 4px 8px rgba(180, 80, 100, 0.08));
+}
+
+@keyframes swayFlower {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.04); }
+}
+
+.animate-sway {
+  animation: swayFlower 4.6s ease-in-out infinite;
+}
+
+.animate-sway-delayed {
+  animation: swayFlower 5.2s 0.6s ease-in-out infinite;
+}
+
+@keyframes petalFall {
+  0% { transform: translateY(-6px) rotate(0deg); opacity: 0.5; }
+  50% { transform: translateY(3px) rotate(4deg); opacity: 0.7; }
+  100% { transform: translateY(-6px) rotate(0deg); opacity: 0.5; }
+}
+
+.animate-petal {
+  animation: petalFall 6s ease-in-out infinite;
+}
+
+.animate-petal-delayed {
+  animation: petalFall 7s 1.2s ease-in-out infinite;
+}
+
+.real-invite-card {
+  border: 8px solid rgba(255,255,255,.86);
+  background:
+    radial-gradient(circle at 14% 15%, rgba(228, 94, 132, .12), transparent 24%),
+    radial-gradient(circle at 86% 12%, rgba(239, 153, 177, .16), transparent 24%),
+    radial-gradient(circle at 18% 82%, rgba(226, 106, 139, .13), transparent 21%),
+    radial-gradient(circle at 82% 86%, rgba(236, 179, 99, .10), transparent 22%),
+    linear-gradient(180deg, rgba(255,251,249,.98), rgba(255,242,246,.93));
+  box-shadow: 0 24px 70px rgba(188, 87, 116, .16);
+}
+
+.real-invite-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(205, 72, 108, .16) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle, rgba(237, 155, 177, .14) 0 2px, transparent 3px);
+  background-size: 30px 30px, 46px 46px;
+  background-position: 0 0, 12px 18px;
+  mask-image: linear-gradient(90deg, #000, transparent 35%, transparent 65%, #000);
+  opacity: .8;
+}
+
+.flower-corner {
+  position: absolute;
+  z-index: 5;
+  font-size: 3.2rem;
+  letter-spacing: -.35em;
+  filter: drop-shadow(0 10px 14px rgba(160, 80, 98, .14));
+  opacity: .82;
+}
+
+.flower-corner-top {
+  right: 14px;
+  top: 8px;
+  transform: rotate(8deg);
+}
+
+.flower-corner-bottom {
+  left: -2px;
+  bottom: -18px;
+  transform: rotate(188deg);
+}
+
+.ribbon {
+  background: linear-gradient(180deg, #ffd7df 0%, #f3a8ba 55%, #e98fa7 100%);
+  border: 2px solid rgba(255,255,255,.78);
+  border-radius: 999px 999px 28px 28px;
+  box-shadow: inset 0 8px 16px rgba(255,255,255,.55), 0 14px 24px rgba(185,75,105,.16);
+}
+
+.ribbon::before,
+.ribbon::after {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  width: 70px;
+  height: 48px;
+  background: linear-gradient(135deg, #f3a8ba, #e98fa7);
+  z-index: -1;
+}
+
+.ribbon::before {
+  left: -34px;
+  clip-path: polygon(0 20%, 100% 0, 82% 100%, 0 82%);
+}
+
+.ribbon::after {
+  right: -34px;
+  clip-path: polygon(0 0, 100% 20%, 100% 82%, 18% 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
 }
