@@ -2,6 +2,21 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import {
+  Baby,
+  Calendar,
+  CheckCircle2,
+  Gift,
+  Heart,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Castle,
+  Ribbon,
+  User,
+  Users,
+} from "lucide-react";
 
 type RsvpSummary = {
   name: string;
@@ -19,25 +34,25 @@ type Recado = {
 type GiftItem = {
   id: number;
   nome: string;
-  emoji: string;
+  imagem: string;
   preco: string;
   reservado: boolean;
   reservadoPor: string;
 };
 
 const giftItems: GiftItem[] = [
-  { id: 1, nome: "Urso de Pelúcia", emoji: "🧸", preco: "R$ 89,90", reservado: false, reservadoPor: "" },
-  { id: 2, nome: "Blocos de Montar", emoji: "🧱", preco: "R$ 59,90", reservado: false, reservadoPor: "" },
-  { id: 3, nome: "Carrinho", emoji: "🚗", preco: "R$ 49,90", reservado: false, reservadoPor: "" },
-  { id: 4, nome: "Boneca", emoji: "🎎", preco: "R$ 79,90", reservado: false, reservadoPor: "" },
-  { id: 5, nome: "Quebra-Cabeça", emoji: "🧩", preco: "R$ 39,90", reservado: false, reservadoPor: "" },
-  { id: 6, nome: "Bola", emoji: "⚽", preco: "R$ 29,90", reservado: false, reservadoPor: "" },
-  { id: 7, nome: "Kit Pintura", emoji: "🎨", preco: "R$ 69,90", reservado: false, reservadoPor: "" },
-  { id: 8, nome: "Livro Infantil", emoji: "📚", preco: "R$ 44,90", reservado: false, reservadoPor: "" },
-  { id: 9, nome: "Jogo de Panelinhas", emoji: "🍳", preco: "R$ 54,90", reservado: false, reservadoPor: "" },
-  { id: 10, nome: "Cavalo de Balanço", emoji: "🐴", preco: "R$ 99,90", reservado: false, reservadoPor: "" },
-  { id: 11, nome: "Massinha de Modelar", emoji: "🎭", preco: "R$ 34,90", reservado: false, reservadoPor: "" },
-  { id: 12, nome: "Fantasia de Princesa", emoji: "👑", preco: "R$ 89,90", reservado: false, reservadoPor: "" },
+  { id: 1, nome: "Urso de Pelúcia", imagem: "https://images.pexels.com/photos/113559/pexels-photo-113559.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 89,90", reservado: false, reservadoPor: "" },
+  { id: 2, nome: "Blocos de Montar", imagem: "https://images.pexels.com/photos/4491703/pexels-photo-4491703.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 59,90", reservado: false, reservadoPor: "" },
+  { id: 3, nome: "Carrinho", imagem: "https://images.pexels.com/photos/6132059/pexels-photo-6132059.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 49,90", reservado: false, reservadoPor: "" },
+  { id: 4, nome: "Boneca", imagem: "https://images.pexels.com/photos/20020284/pexels-photo-20020284.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 79,90", reservado: false, reservadoPor: "" },
+  { id: 5, nome: "Quebra-Cabeça", imagem: "https://images.pexels.com/photos/6255656/pexels-photo-6255656.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 39,90", reservado: false, reservadoPor: "" },
+  { id: 6, nome: "Bola", imagem: "https://images.pexels.com/photos/209861/pexels-photo-209861.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 29,90", reservado: false, reservadoPor: "" },
+  { id: 7, nome: "Kit Pintura", imagem: "https://images.pexels.com/photos/13755613/pexels-photo-13755613.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 69,90", reservado: false, reservadoPor: "" },
+  { id: 8, nome: "Livro Infantil", imagem: "https://images.pexels.com/photos/4887203/pexels-photo-4887203.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 44,90", reservado: false, reservadoPor: "" },
+  { id: 9, nome: "Jogo de Panelinhas", imagem: "https://images.pexels.com/photos/4484893/pexels-photo-4484893.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 54,90", reservado: false, reservadoPor: "" },
+  { id: 10, nome: "Cavalo de Balanço", imagem: "https://images.pexels.com/photos/712857/pexels-photo-712857.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 99,90", reservado: false, reservadoPor: "" },
+  { id: 11, nome: "Massinha de Modelar", imagem: "https://images.pexels.com/photos/4487869/pexels-photo-4487869.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 34,90", reservado: false, reservadoPor: "" },
+  { id: 12, nome: "Fantasia de Princesa", imagem: "https://images.pexels.com/photos/19230196/pexels-photo-19230196.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 89,90", reservado: false, reservadoPor: "" },
 ];
 
 const eventDetails = [
@@ -160,7 +175,7 @@ export default function InvitationSite() {
           <div className="hidden gap-6 text-sm font-medium text-[#806562] md:flex">
             <a href="#evento">Evento</a>
             <a href="#mural">Mural</a>
-            <a href="#rsvp">RSVP</a>
+            <a href="#rsvp">Presença</a>
             <a href="#gifts">Presentes</a>
           </div>
           <a
@@ -390,18 +405,21 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
-            <p className="mb-3 font-serif text-5xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
-              RSVP
+            <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">RSVP</p>
+            <p className="mb-3 mt-3 font-serif text-4xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
+              Confirme sua Presença
             </p>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-xl leading-9 text-[#7e5f5b] sm:text-2xl">
-              Confirme sua presença até 20 de setembro
+              Sua presença é o maior presente! Responda até 20 de setembro.
             </p>
           </div>
 
           <div className="mx-auto grid max-w-4xl gap-10 lg:grid-cols-[1fr_1.2fr]">
             <div className="rounded-[2rem] bg-gradient-to-br from-[#fce4eb] to-[#fff1f4] p-8 text-[#7d625f] shadow-[0_10px_30px_rgba(201,111,135,.08)]">
-              <div className="mb-3 text-5xl">💌</div>
+              <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/70 text-[#df7894]">
+                <Mail className="h-6 w-6" strokeWidth={2} />
+              </div>
               <p className="font-serif text-2xl font-bold leading-8 text-[#b85f78]">
               Para prepararmos cada detalhe da festa real com carinho, confirme sua presença.
               </p>
@@ -413,45 +431,56 @@ export default function InvitationSite() {
                 </div>
               )}
               <div className="mt-8 space-y-3 text-sm leading-7 text-[#806966]">
-                <p>📅 <strong>11 de outubro</strong> — 13h</p>
-                <p>📍 Est. Padre Roser, 765 — Vila da Penha</p>
-                <p>🏰 Casa de Festas Turma da Kali</p>
+                <p className="flex items-center gap-2.5">
+                  <Calendar className="h-4 w-4 shrink-0 text-[#d36f8a]" strokeWidth={2} />
+                  <span><strong>11 de outubro</strong> — 13h</span>
+                </p>
+                <p className="flex items-center gap-2.5">
+                  <MapPin className="h-4 w-4 shrink-0 text-[#d36f8a]" strokeWidth={2} />
+                  <span>Est. Padre Roser, 765 — Vila da Penha</span>
+                </p>
+                <p className="flex items-center gap-2.5">
+                  <Castle className="h-4 w-4 shrink-0 text-[#d36f8a]" strokeWidth={2} />
+                  <span>Casa de Festas Turma da Kali</span>
+                </p>
               </div>
             </div>
 
             <form onSubmit={handleRsvp} className="rounded-[2rem] bg-white/68 p-7 shadow-[0_10px_30px_rgba(201,111,135,.06)] sm:p-8">
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2">👤 Seu nome</span>
-                  <input name="name" className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200" placeholder="Digite seu nome" />
+                  <span className="flex items-center gap-2"><User className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Seu nome</span>
+                  <input name="name" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Digite seu nome" />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2">📱 Telefone</span>
-                  <input name="phone" className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200" placeholder="(21) 99999-9999" />
+                  <span className="flex items-center gap-2"><Phone className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Telefone</span>
+                  <input name="phone" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="(21) 99999-9999" />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                  <span className="flex items-center gap-2">✅ Presença</span>
-                  <select name="attendance" className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200">
+                  <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Presença</span>
+                  <select name="attendance" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100">
                     <option value="sim">Sim, estaremos lá</option>
                     <option value="nao">Não poderei ir</option>
                   </select>
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                  <span className="flex items-center gap-2">👨‍👩‍👧 Adultos</span>
-                  <input name="adults" type="number" min="0" defaultValue="1" className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200" />
+                  <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Adultos</span>
+                  <input name="adults" type="number" min="0" defaultValue="1" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                  <span className="flex items-center gap-2">👶 Crianças</span>
-                  <input name="children" type="number" min="0" defaultValue="0" className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200" />
+                  <span className="flex items-center gap-2"><Baby className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Crianças</span>
+                  <input name="children" type="number" min="0" defaultValue="0" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2">💬 Mensagem</span>
-                  <input name="message" className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200" placeholder="Deixe um recadinho carinhoso" />
+                  <span className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Mensagem</span>
+                  <input name="message" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Deixe um recadinho carinhoso" />
                 </label>
               </div>
               {error && <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</p>}
               <button className="mt-6 w-full royal-button rounded-full px-7 py-4 text-lg font-black text-white shadow-[0_8px_24px_rgba(223,120,148,.24)] transition-all hover:scale-[1.02]" type="submit">
-                Confirmar presença 💖
+                <span className="flex items-center justify-center gap-2">
+                  Confirmar presença <Heart className="h-5 w-5" strokeWidth={2.25} fill="currentColor" />
+                </span>
               </button>
             </form>
           </div>
@@ -516,9 +545,9 @@ export default function InvitationSite() {
                   </button>
                   <button
                     onClick={confirmarReserva}
-                    className="royal-button flex-1 rounded-full px-4 py-3 font-bold text-white"
+                    className="royal-button flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-3 font-bold text-white"
                   >
-                    Confirmar 🎁
+                    <Gift className="h-4 w-4" strokeWidth={2.25} /> Confirmar
                   </button>
                 </div>
               </div>
@@ -529,34 +558,43 @@ export default function InvitationSite() {
             {gifts.map((item) => (
               <div
                 key={item.id}
-                className={`animate-rise rounded-[1.5rem] p-5 text-center shadow-[0_6px_18px_rgba(201,111,135,.06)] transition-all ${
+                className={`group animate-rise overflow-hidden rounded-[1.5rem] text-center shadow-[0_6px_18px_rgba(201,111,135,.06)] transition-all ${
                   item.reservado
                     ? "bg-[#fff5f8]/50 opacity-70"
                     : "bg-white/72 hover:shadow-[0_8px_24px_rgba(201,111,135,.12)] hover:-translate-y-1"
                 }`}
                 style={{ animationDelay: `${item.id * 60}ms` }}
               >
-                <div className="mx-auto grid h-20 w-20 place-items-center rounded-2xl bg-gradient-to-br from-[#ffe1ea] to-[#fff5f8] text-4xl shadow-inner">
-                  {item.emoji}
-                </div>
-                <h3 className="mt-4 text-base font-black text-[#b85f78]">{item.nome}</h3>
-                <p className="mt-1 font-serif text-xl font-bold text-[#d5a547]">{item.preco}</p>
-
-                {item.reservado ? (
-                  <div className="mt-4">
-                    <span className="inline-block rounded-full bg-[#fce4eb] px-4 py-2 text-xs font-black uppercase tracking-[.1em] text-[#b85f78]">
-                      🎀 Reservado
+                <div className="relative aspect-square w-full overflow-hidden bg-[#fff5f8]">
+                  <img
+                    src={item.imagem}
+                    alt={item.nome}
+                    className={`h-full w-full object-cover transition-transform duration-500 ${
+                      item.reservado ? "" : "group-hover:scale-105"
+                    }`}
+                    loading="lazy"
+                  />
+                  {item.reservado && (
+                    <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-black uppercase tracking-[.08em] text-[#b85f78] shadow-sm">
+                      <Ribbon className="h-3.5 w-3.5" strokeWidth={2.25} /> Reservado
                     </span>
-                    <p className="mt-2 text-xs text-[#b78b8c]">por {item.reservadoPor}</p>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => abrirReserva(item)}
-                    className="mt-4 w-full rounded-full border-2 border-[#df7894]/30 px-4 py-2.5 text-sm font-bold text-[#df7894] transition hover:bg-[#df7894] hover:text-white"
-                  >
-                    🎁 Dar este presente
-                  </button>
-                )}
+                  )}
+                </div>
+                <div className="p-5">
+                  <h3 className="text-base font-black text-[#b85f78]">{item.nome}</h3>
+                  <p className="mt-1 font-serif text-xl font-bold text-[#d5a547]">{item.preco}</p>
+
+                  {item.reservado ? (
+                    <p className="mt-4 text-xs text-[#b78b8c]">Reservado por {item.reservadoPor}</p>
+                  ) : (
+                    <button
+                      onClick={() => abrirReserva(item)}
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-[#df7894]/30 px-4 py-2.5 text-sm font-bold text-[#df7894] transition hover:bg-[#df7894] hover:text-white"
+                    >
+                      <Gift className="h-4 w-4" strokeWidth={2.25} /> Dar este presente
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
