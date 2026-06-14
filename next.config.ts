@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Gera build auto-contido (server.js + node_modules mínimo) para imagem Docker enxuta.
+  output: "standalone",
 };
 
 export default nextConfig;
