@@ -14,15 +14,33 @@ import {
   Phone,
   Castle,
   Ribbon,
+  Trash2,
   User,
+  UserPlus,
   Users,
 } from "lucide-react";
 
+type RsvpParticipant = {
+  name: string;
+  type: "adulto" | "crianca";
+  age: number;
+};
+
 type RsvpSummary = {
   name: string;
+  displayName?: string;
+  groupName?: string;
   attendance: string;
-  adults: string;
-  children: string;
+  adults: number;
+  children: number;
+  participants: RsvpParticipant[];
+};
+
+type ParticipantForm = {
+  id: number;
+  name: string;
+  type: "adulto" | "crianca";
+  age: string;
 };
 
 type Recado = {
@@ -77,10 +95,26 @@ const princessInspiration = [
 ];
 const pixKey = "pix-da-familia@exemplo.com";
 
+function createEmptyParticipant(id: number): ParticipantForm {
+  return {
+    id,
+    name: "",
+    type: "adulto",
+    age: "",
+  };
+}
+
 export default function InvitationSite() {
   const [copied, setCopied] = useState(false);
   const [summary, setSummary] = useState<RsvpSummary | null>(null);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [attendance, setAttendance] = useState<"sim" | "nao">("sim");
+  const [message, setMessage] = useState("");
+  const [participants, setParticipants] = useState<ParticipantForm[]>([createEmptyParticipant(1)]);
+  const [nextParticipantId, setNextParticipantId] = useState(2);
   const [recados, setRecados] = useState<Recado[]>([]);
   const [recadoNome, setRecadoNome] = useState("");
   const [recadoMsg, setRecadoMsg] = useState("");
@@ -94,29 +128,99 @@ export default function InvitationSite() {
     if (!summary) return "";
     const adults = Number(summary.adults || 0);
     const children = Number(summary.children || 0);
-    return `${adults} adulto${adults === 1 ? "" : "s"} • ${children} criança${
-      children === 1 ? "" : "s"
-    }`;
+    return `${adults} adulto${adults === 1 ? "" : "s"} • ${children} criança${children === 1 ? "" : "s"}`;
   }, [summary]);
 
-  function handleRsvp(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get("name") || "").trim();
-    const phone = String(data.get("phone") || "").trim();
+  const participantNamesLabel = useMemo(() => {
+    if (!summary?.participants?.length) return "";
+    return summary.participants.map((participant) => participant.name).join(", ");
+  }, [summary]);
 
-    if (!name || !phone) {
-      setError("Preencha seu nome e telefone para confirmar com carinho.");
+  function updateParticipant(id: number, field: keyof Omit<ParticipantForm, "id">, value: string) {
+    setParticipants((current) =>
+      current.map((participant) =>
+        participant.id === id ? { ...participant, [field]: value } : participant,
+      ),
+    );
+  }
+
+  function addParticipant() {
+    setParticipants((current) => [...current, createEmptyParticipant(nextParticipantId)]);
+    setNextParticipantId((current) => current + 1);
+  }
+
+  function removeParticipant(id: number) {
+    setParticipants((current) =>
+      current.length === 1 ? current : current.filter((participant) => participant.id !== id),
+    );
+  }
+
+  async function handleRsvp(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const normalizedParticipants = participants
+      .map((participant) => ({
+        name: participant.name.trim(),
+        type: participant.type,
+        age: Number(participant.age),
+      }))
+      .filter((participant) => participant.name);
+
+    if (!phone.trim() || normalizedParticipants.length === 0) {
+      setError("Informe pelo menos uma pessoa e o telefone para confirmar com carinho.");
+      return;
+    }
+
+    if (normalizedParticipants.some((participant) => Number.isNaN(participant.age))) {
+      setError("Informe a idade de cada pessoa.");
       return;
     }
 
     setError("");
-    setSummary({
-      name,
-      attendance: String(data.get("attendance") || "sim"),
-      adults: String(data.get("adults") || "1"),
-      children: String(data.get("children") || "0"),
-    });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          groupName: groupName.trim() || undefined,
+          phone: phone.trim(),
+          attendance,
+          participants: normalizedParticipants,
+          message: message.trim() || undefined,
+        }),
+      });
+
+      const body = await response.json();
+
+      if (!response.ok || !body.ok) {
+        setError(body.message || "Não foi possível registrar sua presença agora.");
+        return;
+      }
+
+      setSummary({
+        name: body.rsvp.name,
+        displayName: body.rsvp.displayName,
+        groupName: body.rsvp.groupName,
+        attendance: body.rsvp.attendance,
+        adults: Number(body.rsvp.adults || 0),
+        children: Number(body.rsvp.children || 0),
+        participants: Array.isArray(body.rsvp.participants) ? body.rsvp.participants : [],
+      });
+      setGroupName("");
+      setPhone("");
+      setAttendance("sim");
+      setMessage("");
+      setParticipants([createEmptyParticipant(1)]);
+      setNextParticipantId(2);
+    } catch {
+      setError("Não foi possível registrar sua presença agora.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   async function copyPix() {
@@ -406,9 +510,9 @@ export default function InvitationSite() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
             <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">RSVP</p>
-            <p className="mb-3 mt-3 font-serif text-4xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
+            <h2 className="mb-3 mt-3 font-serif text-4xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
               Confirme sua Presença
-            </p>
+            </h2>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-xl leading-9 text-[#7e5f5b] sm:text-2xl">
               Sua presença é o maior presente! Responda até 20 de setembro.
@@ -426,8 +530,9 @@ export default function InvitationSite() {
               {summary && (
                 <div className="mt-8 rounded-[1.8rem] bg-white/72 p-5 ring-1 ring-[#f0c7d3]/50">
                   <p className="text-xs font-black uppercase tracking-[.24em] text-[#d36f8a]">Presença registrada</p>
-                  <p className="mt-2 text-2xl font-black text-[#b85f78]">{summary.name}</p>
+                  <p className="mt-2 text-2xl font-black text-[#b85f78]">{summary.groupName || summary.displayName || summary.name}</p>
                   <p className="mt-1 text-[#806966]">{summary.attendance === 'sim' ? 'Vai celebrar com a gente' : 'Não poderá comparecer'} • {guestsLabel}</p>
+                  {participantNamesLabel && <p className="mt-2 text-sm text-[#806966]">Pessoas: {participantNamesLabel}</p>}
                 </div>
               )}
               <div className="mt-8 space-y-3 text-sm leading-7 text-[#806966]">
@@ -449,37 +554,70 @@ export default function InvitationSite() {
             <form onSubmit={handleRsvp} className="rounded-[2rem] bg-white/68 p-7 shadow-[0_10px_30px_rgba(201,111,135,.06)] sm:p-8">
               <div className="grid gap-5 sm:grid-cols-2">
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2"><User className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Seu nome</span>
-                  <input name="name" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Digite seu nome" />
+                  <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Família / grupo (opcional)</span>
+                  <input value={groupName} onChange={(event) => setGroupName(event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Ex.: Família Souza" />
                 </label>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
                   <span className="flex items-center gap-2"><Phone className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Telefone</span>
-                  <input name="phone" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="(21) 99999-9999" />
+                  <input value={phone} onChange={(event) => setPhone(event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="(21) 99999-9999" />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
+                <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
                   <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Presença</span>
-                  <select name="attendance" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100">
+                  <select value={attendance} onChange={(event) => setAttendance(event.target.value as "sim" | "nao")} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100">
                     <option value="sim">Sim, estaremos lá</option>
                     <option value="nao">Não poderei ir</option>
                   </select>
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                  <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Adultos</span>
-                  <input name="adults" type="number" min="0" defaultValue="1" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" />
-                </label>
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                  <span className="flex items-center gap-2"><Baby className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Crianças</span>
-                  <input name="children" type="number" min="0" defaultValue="0" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" />
-                </label>
+                <div className="sm:col-span-2 rounded-[1.5rem] border border-[#f4d5de] bg-[#fffafa]/80 p-4">
+                  <div className="mb-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Pessoas do grupo</p>
+                      <p className="mt-1 text-sm text-[#806966]">Adicione cada pessoa com nome, tipo e idade.</p>
+                    </div>
+                    <button type="button" onClick={addParticipant} className="inline-flex items-center gap-2 rounded-full border border-[#efc8d4] bg-white px-4 py-2 text-sm font-bold text-[#b85f78] transition hover:bg-[#fff2f6]">
+                      <UserPlus className="h-4 w-4" strokeWidth={2.2} /> Adicionar pessoa
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {participants.map((participant, index) => (
+                      <div key={participant.id} className="grid gap-4 rounded-[1.25rem] border border-[#f2d8df] bg-white p-4 sm:grid-cols-[1.5fr_.9fr_.7fr_auto]">
+                        <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
+                          <span className="flex items-center gap-2"><User className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Nome completo</span>
+                          <input value={participant.name} onChange={(event) => updateParticipant(participant.id, "name", event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder={`Pessoa ${index + 1}`} />
+                        </label>
+                        <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
+                          <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Tipo</span>
+                          <select value={participant.type} onChange={(event) => updateParticipant(participant.id, "type", event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100">
+                            <option value="adulto">Adulto</option>
+                            <option value="crianca">Criança</option>
+                          </select>
+                        </label>
+                        <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
+                          <span className="flex items-center gap-2"><Baby className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Idade</span>
+                          <input value={participant.age} onChange={(event) => updateParticipant(participant.id, "age", event.target.value)} type="number" min="0" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="0" />
+                        </label>
+                        <div className="flex items-end">
+                          <button type="button" onClick={() => removeParticipant(participant.id)} disabled={participants.length === 1} className="inline-flex h-[52px] w-[52px] items-center justify-center rounded-xl border border-[#f1c4d0]/40 bg-white text-[#b85f78] transition hover:bg-[#fff2f6] disabled:cursor-not-allowed disabled:opacity-40" aria-label={`Remover pessoa ${index + 1}`}>
+                            <Trash2 className="h-4 w-4" strokeWidth={2.2} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
                   <span className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Mensagem</span>
-                  <input name="message" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Deixe um recadinho carinhoso" />
+                  <input value={message} onChange={(event) => setMessage(event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Deixe um recadinho carinhoso" />
                 </label>
               </div>
               {error && <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</p>}
-              <button className="mt-6 w-full royal-button rounded-full px-7 py-4 text-lg font-black text-white shadow-[0_8px_24px_rgba(223,120,148,.24)] transition-all hover:scale-[1.02]" type="submit">
+              <button
+                className="mt-6 w-full royal-button rounded-full px-7 py-4 text-lg font-black text-white shadow-[0_8px_24px_rgba(223,120,148,.24)] transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70"
+                type="submit"
+                disabled={isSubmitting}
+              >
                 <span className="flex items-center justify-center gap-2">
-                  Confirmar presença <Heart className="h-5 w-5" strokeWidth={2.25} fill="currentColor" />
+                  {isSubmitting ? 'Confirmando...' : 'Confirmar presença'} <Heart className="h-5 w-5" strokeWidth={2.25} fill="currentColor" />
                 </span>
               </button>
             </form>
