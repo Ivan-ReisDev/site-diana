@@ -16,6 +16,7 @@ vi.mock('@/lib/db/prisma', () => ({
 vi.mock('@/lib/auth/session', () => ({
   SESSION_COOKIE_NAME: 'site_diana_admin_session',
   createAdminSession,
+  isHttpsRequest: () => false,
 }));
 
 vi.mock('@/lib/auth/password', () => ({

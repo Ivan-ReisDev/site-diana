@@ -1,0 +1,106 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - paragraph [ref=e4]: Diana — Painel
+      - button "Abrir menu" [ref=e5]:
+        - img [ref=e6]
+    - complementary [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - paragraph [ref=e10]: Painel
+          - paragraph [ref=e11]: Diana 🎀
+        - button "Fechar menu" [ref=e12]:
+          - img [ref=e13]
+      - navigation "Navegação do painel" [ref=e16]:
+        - link "Visão geral" [ref=e17] [cursor=pointer]:
+          - /url: "#visao-geral"
+        - link "Cadastro manual" [ref=e18] [cursor=pointer]:
+          - /url: "#cadastro-manual"
+        - link "Lista de confirmações" [ref=e19] [cursor=pointer]:
+          - /url: "#confirmacoes"
+      - button "Sair" [ref=e21]
+    - main [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - paragraph [ref=e25]: Dashboard privada
+          - heading "Lista de presença" [level=1] [ref=e26]
+          - paragraph [ref=e27]: Veja quem confirmou presença, quem não poderá comparecer e os totais atualizados da festa.
+        - generic [ref=e28]:
+          - article [ref=e29]:
+            - paragraph [ref=e30]: Grupos confirmados
+            - paragraph [ref=e31]: "0"
+          - article [ref=e32]:
+            - paragraph [ref=e33]: Grupos que não irão
+            - paragraph [ref=e34]: "0"
+          - article [ref=e35]:
+            - paragraph [ref=e36]: Adultos confirmados
+            - paragraph [ref=e37]: "0"
+          - article [ref=e38]:
+            - paragraph [ref=e39]: Crianças confirmadas
+            - paragraph [ref=e40]: "0"
+          - article [ref=e41]:
+            - paragraph [ref=e42]: Total confirmado
+            - paragraph [ref=e43]: "0"
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - paragraph [ref=e47]: Cadastro manual
+            - heading "Adicionar ou atualizar grupo" [level=2] [ref=e48]
+            - paragraph [ref=e49]: Use o telefone para atualizar um grupo existente ou cadastrar um novo grupo direto pela dashboard.
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - generic [ref=e52]:
+                - generic [ref=e53]: Família / grupo (opcional)
+                - textbox "Família / grupo (opcional)" [ref=e54]:
+                  - /placeholder: "Ex.: Família Souza"
+              - generic [ref=e55]:
+                - generic [ref=e56]: Telefone
+                - textbox "Telefone" [ref=e57]:
+                  - /placeholder: (21) 99999-9999
+              - generic [ref=e58]:
+                - generic [ref=e59]: Presença
+                - combobox "Presença" [ref=e60]:
+                  - option "Sim, estarão presentes" [selected]
+                  - option "Não poderão ir"
+            - generic [ref=e61]:
+              - generic [ref=e62]:
+                - generic [ref=e63]:
+                  - paragraph [ref=e64]: Pessoas do grupo
+                  - paragraph [ref=e65]: Adicione nome, tipo e idade de cada participante.
+                - button "Adicionar pessoa" [ref=e66]
+              - generic [ref=e68]:
+                - generic [ref=e69]:
+                  - generic [ref=e70]: Nome da pessoa 1
+                  - textbox "Nome da pessoa 1" [ref=e71]:
+                    - /placeholder: Pessoa 1
+                - generic [ref=e72]:
+                  - generic [ref=e73]: Tipo
+                  - combobox "Tipo" [ref=e74]:
+                    - option "Adulto" [selected]
+                    - option "Criança"
+                - generic [ref=e75]:
+                  - generic [ref=e76]: Idade
+                  - spinbutton "Idade" [ref=e77]
+                - button "Remover" [disabled] [ref=e78]
+            - generic [ref=e79]:
+              - generic [ref=e80]: Observação
+              - textbox "Observação" [ref=e81]:
+                - /placeholder: "Ex.: chegarão um pouco depois"
+            - generic [ref=e82]:
+              - button "Salvar grupo na dashboard" [ref=e83]
+              - button "Limpar formulário" [ref=e84]
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - generic [ref=e88]: Buscar por nome ou telefone
+              - textbox "Buscar por nome ou telefone" [ref=e89]:
+                - /placeholder: "Ex.: Família Reis"
+            - generic [ref=e90]:
+              - generic [ref=e91]: Status de presença
+              - combobox "Status de presença" [ref=e92]:
+                - option "Todos" [selected]
+                - option "Confirmados"
+                - option "Não irão"
+            - button "Aplicar filtros" [ref=e93]
+          - paragraph [ref=e95]: Nenhuma confirmação encontrada com os filtros atuais.
+  - button "Open Next.js Dev Tools" [ref=e101] [cursor=pointer]:
+    - img [ref=e102]

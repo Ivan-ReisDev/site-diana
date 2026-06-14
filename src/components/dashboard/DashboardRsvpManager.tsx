@@ -5,10 +5,9 @@ import { useMemo, useState, type FormEvent } from 'react';
 
 import type { RsvpSummary } from '@/lib/rsvp/service';
 
-type ParticipantForm = {
+type ChildForm = {
   id: number;
   name: string;
-  type: 'adulto' | 'crianca';
   age: string;
 };
 
@@ -16,65 +15,83 @@ type DashboardRsvpManagerProps = {
   initialRows: RsvpSummary[];
 };
 
-function createParticipant(id: number): ParticipantForm {
-  return { id, name: '', type: 'adulto', age: '' };
+function createChild(id: number): ChildForm {
+  return { id, name: '', age: '' };
 }
 
 export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps) {
   const router = useRouter();
-  const [groupName, setGroupName] = useState('');
+  const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [attendance, setAttendance] = useState<'sim' | 'nao'>('sim');
-  const [message, setMessage] = useState('');
-  const [participants, setParticipants] = useState<ParticipantForm[]>([createParticipant(1)]);
-  const [nextParticipantId, setNextParticipantId] = useState(2);
+  const [adults, setAdults] = useState<ChildForm[]>([createChild(1)]);
+  const [nextAdultId, setNextAdultId] = useState(2);
+  const [children, setChildren] = useState<ChildForm[]>([]);
+  const [nextChildId, setNextChildId] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [error, setError] = useState('');
 
   const knownPhones = useMemo(() => initialRows.map((row) => row.phone), [initialRows]);
 
-  function updateParticipant(id: number, field: keyof Omit<ParticipantForm, 'id'>, value: string) {
-    setParticipants((current) => current.map((participant) => (participant.id === id ? { ...participant, [field]: value } : participant)));
+  function updateAdult(id: number, field: keyof Omit<ChildForm, 'id'>, value: string) {
+    setAdults((current) => current.map((adult) => (adult.id === id ? { ...adult, [field]: value } : adult)));
   }
 
-  function addParticipant() {
-    setParticipants((current) => [...current, createParticipant(nextParticipantId)]);
-    setNextParticipantId((current) => current + 1);
+  function addAdult() {
+    setAdults((current) => [...current, createChild(nextAdultId)]);
+    setNextAdultId((current) => current + 1);
   }
 
-  function removeParticipant(id: number) {
-    setParticipants((current) => (current.length === 1 ? current : current.filter((participant) => participant.id !== id)));
+  function removeAdult(id: number) {
+    setAdults((current) => (current.length > 1 ? current.filter((adult) => adult.id !== id) : current));
+  }
+
+  function updateChild(id: number, field: keyof Omit<ChildForm, 'id'>, value: string) {
+    setChildren((current) => current.map((child) => (child.id === id ? { ...child, [field]: value } : child)));
+  }
+
+  function addChild() {
+    setChildren((current) => [...current, createChild(nextChildId)]);
+    setNextChildId((current) => current + 1);
+  }
+
+  function removeChild(id: number) {
+    setChildren((current) => current.filter((child) => child.id !== id));
   }
 
   function resetForm() {
-    setGroupName('');
+    setName('');
     setPhone('');
     setAttendance('sim');
-    setMessage('');
-    setParticipants([createParticipant(1)]);
-    setNextParticipantId(2);
+    setAdults([createChild(1)]);
+    setNextAdultId(2);
+    setChildren([]);
+    setNextChildId(1);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const normalizedParticipants = participants
-      .map((participant) => ({
-        name: participant.name.trim(),
-        type: participant.type,
-        age: Number(participant.age),
-      }))
-      .filter((participant) => participant.name);
+    const normalizedAdults = adults.map((adult) => ({ name: adult.name.trim(), age: Number(adult.age) }));
+    const normalizedChildren = children
+      .map((child) => ({ name: child.name.trim(), age: Number(child.age) }))
+      .filter((child) => child.name);
 
-    if (!phone.trim() || normalizedParticipants.length === 0) {
-      setError('Informe telefone e pelo menos uma pessoa.');
+    if (!name.trim() || !phone.trim()) {
+      setError('Informe o nome completo e o telefone.');
       setFeedback('');
       return;
     }
 
-    if (normalizedParticipants.some((participant) => Number.isNaN(participant.age))) {
-      setError('Informe a idade de cada pessoa.');
+    if (normalizedAdults.some((adult) => !adult.name || Number.isNaN(adult.age))) {
+      setError('Informe o nome completo e a idade de cada adulto.');
+      setFeedback('');
+      return;
+    }
+
+    if (normalizedChildren.some((child) => Number.isNaN(child.age))) {
+      setError('Informe a idade de cada criança.');
       setFeedback('');
       return;
     }
@@ -88,11 +105,11 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          groupName: groupName.trim() || undefined,
+          name: name.trim(),
           phone: phone.trim(),
           attendance,
-          participants: normalizedParticipants,
-          message: message.trim() || undefined,
+          adults: normalizedAdults,
+          children: normalizedChildren,
         }),
       });
 
@@ -125,14 +142,14 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit}>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
           <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-            <span>Família / grupo (opcional)</span>
+            <span>Nome completo</span>
             <input
               className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-              onChange={(event) => setGroupName(event.target.value)}
-              placeholder="Ex.: Família Souza"
-              value={groupName}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Nome completo"
+              value={name}
             />
           </label>
 
@@ -157,46 +174,35 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
               <option value="nao">Não poderão ir</option>
             </select>
           </label>
+
         </div>
 
         <div className="rounded-[1.25rem] border border-[#f8d7df] bg-[#fffafc] p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Pessoas do grupo</p>
-              <p className="mt-1 text-sm text-[#806562]">Adicione nome, tipo e idade de cada participante.</p>
+              <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Adultos</p>
+              <p className="mt-1 text-sm text-[#806562]">Adicione o nome completo e a idade de cada adulto.</p>
             </div>
             <button
               className="rounded-full bg-[#f7dce4] px-4 py-2 text-sm font-bold text-[#a14f67] transition hover:brightness-95"
               type="button"
-              onClick={addParticipant}
+              onClick={addAdult}
             >
-              Adicionar pessoa
+              Adicionar adulto
             </button>
           </div>
 
           <div className="space-y-4">
-            {participants.map((participant, index) => (
-              <div key={participant.id} className="grid gap-3 rounded-[1.1rem] border border-[#f3d6de] bg-white p-4 md:grid-cols-[1.3fr_.8fr_.6fr_auto] md:items-end">
+            {adults.map((adult, index) => (
+              <div key={adult.id} className="grid gap-3 rounded-[1.1rem] border border-[#f3d6de] bg-white p-4 md:grid-cols-[1.3fr_.6fr_auto] md:items-end">
                 <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-                  <span>Nome da pessoa {index + 1}</span>
+                  <span>Nome completo do adulto {index + 1}</span>
                   <input
                     className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-                    onChange={(event) => updateParticipant(participant.id, 'name', event.target.value)}
-                    placeholder={`Pessoa ${index + 1}`}
-                    value={participant.name}
+                    onChange={(event) => updateAdult(adult.id, 'name', event.target.value)}
+                    placeholder={`Adulto ${index + 1}`}
+                    value={adult.name}
                   />
-                </label>
-
-                <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-                  <span>Tipo</span>
-                  <select
-                    className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-                    onChange={(event) => updateParticipant(participant.id, 'type', event.target.value)}
-                    value={participant.type}
-                  >
-                    <option value="adulto">Adulto</option>
-                    <option value="crianca">Criança</option>
-                  </select>
                 </label>
 
                 <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
@@ -204,18 +210,18 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
                   <input
                     className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
                     min="0"
-                    onChange={(event) => updateParticipant(participant.id, 'age', event.target.value)}
+                    onChange={(event) => updateAdult(adult.id, 'age', event.target.value)}
                     placeholder="0"
                     type="number"
-                    value={participant.age}
+                    value={adult.age}
                   />
                 </label>
 
                 <button
-                  className="rounded-full border border-[#f1c4d0] px-4 py-3 text-sm font-bold text-[#a14f67] transition hover:bg-[#fff4f7] disabled:cursor-not-allowed disabled:opacity-60"
-                  disabled={participants.length === 1}
+                  className="rounded-full border border-[#f1c4d0] px-4 py-3 text-sm font-bold text-[#a14f67] transition hover:bg-[#fff4f7] disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={adults.length === 1}
                   type="button"
-                  onClick={() => removeParticipant(participant.id)}
+                  onClick={() => removeAdult(adult.id)}
                 >
                   Remover
                 </button>
@@ -224,15 +230,61 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
           </div>
         </div>
 
-        <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-          <span>Observação</span>
-          <textarea
-            className="min-h-28 rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-            onChange={(event) => setMessage(event.target.value)}
-            placeholder="Ex.: chegarão um pouco depois"
-            value={message}
-          />
-        </label>
+        <div className="rounded-[1.25rem] border border-[#f8d7df] bg-[#fffafc] p-4">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Crianças</p>
+              <p className="mt-1 text-sm text-[#806562]">Adicione o nome completo e a idade de cada criança.</p>
+            </div>
+            <button
+              className="rounded-full bg-[#f7dce4] px-4 py-2 text-sm font-bold text-[#a14f67] transition hover:brightness-95"
+              type="button"
+              onClick={addChild}
+            >
+              Adicionar criança
+            </button>
+          </div>
+
+          {children.length === 0 ? (
+            <p className="text-sm text-[#806562]">Nenhuma criança adicionada.</p>
+          ) : (
+            <div className="space-y-4">
+              {children.map((child, index) => (
+                <div key={child.id} className="grid gap-3 rounded-[1.1rem] border border-[#f3d6de] bg-white p-4 md:grid-cols-[1.3fr_.6fr_auto] md:items-end">
+                  <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
+                    <span>Nome completo da criança {index + 1}</span>
+                    <input
+                      className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
+                      onChange={(event) => updateChild(child.id, 'name', event.target.value)}
+                      placeholder={`Criança ${index + 1}`}
+                      value={child.name}
+                    />
+                  </label>
+
+                  <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
+                    <span>Idade</span>
+                    <input
+                      className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
+                      min="0"
+                      onChange={(event) => updateChild(child.id, 'age', event.target.value)}
+                      placeholder="0"
+                      type="number"
+                      value={child.age}
+                    />
+                  </label>
+
+                  <button
+                    className="rounded-full border border-[#f1c4d0] px-4 py-3 text-sm font-bold text-[#a14f67] transition hover:bg-[#fff4f7]"
+                    type="button"
+                    onClick={() => removeChild(child.id)}
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {error ? <p className="text-sm font-semibold text-red-600">{error}</p> : null}
         {feedback ? <p className="text-sm font-semibold text-emerald-700">{feedback}</p> : null}

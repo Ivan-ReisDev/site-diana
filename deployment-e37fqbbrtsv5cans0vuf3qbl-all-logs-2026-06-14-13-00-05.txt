@@ -1,0 +1,403 @@
+2026-Jun-14 12:51:39.566767 Docker 29.4.2 with BuildKit and Buildx detected on deployment server (localhost).
+2026-Jun-14 12:51:39.584002 Starting deployment of Ivan-ReisDev/site-diana:main to localhost.
+2026-Jun-14 12:51:40.033747 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-14 12:51:40.232003 [DEBUG] [CMD]: docker stop --time=30 e37fqbbrtsv5cans0vuf3qbl
+2026-Jun-14 12:51:40.232003 [DEBUG] Flag --time has been deprecated, use --timeout instead
+2026-Jun-14 12:51:40.236752 [DEBUG] Error response from daemon: No such container: e37fqbbrtsv5cans0vuf3qbl
+2026-Jun-14 12:51:40.557043 [DEBUG] [CMD]: docker run -d --network 'coolify' --name e37fqbbrtsv5cans0vuf3qbl  --rm -v /root/.docker/buildx:/root/.docker/buildx -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-14 12:51:40.557043 [DEBUG] 29e0576663eb00439bc762cde7a20baf649303cba1318383145c5d7892e0c5fb
+2026-Jun-14 12:51:42.718911 [DEBUG] [CMD]: docker exec e37fqbbrtsv5cans0vuf3qbl bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote '\''https://x-access-token:<REDACTED>@github.com/Ivan-ReisDev/site-diana.git'\'' '\''refs/heads/main'\'''
+2026-Jun-14 12:51:42.718911 [DEBUG] 816402d9c6f8e43ec23b7bf541b41072011f9647	refs/heads/main
+2026-Jun-14 12:51:42.949286 Image not found (s8d4k9yjhc9w1bfg4076xob3:816402d9c6f8e43ec23b7bf541b41072011f9647). Building new image.
+2026-Jun-14 12:51:43.216848 ----------------------------------------
+2026-Jun-14 12:51:43.238120 Importing Ivan-ReisDev/site-diana:main (commit sha 816402d9c6f8e43ec23b7bf541b41072011f9647) to /artifacts/e37fqbbrtsv5cans0vuf3qbl.
+2026-Jun-14 12:51:43.558539 [DEBUG] [CMD]: docker exec e37fqbbrtsv5cans0vuf3qbl bash -c 'git -c '\''url.https://x-access-token:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 clone --depth=1 --recurse-submodules --shallow-submodules -b '\''main'\'' '\''https:<REDACTED>@github.com/Ivan-ReisDev/site-diana.git'\'' '\''/artifacts/e37fqbbrtsv5cans0vuf3qbl'\'' && cd '\''/artifacts/e37fqbbrtsv5cans0vuf3qbl'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https://x-access-token:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 fetch --depth=1 origin '\''816402d9c6f8e43ec23b7bf541b41072011f9647'\'' && git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 -c advice.detachedHead=false checkout '\''816402d9c6f8e43ec23b7bf541b41072011f9647'\'' >/dev/null 2>&1 && cd '\''/artifacts/e37fqbbrtsv5cans0vuf3qbl'\'' && if [ -f .gitmodules ]; then git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 submodule sync && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 submodule update --init --recursive --depth=1; fi && cd '\''/artifacts/e37fqbbrtsv5cans0vuf3qbl'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 lfs pull'
+2026-Jun-14 12:<REDACTED>@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:51:53.348314 [DEBUG] #4 resolve ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de 0.1s done
+2026-Jun-14 12:51:53.348314 [DEBUG] #4 DONE 0.1s
+2026-Jun-14 12:51:53.348314 [DEBUG] 
+2026-Jun-14 12:51:53.348314 [DEBUG] #5 [internal] load build context
+2026-Jun-14 12:51:53.496345 [DEBUG] #5 transferring context: 544.43kB 0.1s done
+2026-Jun-14 12:51:53.496345 [DEBUG] #5 DONE 0.1s
+2026-Jun-14 12:51:53.496345 [DEBUG] 
+2026-Jun-14 12:51:53.496345 [DEBUG] #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:51:53.496345 [DEBUG] #4 DONE 0.3s
+2026-Jun-14 12:51:53.670496 [DEBUG] #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:51:53.686745 [DEBUG] #4 sha256:866b26ac4e4722aa6bd512e1e0c5fa91657dc060ef3eebbbcbd6057625e8f518 0B / 335B 0.2s
+2026-Jun-14 12:51:53.847123 [DEBUG] #4 sha256:866b26ac4e4722aa6bd512e1e0c5fa91657dc060ef3eebbbcbd6057625e8f518 335B / 335B 0.2s done
+2026-Jun-14 12:51:53.847123 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 0B / 75.95MB 0.2s
+2026-Jun-14 12:51:53.847123 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 1.05MB / 33.30MB 0.3s
+2026-Jun-14 12:51:53.847123 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 0B / 29.72MB 0.2s
+2026-Jun-14 12:51:54.002247 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 5.24MB / 75.95MB 0.5s
+2026-Jun-14 12:51:54.147514 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 4.19MB / 33.30MB 0.5s
+2026-Jun-14 12:51:54.147514 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 4.19MB / 29.72MB 0.5s
+2026-Jun-14 12:51:54.291805 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 10.49MB / 75.95MB 0.8s
+2026-Jun-14 12:51:54.291805 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 6.29MB / 33.30MB 0.6s
+2026-Jun-14 12:51:54.291805 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 6.29MB / 29.72MB 0.6s
+2026-Jun-14 12:51:54.455986 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 14.68MB / 75.95MB 0.9s
+2026-Jun-14 12:51:54.455986 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 8.39MB / 33.30MB 0.8s
+2026-Jun-14 12:51:54.455986 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 9.44MB / 29.72MB 0.8s
+2026-Jun-14 12:51:54.594004 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 18.87MB / 75.95MB 1.1s
+2026-Jun-14 12:51:54.594004 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 11.53MB / 33.30MB 0.9s
+2026-Jun-14 12:51:54.594004 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 13.63MB / 29.72MB 0.9s
+2026-Jun-14 12:51:54.752394 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 24.12MB / 75.95MB 1.2s
+2026-Jun-14 12:51:54.752394 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 14.68MB / 33.30MB 1.1s
+2026-Jun-14 12:51:54.752394 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 16.78MB / 29.72MB 1.1s
+2026-Jun-14 12:51:54.909718 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 20.97MB / 33.30MB 1.2s
+2026-Jun-14 12:51:54.909718 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 23.07MB / 29.72MB 1.2s
+2026-Jun-14 12:51:54.920531 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 29.36MB / 75.95MB 1.4s
+2026-Jun-14 12:51:54.920531 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 25.17MB / 33.30MB 1.4s
+2026-Jun-14 12:51:54.920531 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 27.26MB / 29.72MB 1.4s
+2026-Jun-14 12:51:55.025442 [DEBUG] #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 29.72MB / 29.72MB 1.5s done
+2026-Jun-14 12:51:55.171185 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 34.60MB / 75.95MB 1.5s
+2026-Jun-14 12:51:55.171185 [DEBUG] #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 33.30MB / 33.30MB 1.6s done
+2026-Jun-14 12:51:55.171185 [DEBUG] #4 extracting sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee
+2026-Jun-14 12:51:55.338742 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 47.19MB / 75.95MB 1.8s
+2026-Jun-14 12:51:55.489012 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 56.62MB / 75.95MB 2.0s
+2026-Jun-14 12:51:55.638538 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 66.06MB / 75.95MB 2.1s
+2026-Jun-14 12:51:55.797796 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 73.40MB / 75.95MB 2.3s
+2026-Jun-14 12:51:55.906289 [DEBUG] #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 75.95MB / 75.95MB 2.4s done
+2026-Jun-14 12:51:57.674601 [DEBUG] #4 extracting sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 2.6s done
+2026-Jun-14 12:51:57.674601 [DEBUG] #4 DONE 4.4s
+2026-Jun-14 12:51:57.825123 [DEBUG] #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:51:57.825123 [DEBUG] #4 extracting sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913
+2026-Jun-14 12:52:02.303327 [DEBUG] #4 extracting sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 4.6s done
+2026-Jun-14 12:52:02.303327 [DEBUG] #4 DONE 9.1s
+2026-Jun-14 12:52:02.453181 [DEBUG] #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:52:02.453181 [DEBUG] #4 extracting sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06
+2026-Jun-14 12:52:06.971721 [DEBUG] #4 extracting sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 4.7s done
+2026-Jun-14 12:52:06.971721 [DEBUG] #4 DONE 13.7s
+2026-Jun-14 12:52:07.099275 [DEBUG] #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:52:07.099275 [DEBUG] #4 extracting sha256:866b26ac4e4722aa6bd512e1e0c5fa91657dc060ef3eebbbcbd6057625e8f518 0.0s done
+2026-Jun-14 12:52:07.099275 [DEBUG] #4 DONE 13.7s
+2026-Jun-14 12:52:07.099275 [DEBUG] 
+2026-Jun-14 12:52:07.099275 [DEBUG] #6 [stage-0  2/11] WORKDIR /app/
+2026-Jun-14 12:52:07.099275 [DEBUG] #6 DONE 0.1s
+2026-Jun-14 12:52:07.317977 [DEBUG] #7 [stage-0  3/11] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+2026-Jun-14 12:52:07.317977 [DEBUG] #7 DONE 0.1s
+2026-Jun-14 12:52:07.317977 [DEBUG] 
+2026-Jun-14 12:52:07.317977 [DEBUG] #8 [stage-0  4/11] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+2026-Jun-14 12:52:07.399145 [DEBUG] #8 0.235 unpacking 'https://github.com/NixOS/nixpkgs/archive/ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.tar.gz' into the Git cache...
+2026-Jun-14 12:<REDACTED>@asamuzakjp/css-color@5.1.11',
+2026-Jun-14 12:54:50.434281 [DEBUG] #11 2.936 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:54:50.434281 [DEBUG] #11 2.936 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:54:50.434281 [DEBUG] #11 2.936 npm warn EBADENGINE }
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.949 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.949 npm warn EBADENGINE   package: '@asamuzakjp/dom-selector@7.1.1',
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.949 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.949 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.949 npm warn EBADENGINE }
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.961 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.961 npm warn EBADENGINE   package: '@asamuzakjp/generational-cache@1.0.1',
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.961 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.961 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:54:50.610182 [DEBUG] #11 2.961 npm warn EBADENGINE }
+2026-Jun-14 12:55:06.109620 [DEBUG] #11 18.61 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:55:06.109620 [DEBUG] #11 18.61 npm warn EBADENGINE   package: '@exodus/bytes@1.15.1',
+2026-Jun-14 12:55:06.109620 [DEBUG] #11 18.61 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:55:06.109620 [DEBUG] #11 18.61 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:55:06.109620 [DEBUG] #11 18.61 npm warn EBADENGINE }
+2026-Jun-14 12:55:31.783860 [DEBUG] #11 44.28 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:55:31.783860 [DEBUG] #11 44.28 npm warn EBADENGINE   package: 'eslint-visitor-keys@5.0.1',
+2026-Jun-14 12:55:31.783860 [DEBUG] #11 44.28 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.13.0 || >=24' },
+2026-Jun-14 12:55:31.783860 [DEBUG] #11 44.28 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:55:31.783860 [DEBUG] #11 44.28 npm warn EBADENGINE }
+2026-Jun-14 12:55:31.943237 [DEBUG] #11 44.29 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:55:31.943237 [DEBUG] #11 44.29 npm warn EBADENGINE   package: '@vitejs/plugin-react@6.0.2',
+2026-Jun-14 12:55:31.943237 [DEBUG] #11 44.29 npm warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+2026-Jun-14 12:55:31.943237 [DEBUG] #11 44.29 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:55:31.943237 [DEBUG] #11 44.29 npm warn EBADENGINE }
+2026-Jun-14 12:55:57.465067 [DEBUG] #11 69.96 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:55:57.465067 [DEBUG] #11 69.96 npm warn EBADENGINE   package: 'data-urls@7.0.0',
+2026-Jun-14 12:55:57.465067 [DEBUG] #11 69.96 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:55:57.465067 [DEBUG] #11 69.96 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:55:57.465067 [DEBUG] #11 69.96 npm warn EBADENGINE }
+2026-Jun-14 12:56:33.541300 [DEBUG] #11 106.0 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:56:33.541300 [DEBUG] #11 106.0 npm warn EBADENGINE   package: 'html-encoding-sniffer@6.0.0',
+2026-Jun-14 12:56:33.541300 [DEBUG] #11 106.0 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:56:33.541300 [DEBUG] #11 106.0 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:56:33.541300 [DEBUG] #11 106.0 npm warn EBADENGINE }
+2026-Jun-14 12:56:49.079399 [DEBUG] #11 121.6 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:56:49.079399 [DEBUG] #11 121.6 npm warn EBADENGINE   package: 'jsdom@29.1.1',
+2026-Jun-14 12:56:49.079399 [DEBUG] #11 121.6 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.13.0 || >=24.0.0' },
+2026-Jun-14 12:56:49.079399 [DEBUG] #11 121.6 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:56:49.079399 [DEBUG] #11 121.6 npm warn EBADENGINE }
+2026-Jun-14 12:57:20.116448 [DEBUG] #11 152.6 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:57:20.116448 [DEBUG] #11 152.6 npm warn EBADENGINE   package: 'rolldown@1.0.3',
+2026-Jun-14 12:57:20.116448 [DEBUG] #11 152.6 npm warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+2026-Jun-14 12:57:20.116448 [DEBUG] #11 152.6 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:57:20.116448 [DEBUG] #11 152.6 npm warn EBADENGINE }
+2026-Jun-14 12:57:50.948388 [DEBUG] #11 183.4 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:57:50.948388 [DEBUG] #11 183.4 npm warn EBADENGINE   package: 'vite@8.0.16',
+2026-Jun-14 12:57:50.948388 [DEBUG] #11 183.4 npm warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+2026-Jun-14 12:57:50.948388 [DEBUG] #11 183.4 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:57:50.948388 [DEBUG] #11 183.4 npm warn EBADENGINE }
+2026-Jun-14 12:57:56.041635 [DEBUG] #11 188.5 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:57:56.057247 [DEBUG] #11 188.5 npm warn EBADENGINE   package: 'whatwg-url@16.0.1',
+2026-Jun-14 12:57:56.057247 [DEBUG] #11 188.5 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:57:56.057247 [DEBUG] #11 188.5 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:57:56.057247 [DEBUG] #11 188.5 npm warn EBADENGINE }
+2026-Jun-14 12:58:01.383172 [DEBUG] #11 193.9 npm error code EUSAGE
+2026-Jun-14 12:58:01.546796 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.546796 [DEBUG] #11 193.9 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error Missing: @emnapi/runtime@1.11.1 from lock file
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error Missing: @emnapi/core@1.11.1 from lock file
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error Clean install a project
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error Usage:
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error npm ci
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error Options:
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [--no-bin-links] [--no-fund] [--dry-run]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error aliases: clean-install, ic, install-clean, isntall-clean
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error Run "npm help ci" for more info
+2026-Jun-14 12:58:01.576068 [DEBUG] #11 193.9 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-14T12_54_48_153Z-debug-0.log
+2026-Jun-14 12:58:01.617776 [DEBUG] #11 ERROR: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Jun-14 12:58:01.833525 [DEBUG] ------
+2026-Jun-14 12:58:01.833525 [DEBUG] > [stage-0  7/11] RUN --mount=type=cache,id=s8d4k9yjhc9w1bfg4076xob3-/root/npm,target=/root/.npm npm ci:
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error [--no-bin-links] [--no-fund] [--dry-run]
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error aliases: clean-install, ic, install-clean, isntall-clean
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error Run "npm help ci" for more info
+2026-Jun-14 12:58:01.833525 [DEBUG] 193.9 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-14T12_54_48_153Z-debug-0.log
+2026-Jun-14 12:58:01.833525 [DEBUG] ------
+2026-Jun-14 12:58:01.833525 [DEBUG] 
+2026-Jun-14 12:58:01.833525 [DEBUG] 1 warning found (use docker --debug to expand):
+2026-Jun-14 12:58:01.833525 [DEBUG] - UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 18)
+2026-Jun-14 12:58:01.875658 [DEBUG] Dockerfile:20
+2026-Jun-14 12:58:01.875658 [DEBUG] --------------------
+2026-Jun-14 12:58:01.875658 [DEBUG] 18 |     ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
+2026-Jun-14 12:58:01.875658 [DEBUG] 19 |     COPY . /app/.
+2026-Jun-14 12:58:01.875658 [DEBUG] 20 | >>> RUN --mount=type=cache,id=s8d4k9yjhc9w1bfg4076xob3-/root/npm,target=/root/.npm npm ci
+2026-Jun-14 12:58:01.875658 [DEBUG] 21 |
+2026-Jun-14 12:58:01.875658 [DEBUG] 22 |     # build phase
+2026-Jun-14 12:58:01.875658 [DEBUG] --------------------
+2026-Jun-14 12:58:01.875658 [DEBUG] ERROR: failed to build: failed to solve: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Jun-14 12:58:01.875658 [DEBUG] exit status 1
+2026-Jun-14 12:58:02.143352 ========================================
+2026-Jun-14 12:58:02.203009 Deployment failed: Command execution failed (exit code 1): docker exec e37fqbbrtsv5cans0vuf3qbl bash -c 'bash /artifacts/build.sh'
+2026-Jun-14 12:58:02.203009 Error: #0 building with "default" instance using docker driver
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #1 [internal] load build definition from Dockerfile
+2026-Jun-14 12:58:02.203009 #1 transferring dockerfile: 1.43kB done
+2026-Jun-14 12:58:02.203009 #1 DONE 0.0s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #2 [internal] load metadata for ghcr.io/railwayapp/nixpacks:ubuntu-1745885067
+2026-Jun-14 12:58:02.203009 #2 DONE 1.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #3 [internal] load .dockerignore
+2026-Jun-14 12:58:02.203009 #3 transferring context: 2B done
+2026-Jun-14 12:58:02.203009 #3 DONE 0.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:58:02.203009 #4 resolve ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de 0.1s done
+2026-Jun-14 12:58:02.203009 #4 DONE 0.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #5 [internal] load build context
+2026-Jun-14 12:58:02.203009 #5 transferring context: 544.43kB 0.1s done
+2026-Jun-14 12:58:02.203009 #5 DONE 0.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:58:02.203009 #4 DONE 0.3s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:58:02.203009 #4 sha256:866b26ac4e4722aa6bd512e1e0c5fa91657dc060ef3eebbbcbd6057625e8f518 0B / 335B 0.2s
+2026-Jun-14 12:58:02.203009 #4 sha256:866b26ac4e4722aa6bd512e1e0c5fa91657dc060ef3eebbbcbd6057625e8f518 335B / 335B 0.2s done
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 0B / 75.95MB 0.2s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 1.05MB / 33.30MB 0.3s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 0B / 29.72MB 0.2s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 5.24MB / 75.95MB 0.5s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 4.19MB / 33.30MB 0.5s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 4.19MB / 29.72MB 0.5s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 10.49MB / 75.95MB 0.8s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 6.29MB / 33.30MB 0.6s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 6.29MB / 29.72MB 0.6s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 14.68MB / 75.95MB 0.9s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 8.39MB / 33.30MB 0.8s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 9.44MB / 29.72MB 0.8s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 18.87MB / 75.95MB 1.1s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 11.53MB / 33.30MB 0.9s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 13.63MB / 29.72MB 0.9s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 24.12MB / 75.95MB 1.2s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 14.68MB / 33.30MB 1.1s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 16.78MB / 29.72MB 1.1s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 20.97MB / 33.30MB 1.2s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 23.07MB / 29.72MB 1.2s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 29.36MB / 75.95MB 1.4s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 25.17MB / 33.30MB 1.4s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 27.26MB / 29.72MB 1.4s
+2026-Jun-14 12:58:02.203009 #4 sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 29.72MB / 29.72MB 1.5s done
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 34.60MB / 75.95MB 1.5s
+2026-Jun-14 12:58:02.203009 #4 sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 33.30MB / 33.30MB 1.6s done
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 47.19MB / 75.95MB 1.8s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 56.62MB / 75.95MB 2.0s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 66.06MB / 75.95MB 2.1s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 73.40MB / 75.95MB 2.3s
+2026-Jun-14 12:58:02.203009 #4 sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 75.95MB / 75.95MB 2.4s done
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:2726e237d1a374379e783053d93d0345c8a3bf3c57b5d35b099de1ad777486ee 2.6s done
+2026-Jun-14 12:58:02.203009 #4 DONE 4.4s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:7962e2b983fd33a26ed1c6cd3dc8130d909d793c6a76893ed532f122edf72913 4.6s done
+2026-Jun-14 12:58:02.203009 #4 DONE 9.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:b65af0a51d863b994ae8e73f3b739ad2c14c4ab0f3b8807c7baf25404b897c06 4.7s done
+2026-Jun-14 12:58:02.203009 #4 DONE 13.7s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #4 [stage-0  1/11] FROM ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 12:58:02.203009 #4 extracting sha256:866b26ac4e4722aa6bd512e1e0c5fa91657dc060ef3eebbbcbd6057625e8f518 0.0s done
+2026-Jun-14 12:58:02.203009 #4 DONE 13.7s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #6 [stage-0  2/11] WORKDIR /app/
+2026-Jun-14 12:58:02.203009 #6 DONE 0.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #7 [stage-0  3/11] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+2026-Jun-14 12:58:02.203009 #7 DONE 0.1s
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 #8 [stage-0  4/11] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+2026-Jun-14 12:58:02.203009 #8 0.235 unpacking 'https://github.com/NixOS/nixpkgs/archive/ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.tar.gz' into the Git cache...
+2026-Jun-14 12:<REDACTED>@asamuzakjp/css-color@5.1.11',
+2026-Jun-14 12:58:02.203009 #11 2.936 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 2.936 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 2.936 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 2.949 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 2.949 npm warn EBADENGINE   package: '@asamuzakjp/dom-selector@7.1.1',
+2026-Jun-14 12:58:02.203009 #11 2.949 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 2.949 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 2.949 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 2.961 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 2.961 npm warn EBADENGINE   package: '@asamuzakjp/generational-cache@1.0.1',
+2026-Jun-14 12:58:02.203009 #11 2.961 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 2.961 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 2.961 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 18.61 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 18.61 npm warn EBADENGINE   package: '@exodus/bytes@1.15.1',
+2026-Jun-14 12:58:02.203009 #11 18.61 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 18.61 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 18.61 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 44.28 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 44.28 npm warn EBADENGINE   package: 'eslint-visitor-keys@5.0.1',
+2026-Jun-14 12:58:02.203009 #11 44.28 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.13.0 || >=24' },
+2026-Jun-14 12:58:02.203009 #11 44.28 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 44.28 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 44.29 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 44.29 npm warn EBADENGINE   package: '@vitejs/plugin-react@6.0.2',
+2026-Jun-14 12:58:02.203009 #11 44.29 npm warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+2026-Jun-14 12:58:02.203009 #11 44.29 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 44.29 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 69.96 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 69.96 npm warn EBADENGINE   package: 'data-urls@7.0.0',
+2026-Jun-14 12:58:02.203009 #11 69.96 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 69.96 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 69.96 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 106.0 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 106.0 npm warn EBADENGINE   package: 'html-encoding-sniffer@6.0.0',
+2026-Jun-14 12:58:02.203009 #11 106.0 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 106.0 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 106.0 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 121.6 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 121.6 npm warn EBADENGINE   package: 'jsdom@29.1.1',
+2026-Jun-14 12:58:02.203009 #11 121.6 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.13.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 121.6 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 121.6 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 152.6 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 152.6 npm warn EBADENGINE   package: 'rolldown@1.0.3',
+2026-Jun-14 12:58:02.203009 #11 152.6 npm warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+2026-Jun-14 12:58:02.203009 #11 152.6 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 152.6 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 183.4 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 183.4 npm warn EBADENGINE   package: 'vite@8.0.16',
+2026-Jun-14 12:58:02.203009 #11 183.4 npm warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+2026-Jun-14 12:58:02.203009 #11 183.4 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 183.4 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 188.5 npm warn EBADENGINE Unsupported engine {
+2026-Jun-14 12:58:02.203009 #11 188.5 npm warn EBADENGINE   package: 'whatwg-url@16.0.1',
+2026-Jun-14 12:58:02.203009 #11 188.5 npm warn EBADENGINE   required: { node: '^20.19.0 || ^22.12.0 || >=24.0.0' },
+2026-Jun-14 12:58:02.203009 #11 188.5 npm warn EBADENGINE   current: { node: 'v22.11.0', npm: '10.9.0' }
+2026-Jun-14 12:58:02.203009 #11 188.5 npm warn EBADENGINE }
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error code EUSAGE
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error Missing: @emnapi/runtime@1.11.1 from lock file
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error Missing: @emnapi/core@1.11.1 from lock file
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error Clean install a project
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error Usage:
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error npm ci
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error Options:
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [--no-bin-links] [--no-fund] [--dry-run]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error aliases: clean-install, ic, install-clean, isntall-clean
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error Run "npm help ci" for more info
+2026-Jun-14 12:58:02.203009 #11 193.9 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-14T12_54_48_153Z-debug-0.log
+2026-Jun-14 12:58:02.203009 #11 ERROR: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Jun-14 12:58:02.203009 ------
+2026-Jun-14 12:58:02.203009 > [stage-0  7/11] RUN --mount=type=cache,id=s8d4k9yjhc9w1bfg4076xob3-/root/npm,target=/root/.npm npm ci:
+2026-Jun-14 12:58:02.203009 193.9 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+2026-Jun-14 12:58:02.203009 193.9 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+2026-Jun-14 12:58:02.203009 193.9 npm error [--no-bin-links] [--no-fund] [--dry-run]
+2026-Jun-14 12:58:02.203009 193.9 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+2026-Jun-14 12:58:02.203009 193.9 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+2026-Jun-14 12:58:02.203009 193.9 npm error
+2026-Jun-14 12:58:02.203009 193.9 npm error aliases: clean-install, ic, install-clean, isntall-clean
+2026-Jun-14 12:58:02.203009 193.9 npm error
+2026-Jun-14 12:58:02.203009 193.9 npm error Run "npm help ci" for more info
+2026-Jun-14 12:58:02.203009 193.9 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-14T12_54_48_153Z-debug-0.log
+2026-Jun-14 12:58:02.203009 ------
+2026-Jun-14 12:58:02.203009 
+2026-Jun-14 12:58:02.203009 1 warning found (use docker --debug to expand):
+2026-Jun-14 12:58:02.203009 - UndefinedVar: Usage of undefined variable '$NIXPACKS_PATH' (line 18)
+2026-Jun-14 12:58:02.203009 Dockerfile:20
+2026-Jun-14 12:58:02.203009 --------------------
+2026-Jun-14 12:58:02.203009 18 |     ENV NIXPACKS_PATH=/app/node_modules/.bin:$NIXPACKS_PATH
+2026-Jun-14 12:58:02.203009 19 |     COPY . /app/.
+2026-Jun-14 12:58:02.203009 20 | >>> RUN --mount=type=cache,id=s8d4k9yjhc9w1bfg4076xob3-/root/npm,target=/root/.npm npm ci
+2026-Jun-14 12:58:02.203009 21 |
+2026-Jun-14 12:58:02.203009 22 |     # build phase
+2026-Jun-14 12:58:02.203009 --------------------
+2026-Jun-14 12:58:02.203009 ERROR: failed to build: failed to solve: process "/bin/bash -ol pipefail -c npm ci" did not complete successfully: exit code: 1
+2026-Jun-14 12:58:02.203009 exit status 1
+2026-Jun-14 12:58:02.222912 [DEBUG] Error type: App\Exceptions\DeploymentException
+2026-Jun-14 12:58:02.244755 [DEBUG] Error code: 0
+2026-Jun-14 12:58:02.265699 [DEBUG] Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-14 12:58:02.287358 [DEBUG] Stack trace (first 5 lines):
+2026-Jun-14 12:58:02.308699 [DEBUG] #0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-14 12:58:02.329443 [DEBUG] #1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-14 12:58:02.351344 [DEBUG] #2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-14 12:58:02.373411 [DEBUG] #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3778): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-14 12:58:02.408505 [DEBUG] #4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(946): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-14 12:58:02.440143 ========================================
+2026-Jun-14 12:58:02.463321 Deployment failed. Removing the new version of your application.
+2026-Jun-14 12:58:04.112842 Gracefully shutting down build container: e37fqbbrtsv5cans0vuf3qbl
+2026-Jun-14 12:58:04.383455 [DEBUG] [CMD]: docker stop --time=30 e37fqbbrtsv5cans0vuf3qbl
+2026-Jun-14 12:58:04.383455 [DEBUG] Flag --time has been deprecated, use --timeout instead
+2026-Jun-14 12:58:04.683917 [DEBUG] e37fqbbrtsv5cans0vuf3qbl

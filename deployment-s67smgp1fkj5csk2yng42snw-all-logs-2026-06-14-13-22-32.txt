@@ -1,0 +1,53 @@
+2026-Jun-14 13:20:06.335386 Docker 29.4.2 with BuildKit and Buildx detected on deployment server (localhost).
+2026-Jun-14 13:20:06.353918 Starting deployment of Ivan-ReisDev/site-diana:main to localhost.
+2026-Jun-14 13:20:06.980176 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-14 13:20:07.188029 [DEBUG] [CMD]: docker stop --time=30 s67smgp1fkj5csk2yng42snw
+2026-Jun-14 13:20:07.188029 [DEBUG] Flag --time has been deprecated, use --timeout instead
+2026-Jun-14 13:20:07.194665 [DEBUG] Error response from daemon: No such container: s67smgp1fkj5csk2yng42snw
+2026-Jun-14 13:20:07.515116 [DEBUG] [CMD]: docker run -d --network 'coolify' --name s67smgp1fkj5csk2yng42snw  --rm -v /root/.docker/buildx:/root/.docker/buildx -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-14 13:20:07.515116 [DEBUG] 44e45216d782269f7b2d09fe869d692488950e1f20b250fcf2d7ae19bbb2e254
+2026-Jun-14 13:20:09.831336 [DEBUG] [CMD]: docker exec s67smgp1fkj5csk2yng42snw bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote '\''https://x-access-token:<REDACTED>@github.com/Ivan-ReisDev/site-diana.git'\'' '\''refs/heads/main'\'''
+2026-Jun-14 13:20:09.831336 [DEBUG] 65ec14ec7b5d990ef5263c5b142db434da9854ae	refs/heads/main
+2026-Jun-14 13:20:10.085721 Image not found (s8d4k9yjhc9w1bfg4076xob3:65ec14ec7b5d990ef5263c5b142db434da9854ae). Building new image.
+2026-Jun-14 13:20:10.372012 ----------------------------------------
+2026-Jun-14 13:20:10.392810 Importing Ivan-ReisDev/site-diana:main (commit sha 65ec14ec7b5d990ef5263c5b142db434da9854ae) to /artifacts/s67smgp1fkj5csk2yng42snw.
+2026-Jun-14 13:20:10.744865 [DEBUG] [CMD]: docker exec s67smgp1fkj5csk2yng42snw bash -c 'git -c '\''url.https://x-access-token:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 clone --depth=1 --recurse-submodules --shallow-submodules -b '\''main'\'' '\''https:<REDACTED>@github.com/Ivan-ReisDev/site-diana.git'\'' '\''/artifacts/s67smgp1fkj5csk2yng42snw'\'' && cd '\''/artifacts/s67smgp1fkj5csk2yng42snw'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https://x-access-token:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 fetch --depth=1 origin '\''65ec14ec7b5d990ef5263c5b142db434da9854ae'\'' && git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 -c advice.detachedHead=false checkout '\''65ec14ec7b5d990ef5263c5b142db434da9854ae'\'' >/dev/null 2>&1 && cd '\''/artifacts/s67smgp1fkj5csk2yng42snw'\'' && if [ -f .gitmodules ]; then git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 submodule sync && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 submodule update --init --recursive --depth=1; fi && cd '\''/artifacts/s67smgp1fkj5csk2yng42snw'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 lfs pull'
+2026-Jun-14 13:<REDACTED>@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 13:20:19.136783 [DEBUG] #5 resolve ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de 0.1s done
+2026-Jun-14 13:20:19.136783 [DEBUG] #5 DONE 0.1s
+2026-Jun-14 13:20:19.136783 [DEBUG] 
+2026-Jun-14 13:20:19.136783 [DEBUG] #6 [stage-0  2/11] WORKDIR /app/
+2026-Jun-14 13:20:19.136783 [DEBUG] #6 CACHED
+2026-Jun-14 13:20:19.136783 [DEBUG] 
+2026-Jun-14 13:20:19.136783 [DEBUG] #7 [stage-0  3/11] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+2026-Jun-14 13:20:19.136783 [DEBUG] #7 CACHED
+2026-Jun-14 13:20:19.136783 [DEBUG] 
+2026-Jun-14 13:20:19.136783 [DEBUG] #8 [stage-0  4/11] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+2026-Jun-14 13:20:19.833548 [DEBUG] #8 0.693 unpacking 'https://github.com/NixOS/nixpkgs/archive/ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.tar.gz' into the Git cache...
+2026-Jun-14 13:<REDACTED>@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de
+2026-Jun-14 13:21:56.286015 #5 resolve ghcr.io/railwayapp/nixpacks:ubuntu-1745885067@sha256:d45c89d80e13d7ad0fd555b5130f22a866d9dd10e861f589932303ef2314c7de 0.1s done
+2026-Jun-14 13:21:56.286015 #5 DONE 0.1s
+2026-Jun-14 13:21:56.286015 
+2026-Jun-14 13:21:56.286015 #6 [stage-0  2/11] WORKDIR /app/
+2026-Jun-14 13:21:56.286015 #6 CACHED
+2026-Jun-14 13:21:56.286015 
+2026-Jun-14 13:21:56.286015 #7 [stage-0  3/11] COPY .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix
+2026-Jun-14 13:21:56.286015 #7 CACHED
+2026-Jun-14 13:21:56.286015 
+2026-Jun-14 13:21:56.286015 #8 [stage-0  4/11] RUN nix-env -if .nixpacks/nixpkgs-ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.nix && nix-collect-garbage -d
+2026-Jun-14 13:21:56.286015 #8 0.693 unpacking 'https://github.com/NixOS/nixpkgs/archive/ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7.tar.gz' into the Git cache...
+2026-Jun-14 13:21:56.298230 [DEBUG] Error type: App\Exceptions\DeploymentException
+2026-Jun-14 13:21:56.310632 [DEBUG] Error code: 0
+2026-Jun-14 13:21:56.322550 [DEBUG] Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-14 13:21:56.336395 [DEBUG] Stack trace (first 5 lines):
+2026-Jun-14 13:21:56.351826 [DEBUG] #0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-14 13:21:56.376458 [DEBUG] #1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-14 13:21:56.401478 [DEBUG] #2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-14 13:21:56.425709 [DEBUG] #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3778): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-14 13:21:56.441719 [DEBUG] #4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(946): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-14 13:21:56.462211 ========================================
+2026-Jun-14 13:21:56.481042 Deployment failed. Removing the new version of your application.
+2026-Jun-14 13:21:58.998152 Gracefully shutting down build container: s67smgp1fkj5csk2yng42snw
+2026-Jun-14 13:21:59.232405 [DEBUG] [CMD]: docker stop --time=30 s67smgp1fkj5csk2yng42snw
+2026-Jun-14 13:21:59.232405 [DEBUG] Flag --time has been deprecated, use --timeout instead
+2026-Jun-14 13:21:59.730289 [DEBUG] s67smgp1fkj5csk2yng42snw

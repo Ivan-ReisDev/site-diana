@@ -1,30 +1,24 @@
 import type { Attendance, Prisma, PrismaClient, Rsvp } from '@prisma/client';
+import { z } from 'zod';
 
 import { getPrismaClient } from '@/lib/db/prisma';
 
 import { normalizePhone } from './phone';
-import {
-  type RsvpInput,
-  type RsvpParticipantInput,
-  rsvpInputSchema,
-  rsvpParticipantSchema,
-} from './schema';
+import { type RsvpGuestInput, type RsvpInput, rsvpGuestSchema, rsvpInputSchema } from './schema';
 
 export type DashboardStatusFilter = 'all' | 'yes' | 'no';
-export type RsvpParticipant = RsvpParticipantInput;
+export type RsvpGuest = RsvpGuestInput;
 
 export type RsvpSummary = {
   id: string;
   name: string;
-  displayName: string;
-  groupName?: string;
   phone: string;
   attendance: 'sim' | 'nao';
   adults: number;
   children: number;
   total: number;
-  participants: RsvpParticipant[];
-  message?: string;
+  adultsList: RsvpGuest[];
+  childrenList: RsvpGuest[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -43,22 +37,6 @@ export function toAttendanceEnum(attendance: string): Attendance {
 
 export function fromAttendanceEnum(attendance: Attendance): 'sim' | 'nao' {
   return attendance === 'NO' ? 'nao' : 'sim';
-}
-
-export function countParticipants(participants: RsvpParticipant[]) {
-  return participants.reduce(
-    (acc, participant) => {
-      if (participant.type === 'adulto') {
-        acc.adults += 1;
-      } else {
-        acc.children += 1;
-      }
-
-      acc.total += 1;
-      return acc;
-    },
-    { adults: 0, children: 0, total: 0 },
-  );
 }
 
 export function calculatePresenceStats(
@@ -87,33 +65,33 @@ export function calculatePresenceStats(
   );
 }
 
-function parseStoredParticipants(value: Prisma.JsonValue): RsvpParticipant[] {
-  const parsed = PrismaParticipantArraySchema.safeParse(value);
-  return parsed.success ? parsed.data : [];
+const participantsSchema = z.object({
+  adults: rsvpGuestSchema.array().default([]),
+  children: rsvpGuestSchema.array().default([]),
+});
+
+function parseStoredParticipants(value: Prisma.JsonValue): { adults: RsvpGuest[]; children: RsvpGuest[] } {
+  const parsed = participantsSchema.safeParse(value);
+  return parsed.success ? parsed.data : { adults: [], children: [] };
 }
 
 function serializeRsvp(rsvp: Rsvp): RsvpSummary {
   const participants = parseStoredParticipants(rsvp.participants as Prisma.JsonValue);
-  const displayName = rsvp.groupName?.trim() || participants.map((participant) => participant.name).join(', ') || rsvp.name;
 
   return {
     id: rsvp.id,
     name: rsvp.name,
-    displayName,
-    groupName: rsvp.groupName ?? undefined,
     phone: rsvp.phone,
     attendance: fromAttendanceEnum(rsvp.attendance),
     adults: rsvp.adults,
     children: rsvp.children,
     total: rsvp.adults + rsvp.children,
-    participants,
-    message: rsvp.message ?? undefined,
+    adultsList: participants.adults,
+    childrenList: participants.children,
     createdAt: rsvp.createdAt,
     updatedAt: rsvp.updatedAt,
   };
 }
-
-const PrismaParticipantArraySchema = rsvpParticipantSchema.array();
 
 export async function upsertRsvp(input: unknown, db: PrismaClient = getPrismaClient()) {
   const parsed = rsvpInputSchema.parse(input);
@@ -129,20 +107,16 @@ export async function upsertRsvp(input: unknown, db: PrismaClient = getPrismaCli
 }
 
 function buildRsvpMutation(parsed: RsvpInput, phoneNormalized: string) {
-  const normalizedGroupName = parsed.groupName?.trim() || null;
-  const participantNames = parsed.participants.map((participant) => participant.name.trim()).join(', ');
-  const counts = countParticipants(parsed.participants);
-
   return {
-    name: normalizedGroupName ? `${normalizedGroupName} — ${participantNames}` : participantNames,
-    groupName: normalizedGroupName,
+    name: parsed.name.trim(),
+    groupName: null,
     phone: parsed.phone,
     phoneNormalized,
     attendance: toAttendanceEnum(parsed.attendance),
-    adults: counts.adults,
-    children: counts.children,
-    participants: parsed.participants,
-    message: parsed.message?.trim() || null,
+    adults: parsed.adults.length,
+    children: parsed.children.length,
+    participants: { adults: parsed.adults, children: parsed.children },
+    message: null,
   };
 }
 
@@ -160,7 +134,6 @@ export async function listRsvps(
       ? {
           OR: [
             { name: { contains: q, mode: 'insensitive' } },
-            { groupName: { contains: q, mode: 'insensitive' } },
             { phone: { contains: q } },
             { phoneNormalized: { contains: q.replace(/\D/g, '') } },
           ],

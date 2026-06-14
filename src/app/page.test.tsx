@@ -18,22 +18,21 @@ describe('InvitationSite', () => {
     expect(screen.getByRole('button', { name: /copiar chave pix/i })).toBeInTheDocument();
   });
 
-  it('envia RSVP com participantes individuais e mostra feedback de sucesso', async () => {
+  it('envia RSVP com adultos e crianças e mostra feedback de sucesso', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
         ok: true,
         rsvp: {
-          name: 'Família Reis — João Reis, Lia Reis',
-          displayName: 'Família Reis',
-          groupName: 'Família Reis',
+          name: 'João Reis',
           attendance: 'sim',
-          adults: 1,
+          adults: 2,
           children: 1,
-          participants: [
-            { name: 'João Reis', type: 'adulto', age: 35 },
-            { name: 'Lia Reis', type: 'crianca', age: 7 },
+          adultsList: [
+            { name: 'João Reis', age: 32 },
+            { name: 'Ana Reis', age: 30 },
           ],
+          childrenList: [{ name: 'Lia Reis', age: 7 }],
         },
         message: 'Presença registrada com carinho.',
       }),
@@ -43,14 +42,20 @@ describe('InvitationSite', () => {
 
     render(<InvitationSite />);
 
-    fireEvent.change(screen.getByPlaceholderText('Ex.: Família Souza'), { target: { value: 'Família Reis' } });
+    fireEvent.change(screen.getByPlaceholderText('Seu nome completo'), { target: { value: 'João Reis' } });
     fireEvent.change(screen.getByPlaceholderText('(21) 99999-9999'), { target: { value: '(21) 99999-0000' } });
-    fireEvent.change(screen.getByPlaceholderText('Pessoa 1'), { target: { value: 'João Reis' } });
-    fireEvent.change(screen.getByPlaceholderText('0'), { target: { value: '35' } });
-    fireEvent.click(screen.getByRole('button', { name: /adicionar pessoa/i }));
-    fireEvent.change(screen.getByPlaceholderText('Pessoa 2'), { target: { value: 'Lia Reis' } });
-    fireEvent.change(screen.getAllByRole('combobox')[1], { target: { value: 'crianca' } });
-    fireEvent.change(screen.getAllByPlaceholderText('0')[1], { target: { value: '7' } });
+
+    fireEvent.change(screen.getByPlaceholderText('Adulto 1'), { target: { value: 'João Reis' } });
+    fireEvent.change(screen.getAllByPlaceholderText('0')[0], { target: { value: '32' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /adicionar adulto/i }));
+    fireEvent.change(screen.getByPlaceholderText('Adulto 2'), { target: { value: 'Ana Reis' } });
+    fireEvent.change(screen.getAllByPlaceholderText('0')[1], { target: { value: '30' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }));
+    fireEvent.change(screen.getByPlaceholderText('Criança 1'), { target: { value: 'Lia Reis' } });
+    fireEvent.change(screen.getAllByPlaceholderText('0')[2], { target: { value: '7' } });
+
     fireEvent.click(screen.getByRole('button', { name: /confirmar presença/i }));
 
     await waitFor(() => {
@@ -58,8 +63,8 @@ describe('InvitationSite', () => {
     });
 
     expect(await screen.findByText(/presença registrada/i)).toBeInTheDocument();
-    expect(screen.getByText(/família reis/i)).toBeInTheDocument();
-    expect(screen.getByText(/joão reis, lia reis/i)).toBeInTheDocument();
+    expect(screen.getByText(/joão reis/i)).toBeInTheDocument();
+    expect(screen.getByText(/crianças: lia reis/i)).toBeInTheDocument();
   });
 
   it('mostra feedback ao copiar chave Pix', async () => {

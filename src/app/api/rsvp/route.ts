@@ -4,7 +4,7 @@ import { upsertRsvp } from '@/lib/rsvp/service';
 
 function getErrorMessage(error: unknown) {
   if (error instanceof ZodError) {
-    return 'Informe pelo menos uma pessoa e o telefone.';
+    return 'Informe seu nome completo, telefone e os dados de cada adulto.';
   }
 
   if (error instanceof Error) {

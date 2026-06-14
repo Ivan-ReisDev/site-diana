@@ -3,43 +3,32 @@
 import { FormEvent, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  Baby,
   Calendar,
-  CheckCircle2,
   Gift,
   Heart,
   Mail,
   MapPin,
-  MessageCircle,
-  Phone,
   Castle,
   Ribbon,
-  Trash2,
-  User,
-  UserPlus,
-  Users,
 } from "lucide-react";
 
-type RsvpParticipant = {
+type RsvpGuest = {
   name: string;
-  type: "adulto" | "crianca";
   age: number;
 };
 
 type RsvpSummary = {
   name: string;
-  displayName?: string;
-  groupName?: string;
   attendance: string;
   adults: number;
   children: number;
-  participants: RsvpParticipant[];
+  adultsList: RsvpGuest[];
+  childrenList: RsvpGuest[];
 };
 
-type ParticipantForm = {
+type GuestForm = {
   id: number;
   name: string;
-  type: "adulto" | "crianca";
   age: string;
 };
 
@@ -95,11 +84,10 @@ const princessInspiration = [
 ];
 const pixKey = "pix-da-familia@exemplo.com";
 
-function createEmptyParticipant(id: number): ParticipantForm {
+function createEmptyGuest(id: number): GuestForm {
   return {
     id,
     name: "",
-    type: "adulto",
     age: "",
   };
 }
@@ -109,12 +97,13 @@ export default function InvitationSite() {
   const [summary, setSummary] = useState<RsvpSummary | null>(null);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [groupName, setGroupName] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [attendance, setAttendance] = useState<"sim" | "nao">("sim");
-  const [message, setMessage] = useState("");
-  const [participants, setParticipants] = useState<ParticipantForm[]>([createEmptyParticipant(1)]);
-  const [nextParticipantId, setNextParticipantId] = useState(2);
+  const [adults, setAdults] = useState<GuestForm[]>([createEmptyGuest(1)]);
+  const [nextAdultId, setNextAdultId] = useState(2);
+  const [children, setChildren] = useState<GuestForm[]>([]);
+  const [nextChildId, setNextChildId] = useState(1);
   const [recados, setRecados] = useState<Recado[]>([]);
   const [recadoNome, setRecadoNome] = useState("");
   const [recadoMsg, setRecadoMsg] = useState("");
@@ -131,48 +120,61 @@ export default function InvitationSite() {
     return `${adults} adulto${adults === 1 ? "" : "s"} • ${children} criança${children === 1 ? "" : "s"}`;
   }, [summary]);
 
-  const participantNamesLabel = useMemo(() => {
-    if (!summary?.participants?.length) return "";
-    return summary.participants.map((participant) => participant.name).join(", ");
+  const childrenNamesLabel = useMemo(() => {
+    if (!summary?.childrenList?.length) return "";
+    return summary.childrenList.map((child) => child.name).join(", ");
   }, [summary]);
 
-  function updateParticipant(id: number, field: keyof Omit<ParticipantForm, "id">, value: string) {
-    setParticipants((current) =>
-      current.map((participant) =>
-        participant.id === id ? { ...participant, [field]: value } : participant,
-      ),
+  function updateAdult(id: number, field: keyof Omit<GuestForm, "id">, value: string) {
+    setAdults((current) =>
+      current.map((adult) => (adult.id === id ? { ...adult, [field]: value } : adult)),
     );
   }
 
-  function addParticipant() {
-    setParticipants((current) => [...current, createEmptyParticipant(nextParticipantId)]);
-    setNextParticipantId((current) => current + 1);
+  function addAdult() {
+    setAdults((current) => [...current, createEmptyGuest(nextAdultId)]);
+    setNextAdultId((current) => current + 1);
   }
 
-  function removeParticipant(id: number) {
-    setParticipants((current) =>
-      current.length === 1 ? current : current.filter((participant) => participant.id !== id),
+  function removeAdult(id: number) {
+    setAdults((current) => (current.length > 1 ? current.filter((adult) => adult.id !== id) : current));
+  }
+
+  function updateChild(id: number, field: keyof Omit<GuestForm, "id">, value: string) {
+    setChildren((current) =>
+      current.map((child) => (child.id === id ? { ...child, [field]: value } : child)),
     );
+  }
+
+  function addChild() {
+    setChildren((current) => [...current, createEmptyGuest(nextChildId)]);
+    setNextChildId((current) => current + 1);
+  }
+
+  function removeChild(id: number) {
+    setChildren((current) => current.filter((child) => child.id !== id));
   }
 
   async function handleRsvp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const normalizedParticipants = participants
-      .map((participant) => ({
-        name: participant.name.trim(),
-        type: participant.type,
-        age: Number(participant.age),
-      }))
-      .filter((participant) => participant.name);
+    const normalizedAdults = adults.map((adult) => ({ name: adult.name.trim(), age: Number(adult.age) }));
+    const normalizedChildren = children
+      .map((child) => ({ name: child.name.trim(), age: Number(child.age) }))
+      .filter((child) => child.name);
 
-    if (!phone.trim() || normalizedParticipants.length === 0) {
-      setError("Informe pelo menos uma pessoa e o telefone para confirmar com carinho.");
+    if (!name.trim() || !phone.trim()) {
+      setError("Informe seu nome completo e telefone para confirmar com carinho.");
       return;
     }
 
-    if (normalizedParticipants.some((participant) => Number.isNaN(participant.age))) {
-      setError("Informe a idade de cada pessoa.");
+    if (normalizedAdults.some((adult) => !adult.name || Number.isNaN(adult.age))) {
+      setError("Informe o nome completo e a idade de cada adulto.");
+      return;
+    }
+
+    if (normalizedChildren.some((child) => Number.isNaN(child.age))) {
+      setError("Informe a idade de cada criança.");
       return;
     }
 
@@ -186,11 +188,11 @@ export default function InvitationSite() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          groupName: groupName.trim() || undefined,
+          name: name.trim(),
           phone: phone.trim(),
           attendance,
-          participants: normalizedParticipants,
-          message: message.trim() || undefined,
+          adults: normalizedAdults,
+          children: normalizedChildren,
         }),
       });
 
@@ -203,19 +205,19 @@ export default function InvitationSite() {
 
       setSummary({
         name: body.rsvp.name,
-        displayName: body.rsvp.displayName,
-        groupName: body.rsvp.groupName,
         attendance: body.rsvp.attendance,
         adults: Number(body.rsvp.adults || 0),
         children: Number(body.rsvp.children || 0),
-        participants: Array.isArray(body.rsvp.participants) ? body.rsvp.participants : [],
+        adultsList: Array.isArray(body.rsvp.adultsList) ? body.rsvp.adultsList : [],
+        childrenList: Array.isArray(body.rsvp.childrenList) ? body.rsvp.childrenList : [],
       });
-      setGroupName("");
+      setName("");
       setPhone("");
       setAttendance("sim");
-      setMessage("");
-      setParticipants([createEmptyParticipant(1)]);
-      setNextParticipantId(2);
+      setAdults([createEmptyGuest(1)]);
+      setNextAdultId(2);
+      setChildren([]);
+      setNextChildId(1);
     } catch {
       setError("Não foi possível registrar sua presença agora.");
     } finally {
@@ -509,7 +511,6 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
-            <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">RSVP</p>
             <h2 className="mb-3 mt-3 font-serif text-4xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
               Confirme sua Presença
             </h2>
@@ -530,9 +531,9 @@ export default function InvitationSite() {
               {summary && (
                 <div className="mt-8 rounded-[1.8rem] bg-white/72 p-5 ring-1 ring-[#f0c7d3]/50">
                   <p className="text-xs font-black uppercase tracking-[.24em] text-[#d36f8a]">Presença registrada</p>
-                  <p className="mt-2 text-2xl font-black text-[#b85f78]">{summary.groupName || summary.displayName || summary.name}</p>
+                  <p className="mt-2 text-2xl font-black text-[#b85f78]">{summary.name}</p>
                   <p className="mt-1 text-[#806966]">{summary.attendance === 'sim' ? 'Vai celebrar com a gente' : 'Não poderá comparecer'} • {guestsLabel}</p>
-                  {participantNamesLabel && <p className="mt-2 text-sm text-[#806966]">Pessoas: {participantNamesLabel}</p>}
+                  {childrenNamesLabel && <p className="mt-2 text-sm text-[#806966]">Crianças: {childrenNamesLabel}</p>}
                 </div>
               )}
               <div className="mt-8 space-y-3 text-sm leading-7 text-[#806966]">
@@ -553,62 +554,91 @@ export default function InvitationSite() {
 
             <form onSubmit={handleRsvp} className="rounded-[2rem] bg-white/68 p-7 shadow-[0_10px_30px_rgba(201,111,135,.06)] sm:p-8">
               <div className="grid gap-5 sm:grid-cols-2">
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Família / grupo (opcional)</span>
-                  <input value={groupName} onChange={(event) => setGroupName(event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Ex.: Família Souza" />
+                <label className="grid gap-1.5 text-sm font-semibold text-[#5b4a48] sm:col-span-2">
+                  <span>Nome completo</span>
+                  <input value={name} onChange={(event) => setName(event.target.value)} className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-pink-100" placeholder="Seu nome completo" />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2"><Phone className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Telefone</span>
-                  <input value={phone} onChange={(event) => setPhone(event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="(21) 99999-9999" />
+                <label className="grid gap-1.5 text-sm font-semibold text-[#5b4a48] sm:col-span-2">
+                  <span>Telefone</span>
+                  <input value={phone} onChange={(event) => setPhone(event.target.value)} className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-pink-100" placeholder="(21) 99999-9999" />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Presença</span>
-                  <select value={attendance} onChange={(event) => setAttendance(event.target.value as "sim" | "nao")} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100">
-                    <option value="sim">Sim, estaremos lá</option>
-                    <option value="nao">Não poderei ir</option>
-                  </select>
-                </label>
-                <div className="sm:col-span-2 rounded-[1.5rem] border border-[#f4d5de] bg-[#fffafa]/80 p-4">
+                <div className="sm:col-span-2">
+                  <span className="text-sm font-semibold text-[#5b4a48]">Presença</span>
+                  <div className="mt-2 flex flex-wrap gap-6">
+                    <label className="flex items-center gap-2 text-sm font-medium text-[#5b4a48]">
+                      <input type="radio" name="attendance" value="sim" checked={attendance === "sim"} onChange={() => setAttendance("sim")} className="h-4 w-4 accent-[#df7894]" />
+                      Sim, estarei lá
+                    </label>
+                    <label className="flex items-center gap-2 text-sm font-medium text-[#5b4a48]">
+                      <input type="radio" name="attendance" value="nao" checked={attendance === "nao"} onChange={() => setAttendance("nao")} className="h-4 w-4 accent-[#df7894]" />
+                      Não poderei ir
+                    </label>
+                  </div>
+                </div>
+                <div className="sm:col-span-2 rounded-md border border-gray-200 bg-white p-4">
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Pessoas do grupo</p>
-                      <p className="mt-1 text-sm text-[#806966]">Adicione cada pessoa com nome, tipo e idade.</p>
+                      <p className="text-sm font-semibold text-[#5b4a48]">Adultos</p>
+                      <p className="mt-1 text-sm text-gray-500">Informe o nome completo e a idade de cada adulto.</p>
                     </div>
-                    <button type="button" onClick={addParticipant} className="inline-flex items-center gap-2 rounded-full border border-[#efc8d4] bg-white px-4 py-2 text-sm font-bold text-[#b85f78] transition hover:bg-[#fff2f6]">
-                      <UserPlus className="h-4 w-4" strokeWidth={2.2} /> Adicionar pessoa
+                    <button type="button" onClick={addAdult} className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-[#b85f78] transition hover:bg-gray-50">
+                      Adicionar adulto
                     </button>
                   </div>
                   <div className="space-y-4">
-                    {participants.map((participant, index) => (
-                      <div key={participant.id} className="grid gap-4 rounded-[1.25rem] border border-[#f2d8df] bg-white p-4 sm:grid-cols-[1.5fr_.9fr_.7fr_auto]">
-                        <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                          <span className="flex items-center gap-2"><User className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Nome completo</span>
-                          <input value={participant.name} onChange={(event) => updateParticipant(participant.id, "name", event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder={`Pessoa ${index + 1}`} />
+                    {adults.map((adult, index) => (
+                      <div key={adult.id} className="grid gap-4 rounded-md border border-gray-200 p-4 sm:grid-cols-[1.5fr_.7fr_auto]">
+                        <label className="grid gap-1.5 text-sm font-semibold text-[#5b4a48]">
+                          <span>Nome completo do adulto {index + 1}</span>
+                          <input value={adult.name} onChange={(event) => updateAdult(adult.id, "name", event.target.value)} className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-pink-100" placeholder={`Adulto ${index + 1}`} />
                         </label>
-                        <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                          <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Tipo</span>
-                          <select value={participant.type} onChange={(event) => updateParticipant(participant.id, "type", event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100">
-                            <option value="adulto">Adulto</option>
-                            <option value="crianca">Criança</option>
-                          </select>
-                        </label>
-                        <label className="grid gap-2 text-sm font-bold text-[#9d5f70]">
-                          <span className="flex items-center gap-2"><Baby className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Idade</span>
-                          <input value={participant.age} onChange={(event) => updateParticipant(participant.id, "age", event.target.value)} type="number" min="0" className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="0" />
+                        <label className="grid gap-1.5 text-sm font-semibold text-[#5b4a48]">
+                          <span>Idade</span>
+                          <input value={adult.age} onChange={(event) => updateAdult(adult.id, "age", event.target.value)} type="number" min="0" className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-pink-100" placeholder="0" />
                         </label>
                         <div className="flex items-end">
-                          <button type="button" onClick={() => removeParticipant(participant.id)} disabled={participants.length === 1} className="inline-flex h-[52px] w-[52px] items-center justify-center rounded-xl border border-[#f1c4d0]/40 bg-white text-[#b85f78] transition hover:bg-[#fff2f6] disabled:cursor-not-allowed disabled:opacity-40" aria-label={`Remover pessoa ${index + 1}`}>
-                            <Trash2 className="h-4 w-4" strokeWidth={2.2} />
+                          <button type="button" onClick={() => removeAdult(adult.id)} disabled={adults.length === 1} className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-[#b85f78] transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto" aria-label={`Remover adulto ${index + 1}`}>
+                            Remover
                           </button>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-                <label className="grid gap-2 text-sm font-bold text-[#9d5f70] sm:col-span-2">
-                  <span className="flex items-center gap-2"><MessageCircle className="h-4 w-4 text-[#d36f8a]" strokeWidth={2} /> Mensagem</span>
-                  <input value={message} onChange={(event) => setMessage(event.target.value)} className="rounded-xl border border-[#f1c4d0]/40 bg-[#fffafa] px-4 py-3.5 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100" placeholder="Deixe um recadinho carinhoso" />
-                </label>
+                <div className="sm:col-span-2 rounded-md border border-gray-200 bg-white p-4">
+                  <div className="mb-4 flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-semibold text-[#5b4a48]">Crianças</p>
+                      <p className="mt-1 text-sm text-gray-500">Se houver crianças, informe o nome completo e a idade de cada uma.</p>
+                    </div>
+                    <button type="button" onClick={addChild} className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-[#b85f78] transition hover:bg-gray-50">
+                      Adicionar criança
+                    </button>
+                  </div>
+                  {children.length === 0 ? (
+                    <p className="text-sm text-gray-500">Nenhuma criança adicionada.</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {children.map((child, index) => (
+                        <div key={child.id} className="grid gap-4 rounded-md border border-gray-200 p-4 sm:grid-cols-[1.5fr_.7fr_auto]">
+                          <label className="grid gap-1.5 text-sm font-semibold text-[#5b4a48]">
+                            <span>Nome completo da criança {index + 1}</span>
+                            <input value={child.name} onChange={(event) => updateChild(child.id, "name", event.target.value)} className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-pink-100" placeholder={`Criança ${index + 1}`} />
+                          </label>
+                          <label className="grid gap-1.5 text-sm font-semibold text-[#5b4a48]">
+                            <span>Idade</span>
+                            <input value={child.age} onChange={(event) => updateChild(child.id, "age", event.target.value)} type="number" min="0" className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-pink-100" placeholder="0" />
+                          </label>
+                          <div className="flex items-end">
+                            <button type="button" onClick={() => removeChild(child.id)} className="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-[#b85f78] transition hover:bg-gray-50 sm:w-auto" aria-label={`Remover criança ${index + 1}`}>
+                              Remover
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               {error && <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</p>}
               <button

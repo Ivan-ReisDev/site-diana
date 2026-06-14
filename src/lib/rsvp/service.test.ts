@@ -1,23 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { calculatePresenceStats, countParticipants, toAttendanceEnum } from './service';
+import { calculatePresenceStats, toAttendanceEnum } from './service';
 
 describe('rsvp service helpers', () => {
   it('converte attendance do formulário para enum', () => {
     expect(toAttendanceEnum('sim')).toBe('YES');
     expect(toAttendanceEnum('nao')).toBe('NO');
-  });
-
-  it('conta adultos e crianças a partir da lista individual', () => {
-    const counts = countParticipants([
-      { name: 'Ana', type: 'adulto', age: 34 },
-      { name: 'Bia', type: 'crianca', age: 8 },
-      { name: 'Caio', type: 'adulto', age: 12 },
-    ]);
-
-    expect(counts.adults).toBe(2);
-    expect(counts.children).toBe(1);
-    expect(counts.total).toBe(3);
   });
 
   it('calcula totais ignorando grupos que não irão', () => {

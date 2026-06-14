@@ -27,14 +27,14 @@ describe('DashboardRsvpManager', () => {
 
     render(<DashboardRsvpManager initialRows={[]} />);
 
-    fireEvent.change(screen.getByPlaceholderText('Ex.: Família Souza'), { target: { value: 'Família Prado' } });
+    fireEvent.change(screen.getByPlaceholderText('Nome completo'), { target: { value: 'Paula Prado' } });
     fireEvent.change(screen.getByPlaceholderText('(21) 99999-9999'), { target: { value: '(21) 98888-1111' } });
-    fireEvent.change(screen.getByPlaceholderText('Pessoa 1'), { target: { value: 'Paula Prado' } });
-    fireEvent.change(screen.getByPlaceholderText('0'), { target: { value: '36' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /adicionar pessoa/i }));
-    fireEvent.change(screen.getByPlaceholderText('Pessoa 2'), { target: { value: 'Theo Prado' } });
-    fireEvent.change(screen.getAllByRole('combobox')[1], { target: { value: 'crianca' } });
+    fireEvent.change(screen.getByPlaceholderText('Adulto 1'), { target: { value: 'Paula Prado' } });
+    fireEvent.change(screen.getAllByPlaceholderText('0')[0], { target: { value: '32' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }));
+    fireEvent.change(screen.getByPlaceholderText('Criança 1'), { target: { value: 'Theo Prado' } });
     fireEvent.change(screen.getAllByPlaceholderText('0')[1], { target: { value: '5' } });
     fireEvent.click(screen.getByRole('button', { name: /salvar grupo na dashboard/i }));
 
