@@ -31,6 +31,16 @@ export function getSessionCookieOptions(expiresAt: Date) {
   };
 }
 
+export function isHttpsRequest(request: Request) {
+  const forwardedProto = request.headers.get('x-forwarded-proto');
+
+  if (forwardedProto) {
+    return forwardedProto.split(',')[0].trim() === 'https';
+  }
+
+  return new URL(request.url).protocol === 'https:';
+}
+
 export type SessionWithUser = AdminSession & {
   adminUser: AdminUser;
 };
