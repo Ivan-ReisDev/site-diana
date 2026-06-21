@@ -4,12 +4,10 @@ import { FormEvent, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Calendar,
-  Gift,
   Heart,
   Mail,
   MapPin,
   Castle,
-  Ribbon,
   Sparkles,
   Lightbulb,
   ExternalLink,
@@ -265,11 +263,6 @@ export default function InvitationSite() {
   const [recadoNome, setRecadoNome] = useState("");
   const [recadoMsg, setRecadoMsg] = useState("");
   const [recadoEnviado, setRecadoEnviado] = useState(false);
-  const [gifts, setGifts] = useState<GiftItem[]>(giftItems);
-  const [giftNome, setGiftNome] = useState("");
-  const [giftId, setGiftId] = useState(0);
-  const [showGiftForm, setShowGiftForm] = useState(false);
-  const [showSuggestionsFor, setShowSuggestionsFor] = useState<number | null>(null);
 
   const guestsLabel = useMemo(() => {
     if (!summary) return "";
@@ -404,22 +397,6 @@ export default function InvitationSite() {
     setRecadoMsg("");
     setRecadoEnviado(true);
     setTimeout(() => setRecadoEnviado(false), 3000);
-  }
-
-  function abrirReserva(item: GiftItem) {
-    setGiftId(item.id);
-    setGiftNome("");
-    setShowGiftForm(true);
-  }
-
-  function confirmarReserva() {
-    if (!giftNome.trim()) return;
-    setGifts((prev) =>
-      prev.map((g) =>
-        g.id === giftId ? { ...g, reservado: true, reservadoPor: giftNome.trim() } : g
-      )
-    );
-    setShowGiftForm(false);
   }
 
   return (
@@ -839,180 +816,88 @@ export default function InvitationSite() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
             <p className="mb-3 font-serif text-5xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
-              Lista de Presentes
+              Sugestões de Presente
             </p>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
-              Escolha um presente para a princesa Diana e reserve com carinho
+              Ideias carinhosas para a princesa Diana — cada presente traz sugestões de itens e lojas onde você pode encontrá-los.
             </p>
           </div>
 
-          {/* Sugestões de presente */}
-          <div className="mb-12">
-            <div className="rounded-[2rem] bg-gradient-to-br from-[#fff1f4] via-[#fff5f8] to-[#fce4eb] p-6 shadow-[0_6px_18px_rgba(201,111,135,.06)] sm:p-8">
-              <div className="flex items-start gap-3">
-                <span className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/80 text-[#b85f78] shadow-sm">
-                  <Lightbulb className="h-5 w-5" strokeWidth={2.25} />
-                </span>
-                <div>
-                  <p className="font-serif text-2xl font-black text-[#b85f78]">
-                    Sugestões de presente
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-[#7e5f5b] sm:text-base">
-                    Não encontrou o item exato? Selecione um presente abaixo e veja ideias e lojas sugeridas para surpreender a Diana.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                {gifts.map((g) => (
-                  <button
-                    key={`sug-${g.id}`}
-                    type="button"
-                    onClick={() =>
-                      setShowSuggestionsFor(showSuggestionsFor === g.id ? null : g.id)
-                    }
-                    className={`inline-flex items-center gap-1.5 rounded-full border-2 px-3.5 py-1.5 text-xs font-bold transition sm:text-sm ${
-                      showSuggestionsFor === g.id
-                        ? "border-[#df7894] bg-[#df7894] text-white shadow-sm"
-                        : "border-[#f1c4d0] bg-white/80 text-[#b85f78] hover:border-[#df7894] hover:bg-[#fff5f8]"
-                    }`}
-                  >
-                    <Sparkles className="h-3.5 w-3.5" strokeWidth={2.25} />
-                    {g.nome}
-                  </button>
-                ))}
-              </div>
-
-              {showSuggestionsFor !== null &&
-                (() => {
-                  const sug = giftSuggestions.find((s) => s.giftId === showSuggestionsFor);
-                  if (!sug) return null;
-                  return (
-                    <motion.div
-                      key={showSuggestionsFor}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="mt-5 rounded-[1.5rem] bg-white/85 p-5 shadow-sm sm:p-6"
-                    >
-                      <p className="text-xs font-black uppercase tracking-[.2em] text-[#d36f8a]">
-                        {gifts.find((g) => g.id === showSuggestionsFor)?.nome}
-                      </p>
-                      <ul className="mt-3 space-y-2">
-                        {sug.ideias.map((ideia, idx) => (
-                          <li
-                            key={idx}
-                            className="flex items-start gap-2 text-sm leading-6 text-[#806966] sm:text-base"
-                          >
-                            <span className="mt-1 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#df7894]" />
-                            {ideia}
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-5 border-t border-[#f1c4d0]/60 pt-4">
-                        <p className="mb-3 flex items-center gap-1.5 text-xs font-black uppercase tracking-[.2em] text-[#d36f8a]">
-                          <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2.25} />
-                          Onde comprar
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {sug.lojas.map((loja) => (
-                            <a
-                              key={loja.nome}
-                              href={loja.busca}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-full bg-[#fff1f4] px-3.5 py-2 text-xs font-bold text-[#b85f78] transition hover:bg-[#df7894] hover:text-white sm:text-sm"
-                            >
-                              {loja.nome}
-                              <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
-                            </a>
-                          ))}
-                        </div>
+          {/* Grid de 12 cards de Sugestões, todos sempre abertos */}
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {giftSuggestions.map((sug) => {
+              const item = giftItems.find((g) => g.id === sug.giftId);
+              return (
+                <article
+                  key={sug.giftId}
+                  className="flex flex-col overflow-hidden rounded-[1.75rem] bg-white/82 shadow-[0_6px_18px_rgba(201,111,135,.06)] ring-1 ring-[#f1c4d0]/50 transition-all hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(201,111,135,.12)]"
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#fff5f8]">
+                    {item?.imagem ? (
+                      <img
+                        src={item.imagem}
+                        alt={item.nome}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-5xl text-[#df7894]">
+                        <Sparkles className="h-12 w-12" strokeWidth={1.5} />
                       </div>
-                    </motion.div>
-                  );
-                })()}
-            </div>
-          </div>
-
-          {/* Modal de reserva */}
-          {showGiftForm && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-5 backdrop-blur-sm">
-              <div className="w-full max-w-sm rounded-[2rem] bg-white p-8 shadow-2xl">
-                <p className="font-serif text-2xl font-black text-[#b85f78]">Reservar presente</p>
-                <p className="mt-2 text-sm text-[#806966]">
-                  Digite seu nome para reservar este presente
-                </p>
-                <input
-                  value={giftNome}
-                  onChange={(e) => setGiftNome(e.target.value)}
-                  placeholder="Seu nome"
-                  className="mt-5 w-full rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200"
-                  autoFocus
-                />
-                <div className="mt-5 flex gap-3">
-                  <button
-                    onClick={() => setShowGiftForm(false)}
-                    className="flex-1 rounded-full border border-[#f1c4d0] px-4 py-3 font-bold text-[#806966] transition hover:bg-[#fff5f8]"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    onClick={confirmarReserva}
-                    className="royal-button flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-3 font-bold text-white"
-                  >
-                    <Gift className="h-4 w-4" strokeWidth={2.25} /> Confirmar
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {gifts.map((item) => (
-              <div
-                key={item.id}
-                className={`group animate-rise overflow-hidden rounded-[1.5rem] text-center shadow-[0_6px_18px_rgba(201,111,135,.06)] transition-all ${
-                  item.reservado
-                    ? "bg-[#fff5f8]/50 opacity-70"
-                    : "bg-white/72 hover:shadow-[0_8px_24px_rgba(201,111,135,.12)] hover:-translate-y-1"
-                }`}
-                style={{ animationDelay: `${item.id * 60}ms` }}
-              >
-                <div className="relative aspect-square w-full overflow-hidden bg-[#fff5f8]">
-                  <img
-                    src={item.imagem}
-                    alt={item.nome}
-                    className={`h-full w-full object-cover transition-transform duration-500 ${
-                      item.reservado ? "" : "group-hover:scale-105"
-                    }`}
-                    loading="lazy"
-                  />
-                  {item.reservado && (
-                    <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-black uppercase tracking-[.08em] text-[#b85f78] shadow-sm">
-                      <Ribbon className="h-3.5 w-3.5" strokeWidth={2.25} /> Reservado
+                    )}
+                    <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[.18em] text-[#b85f78] shadow-sm">
+                      <Lightbulb className="h-3.5 w-3.5" strokeWidth={2.25} />
+                      Sugestão
                     </span>
-                  )}
-                </div>
-                <div className="p-5">
-                  <h3 className="text-base font-black text-[#b85f78]">{item.nome}</h3>
-                  <p className="mt-1 font-serif text-xl font-bold text-[#d5a547]">{item.preco}</p>
+                  </div>
 
-                  {item.reservado ? (
-                    <p className="mt-4 text-xs text-[#b78b8c]">Reservado por {item.reservadoPor}</p>
-                  ) : (
-                    <button
-                      onClick={() => abrirReserva(item)}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border-2 border-[#df7894]/30 px-4 py-2.5 text-sm font-bold text-[#df7894] transition hover:bg-[#df7894] hover:text-white"
-                    >
-                      <Gift className="h-4 w-4" strokeWidth={2.25} /> Dar este presente
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+                  <div className="flex flex-1 flex-col p-5 sm:p-6">
+                    <h3 className="font-serif text-2xl font-black leading-tight text-[#b85f78]">
+                      {item?.nome ?? "Presente"}
+                    </h3>
+                    {item?.preco && (
+                      <p className="mt-1 text-sm font-bold text-[#d5a547]">
+                        Sugestão de valor: {item.preco}
+                      </p>
+                    )}
+
+                    <ul className="mt-4 space-y-2">
+                      {sug.ideias.map((ideia, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 text-sm leading-6 text-[#806966] sm:text-base"
+                        >
+                          <span className="mt-2 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#df7894]" />
+                          {ideia}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-5 flex-1 border-t border-[#f1c4d0]/60 pt-4">
+                      <p className="mb-3 flex items-center gap-1.5 text-xs font-black uppercase tracking-[.2em] text-[#d36f8a]">
+                        <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2.25} />
+                        Onde comprar
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {sug.lojas.map((loja) => (
+                          <a
+                            key={loja.nome}
+                            href={loja.busca}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 rounded-full bg-[#fff1f4] px-3 py-1.5 text-xs font-bold text-[#b85f78] transition hover:bg-[#df7894] hover:text-white sm:text-sm"
+                          >
+                            {loja.nome}
+                            <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {/* Pix também */}
