@@ -10,6 +10,10 @@ import {
   MapPin,
   Castle,
   Ribbon,
+  Sparkles,
+  Lightbulb,
+  ExternalLink,
+  ShoppingBag,
 } from "lucide-react";
 
 type RsvpGuest = {
@@ -62,6 +66,159 @@ const giftItems: GiftItem[] = [
   { id: 12, nome: "Fantasia de Princesa", imagem: "https://images.pexels.com/photos/19230196/pexels-photo-19230196.jpeg?auto=compress&cs=tinysrgb&w=400", preco: "R$ 89,90", reservado: false, reservadoPor: "" },
 ];
 
+type GiftSuggestion = {
+  giftId: number;
+  ideias: string[];
+  lojas: { nome: string; busca: string }[];
+};
+
+const giftSuggestions: GiftSuggestion[] = [
+  {
+    giftId: 1,
+    ideias: [
+      "Urso de pelúcia macio (≥ 30cm) sem peças pequenas",
+      "Manta de conforto + ursinho companheiro",
+      "Ursinho musical para a hora de dormir",
+    ],
+    lojas: [
+      { nome: "Lojas Renner", busca: "https://www.lojasrenner.com.br/busca?q=urso+pelucia+infantil" },
+      { nome: "Shopee", busca: "https://shopee.com.br/search?keyword=urso%20de%20pelucia%20bebe" },
+    ],
+  },
+  {
+    giftId: 2,
+    ideias: [
+      "Blocos de montar grandes (≥ 1 ano, sem engasgo)",
+      "Blocos de empilhar coloridos (madeira)",
+      "Cubos com números e letras",
+    ],
+    lojas: [
+      { nome: "Ri Happy", busca: "https://www.rihappy.com.br/pesquisa?q=blocos+de+montar" },
+      { nome: "Amazon", busca: "https://www.amazon.com.br/s?k=blocos+de+montar+1+ano" },
+    ],
+  },
+  {
+    giftId: 3,
+    ideias: [
+      "Carrinho de brinquedo resistente (caminhão, passeio)",
+      "Carrinho empurrador com som e luz",
+      "Mini veículos de fricção para empurrar",
+    ],
+    lojas: [
+      { nome: "Toymania", busca: "https://www.toymania.com.br/pesquisa?q=carrinho+brinquedo" },
+      { nome: "Shopee", busca: "https://shopee.com.br/search?keyword=carrinho%20de%20brinquedo" },
+    ],
+  },
+  {
+    giftId: 4,
+    ideias: [
+      "Boneca de pano/corpo mole (segura para 1 ano)",
+      "Boneca com chocalho e mordedor",
+      "Boneca da Princesa Diana (faz parte do tema!)",
+    ],
+    lojas: [
+      { nome: "Maria Filó", busca: "https://www.mariafilo.com.br/pesquisa?q=boneca+infantil" },
+      { nome: "Amazon", busca: "https://www.amazon.com.br/s?k=boneca+1+ano" },
+    ],
+  },
+  {
+    giftId: 5,
+    ideias: [
+      "Quebra-cabeça de madeira (peças grandes, 3–6 peças)",
+      "Quebra-cabeça de animais/contagem",
+      "Quebra-cabeça progressivo de encaixe",
+    ],
+    lojas: [
+      { nome: "Grow", busca: "https://www.lojagrow.com.br/pesquisa?q=quebra+cabeca" },
+      { nome: "Shopee", busca: "https://shopee.com.br/search?keyword=quebra%20cabe%C3%A7a%201%20ano" },
+    ],
+  },
+  {
+    giftId: 6,
+    ideias: [
+      "Bola macia de tecido para rolar e chutar",
+      "Bola texturizada sensorial (mordedor)",
+      "Conjunto de bolas coloridas empilháveis",
+    ],
+    lojas: [
+      { nome: "Ri Happy", busca: "https://www.rihappy.com.br/pesquisa?q=bola+infantil" },
+      { nome: "Amazon", busca: "https://www.amazon.com.br/s?k=bola+infantil+1+ano" },
+    ],
+  },
+  {
+    giftId: 7,
+    ideias: [
+      "Kit de pintura atóxico (dedo e grossos)",
+      "Aquarela + papel grosso A3",
+      "Giz de cera triangular (fácil de segurar)",
+    ],
+    lojas: [
+      { nome: "Kalunga", busca: "https://www.kalunga.com.br/busca?q=kit+pintura+infantil" },
+      { nome: "Shopee", busca: "https://shopee.com.br/search?keyword=kit%20pintura%20infantil" },
+    ],
+  },
+  {
+    giftId: 8,
+    ideias: [
+      "Livro cartonado com texturas e cores",
+      "Livro “Bom dia, Verônica” para 1 ano",
+      "Livro de banho (PVC) — diversão no banho",
+    ],
+    lojas: [
+      { nome: "Livraria da Travessa", busca: "https://www.travessa.com.br/busca?termo=livro+infantil+1+ano" },
+      { nome: "Amazon", busca: "https://www.amazon.com.br/s?k=livro+infantil+1+ano" },
+    ],
+  },
+  {
+    giftId: 9,
+    ideias: [
+      "Panelinhas de madeira (cozinha de brincar)",
+      "Kit de panelinhas coloridas com utensílios",
+      "Fogãozinho de madeira com panelinhas",
+    ],
+    lojas: [
+      { nome: "Toymania", busca: "https://www.toymania.com.br/pesquisa?q=panelinhas" },
+      { nome: "Lojas Americanas", busca: "https://www.americanas.com.br/busca/panelinhas" },
+    ],
+  },
+  {
+    giftId: 10,
+    ideias: [
+      "Cavalo de balanço de madeira (tema princesa)",
+      "Pônei/girafa de pelúcia com som",
+      "Cavalinho com rodinhas",
+    ],
+    lojas: [
+      { nome: "Toymania", busca: "https://www.toymania.com.br/pesquisa?q=cavalo+balan%C3%A7o" },
+      { nome: "Shopee", busca: "https://shopee.com.br/search?keyword=cavalo%20de%20bala%C3%A7o" },
+    ],
+  },
+  {
+    giftId: 11,
+    ideias: [
+      "Massinha de modelar atóxica (12 cores)",
+      "Massinha com formas/moldes",
+      "Massinha de trigo com cores vivas",
+    ],
+    lojas: [
+      { nome: "Ri Happy", busca: "https://www.rihappy.com.br/pesquisa?q=massinha+modelar" },
+      { nome: "Amazon", busca: "https://www.amazon.com.br/s?k=massinha+de+modelar+infantil" },
+    ],
+  },
+  {
+    giftId: 12,
+    ideias: [
+      "Fantasia de princesa (tema Cinderela/Ariel)",
+      "Tiara + varinha + saia tutu",
+      "Fantasia de fada com asas brilhantes",
+    ],
+    lojas: [
+      { nome: "Lojas Renner", busca: "https://www.lojasrenner.com.br/busca?q=fantasia+princesa" },
+      { nome: "Shopee", busca: "https://shopee.com.br/search?keyword=fantasia%20princesa%20infantil" },
+    ],
+  },
+];
+
 const eventDetails = [
   { label: "Data", value: "11 de outubro" },
   { label: "Horário", value: "13 horas" },
@@ -112,6 +269,7 @@ export default function InvitationSite() {
   const [giftNome, setGiftNome] = useState("");
   const [giftId, setGiftId] = useState(0);
   const [showGiftForm, setShowGiftForm] = useState(false);
+  const [showSuggestionsFor, setShowSuggestionsFor] = useState<number | null>(null);
 
   const guestsLabel = useMemo(() => {
     if (!summary) return "";
@@ -687,6 +845,96 @@ export default function InvitationSite() {
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
               Escolha um presente para a princesa Diana e reserve com carinho
             </p>
+          </div>
+
+          {/* Sugestões de presente */}
+          <div className="mb-12">
+            <div className="rounded-[2rem] bg-gradient-to-br from-[#fff1f4] via-[#fff5f8] to-[#fce4eb] p-6 shadow-[0_6px_18px_rgba(201,111,135,.06)] sm:p-8">
+              <div className="flex items-start gap-3">
+                <span className="mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/80 text-[#b85f78] shadow-sm">
+                  <Lightbulb className="h-5 w-5" strokeWidth={2.25} />
+                </span>
+                <div>
+                  <p className="font-serif text-2xl font-black text-[#b85f78]">
+                    Sugestões de presente
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-[#7e5f5b] sm:text-base">
+                    Não encontrou o item exato? Selecione um presente abaixo e veja ideias e lojas sugeridas para surpreender a Diana.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {gifts.map((g) => (
+                  <button
+                    key={`sug-${g.id}`}
+                    type="button"
+                    onClick={() =>
+                      setShowSuggestionsFor(showSuggestionsFor === g.id ? null : g.id)
+                    }
+                    className={`inline-flex items-center gap-1.5 rounded-full border-2 px-3.5 py-1.5 text-xs font-bold transition sm:text-sm ${
+                      showSuggestionsFor === g.id
+                        ? "border-[#df7894] bg-[#df7894] text-white shadow-sm"
+                        : "border-[#f1c4d0] bg-white/80 text-[#b85f78] hover:border-[#df7894] hover:bg-[#fff5f8]"
+                    }`}
+                  >
+                    <Sparkles className="h-3.5 w-3.5" strokeWidth={2.25} />
+                    {g.nome}
+                  </button>
+                ))}
+              </div>
+
+              {showSuggestionsFor !== null &&
+                (() => {
+                  const sug = giftSuggestions.find((s) => s.giftId === showSuggestionsFor);
+                  if (!sug) return null;
+                  return (
+                    <motion.div
+                      key={showSuggestionsFor}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="mt-5 rounded-[1.5rem] bg-white/85 p-5 shadow-sm sm:p-6"
+                    >
+                      <p className="text-xs font-black uppercase tracking-[.2em] text-[#d36f8a]">
+                        {gifts.find((g) => g.id === showSuggestionsFor)?.nome}
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {sug.ideias.map((ideia, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-start gap-2 text-sm leading-6 text-[#806966] sm:text-base"
+                          >
+                            <span className="mt-1 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#df7894]" />
+                            {ideia}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-5 border-t border-[#f1c4d0]/60 pt-4">
+                        <p className="mb-3 flex items-center gap-1.5 text-xs font-black uppercase tracking-[.2em] text-[#d36f8a]">
+                          <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2.25} />
+                          Onde comprar
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {sug.lojas.map((loja) => (
+                            <a
+                              key={loja.nome}
+                              href={loja.busca}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-full bg-[#fff1f4] px-3.5 py-2 text-xs font-bold text-[#b85f78] transition hover:bg-[#df7894] hover:text-white sm:text-sm"
+                            >
+                              {loja.nome}
+                              <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })()}
+            </div>
           </div>
 
           {/* Modal de reserva */}
