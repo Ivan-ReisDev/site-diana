@@ -450,7 +450,7 @@ export default function InvitationSite() {
               Diana faz 1 ano
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#7e5f5b] sm:text-xl">
-              Prepara-se: a festa real está prestes a começar! Um convite em aquarela, rosas e castelo para celebrar o primeiro aninho da Diana.
+              Convocação Real... Mamãe e Papai tem a honra de convidar você para celebrar o 1 aniversário da Nosso Princesa Diana
             </p>
           </motion.div>
 
