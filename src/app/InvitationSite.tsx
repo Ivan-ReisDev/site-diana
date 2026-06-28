@@ -626,57 +626,58 @@ export default function InvitationSite() {
             </p>
           </div>
 
-          <div className="rounded-[2rem] bg-white/45 px-6 py-8 sm:px-8">
-            <label
-              htmlFor="recado-nome"
-              className="text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]"
-            >
-              Seu nome
-            </label>
-            <div className="mt-3 grid gap-4 sm:flex">
+          <div className="mx-auto grid max-w-5xl gap-8 rounded-[2rem] bg-white/45 px-6 py-8 sm:px-8 sm:grid-cols-2">
+            <div className="flex flex-col gap-3">
+              <label
+                htmlFor="recado-nome"
+                className="text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]"
+              >
+                Seu nome
+              </label>
               <input
                 id="recado-nome"
                 value={recadoNome}
                 onChange={(e) => setRecadoNome(e.target.value)}
                 placeholder="Como podemos te chamar?"
-                className="w-full rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 text-base text-[#5b4a48] outline-none transition placeholder:text-[#b78b8c] focus:border-[#df7894] focus:bg-white focus:ring-4 focus:ring-pink-200 sm:flex-1"
+                className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200"
               />
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <label
+                htmlFor="recado-mensagem"
+                className="text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]"
+              >
+                Mensagem carinhosa
+              </label>
+              <textarea
+                id="recado-mensagem"
+                value={recadoMsg}
+                onChange={(e) => setRecadoMsg(e.target.value)}
+                placeholder="Escreva sua mensagem para a princesa Diana..."
+                rows={4}
+                className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200"
+              />
+              <span className="text-xs font-semibold text-[#9d6170]">
+                Sua mensagem aparece aqui para sempre
+                <span className="ml-2 font-mono text-[#b78b8c]">{recadoMsg.length}/240</span>
+              </span>
+            </div>
+
+            <div className="sm:col-span-2 mt-2 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
               <button
                 type="button"
                 onClick={enviarRecado}
-                className="royal-button inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-black uppercase tracking-[.18em] text-white whitespace-nowrap"
+                className="royal-button inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-black uppercase tracking-[.18em] text-white whitespace-nowrap sm:w-auto"
               >
                 Enviar recado
               </button>
+              {recadoEnviado && (
+                <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-center text-sm font-bold text-emerald-700 sm:flex-1">
+                  Recado enviado com carinho — obrigada por celebrar com a princesa Diana!
+                </p>
+              )}
             </div>
-
-            <label
-              htmlFor="recado-mensagem"
-              className="mt-6 block text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]"
-            >
-              Mensagem carinhosa
-            </label>
-            <textarea
-              id="recado-mensagem"
-              value={recadoMsg}
-              onChange={(e) => setRecadoMsg(e.target.value)}
-              placeholder="Escreva sua mensagem para a princesa Diana..."
-              rows={4}
-              className="mt-3 w-full rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 text-base leading-relaxed text-[#5b4a48] outline-none transition placeholder:text-[#b78b8c] focus:border-[#df7894] focus:bg-white focus:ring-4 focus:ring-pink-200"
-            />
-
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-[#9d6170]">
-              <span className="font-semibold">
-                Sua mensagem aparece aqui para sempre
-              </span>
-              <span className="font-mono text-[#b78b8c]">{recadoMsg.length}/240</span>
-            </div>
-
-            {recadoEnviado && (
-              <p className="mt-5 rounded-2xl bg-emerald-50 px-4 py-3 text-center text-sm font-bold text-emerald-700">
-                Recado enviado com carinho — obrigada por celebrar com a princesa Diana!
-              </p>
-            )}
           </div>
 
           {recados.length > 0 && (
