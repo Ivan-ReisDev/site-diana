@@ -482,7 +482,12 @@ export default function InvitationSite() {
       >
         <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
-          <span className="flex-shrink-0 text-2xl text-[#d7ad55]/70">♛</span>
+          <img
+            src="/coroa.png"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
+          />
           <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
         </div>
       </motion.div>
@@ -521,7 +526,12 @@ export default function InvitationSite() {
       >
         <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
-          <span className="flex-shrink-0 text-2xl text-[#d7ad55]/70">♛</span>
+          <img
+            src="/coroa.png"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
+          />
           <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
         </div>
       </motion.div>
@@ -571,7 +581,12 @@ export default function InvitationSite() {
       >
         <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
-          <span className="flex-shrink-0 text-2xl text-[#d7ad55]/70">♛</span>
+          <img
+            src="/coroa.png"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
+          />
           <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
         </div>
       </motion.div>
@@ -812,7 +827,12 @@ export default function InvitationSite() {
       >
         <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
           <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
-          <span className="flex-shrink-0 text-2xl text-[#d7ad55]/70">♛</span>
+          <img
+            src="/coroa.png"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
+          />
           <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
         </div>
       </motion.div>
