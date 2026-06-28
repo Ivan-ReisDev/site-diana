@@ -1288,9 +1288,9 @@ export default function InvitationSite() {
               Pix Descomplica
             </p>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
-            <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
-              Prefere presentear com um valor? É só usar o Pix, rápido, simples e
-              com todo carinho.
+            <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b] flex flex-col">
+              Prefere presentear com um valor? <span>É só usar o Pix, rápido, simples e
+              com todo carinho.</span> 
             </p>
           </div>
           <div className="mx-auto max-w-2xl rounded-[2rem] bg-white/45 p-8 text-center shadow-[0_8px_30px_rgba(201,111,135,.06)]">
@@ -1470,9 +1470,33 @@ export default function InvitationSite() {
           aria-hidden="true"
           className="pointer-events-none absolute bottom-0 right-0 w-24 -scale-x-100 select-none opacity-60 sm:w-28"
         />
-        <span className="relative">
+        <p className="relative font-script text-2xl text-[#b85f78] sm:text-3xl">
           Feito com carinho para celebrar o primeiro aninho da princesa Diana.
-        </span>
+        </p>
+        <p className="relative mt-3 text-xs font-medium uppercase tracking-[.28em] text-[#806562]">
+          Desenvolvido por
+          <a
+            href="https://ivanreis.com.br"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 inline-flex items-center gap-1.5 font-black text-[#c15f78] underline decoration-[#d7ad55]/70 decoration-2 underline-offset-4 transition hover:text-[#a64a64]"
+          >
+            Ivan Reis
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-3.5 w-3.5"
+            >
+              <path d="M7 17 17 7" />
+              <path d="M8 7h9v9" />
+            </svg>
+          </a>
+        </p>
       </motion.footer>
     </main>
   );
