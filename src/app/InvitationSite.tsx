@@ -13,6 +13,7 @@ import {
   ExternalLink,
   ShoppingBag,
 } from "lucide-react";
+import { BackgroundMusic } from "@/components/invitation/BackgroundMusic";
 
 type RsvpGuest = {
   name: string;
@@ -401,6 +402,7 @@ export default function InvitationSite() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#fff8f6] text-[#745b58] floral-wash">
+      <BackgroundMusic />
       <section className="relative isolate px-5 pb-20 pt-6 sm:px-8 lg:px-12">
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(244,190,206,.42),transparent_30%),radial-gradient(circle_at_86%_8%,rgba(255,224,232,.55),transparent_24%),radial-gradient(circle_at_70%_78%,rgba(255,231,178,.26),transparent_24%),linear-gradient(135deg,#fffdf9_0%,#fff1f5_48%,#fffaf7_100%)]" />
         <div className="absolute left-8 top-28 -z-10 h-44 w-44 rounded-full bg-pink-200/60 blur-3xl" />
@@ -410,7 +412,7 @@ export default function InvitationSite() {
         <div className="pointer-events-none absolute bottom-28 left-[42%] hidden animate-sparkle text-4xl text-[#f4b8c8]/45 lg:block">✨</div>
 
         <nav className="royal-glass mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3">
-          <a className="font-serif text-lg font-semibold tracking-tight text-[#c15f78]" href="#topo">
+          <a className="font-script text-2xl text-[#c15f78]" href="#topo">
             Diana
           </a>
           <div className="hidden gap-6 text-sm font-medium text-[#806562] md:flex">
@@ -434,7 +436,7 @@ export default function InvitationSite() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="max-w-3xl font-serif text-5xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-7xl lg:text-8xl">
+            <h1 className="max-w-3xl font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl lg:text-8xl">
               Diana faz 1 ano
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#7e5f5b] sm:text-xl">
@@ -486,7 +488,7 @@ export default function InvitationSite() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-10 text-center">
             <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">Informações</p>
-            <h2 className="mt-3 font-serif text-4xl font-black text-[#b85f78] sm:text-5xl">Informações do convite real</h2>
+            <h2 className="mt-3 font-script text-5xl text-[#b85f78] sm:text-6xl">Informações do convite real</h2>
           </div>
           <div className="mx-auto grid max-w-5xl gap-8 rounded-[2rem] bg-white/45 px-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
             {eventDetails.map((item) => (
@@ -524,7 +526,7 @@ export default function InvitationSite() {
         <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[.9fr_1.1fr]">
           <div className="max-w-xl">
             <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">Nossa história</p>
-            <h2 className="mt-4 font-serif text-4xl font-black text-[#b85f78] sm:text-5xl">A festa real está prestes a começar</h2>
+            <h2 className="mt-4 font-script text-5xl text-[#b85f78] sm:text-6xl">A festa real está prestes a começar</h2>
             <p className="mt-6 text-lg leading-9 text-[#806966]">
               Com flores, castelo rosado e detalhes de princesa, vamos celebrar o primeiro ano da Diana ao lado de pessoas especiais.
             </p>
@@ -574,7 +576,7 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 text-center">
-            <p className="mb-3 font-serif text-5xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
+            <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Mural de Recados
             </p>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
@@ -646,7 +648,7 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <div className="mb-14 text-center">
-            <h2 className="mb-3 mt-3 font-serif text-4xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
+            <h2 className="mb-3 mt-3 font-script text-5xl leading-[1.1] text-[#b85f78] sm:text-6xl">
               Confirme sua Presença
             </h2>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
@@ -815,7 +817,7 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
-            <p className="mb-3 font-serif text-5xl font-black leading-[.95] tracking-[-0.06em] text-[#b85f78] sm:text-6xl">
+            <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Sugestões de Presente
             </p>
             <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
@@ -903,7 +905,7 @@ export default function InvitationSite() {
           {/* Pix também */}
           <div className="mx-auto mt-16 max-w-2xl rounded-[2rem] bg-gradient-to-br from-[#fce4eb] to-[#fff1f4] p-8 text-center shadow-[0_10px_30px_rgba(201,111,135,.08)]">
             <p className="mb-2 text-3xl">💝</p>
-            <p className="font-serif text-2xl font-black text-[#b85f78]">
+            <p className="font-script text-3xl text-[#b85f78]">
               Prefere contribuir via Pix?
             </p>
             <p className="mx-auto mt-3 max-w-lg text-base leading-7 text-[#806966]">
