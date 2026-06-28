@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Nunito, Pacifico, Playfair_Display } from "next/font/google";
+import { Geist_Mono, Great_Vibes, Nunito, Pacifico, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -16,6 +16,12 @@ const playfair = Playfair_Display({
 
 const pacifico = Pacifico({
   variable: "--font-pacifico",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const greatVibes = Great_Vibes({
+  variable: "--font-great-vibes",
   subsets: ["latin"],
   weight: "400",
 });
@@ -52,7 +58,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${nunito.variable} ${playfair.variable} ${pacifico.variable} ${geistMono.variable} scroll-smooth antialiased`}
+      className={`${nunito.variable} ${playfair.variable} ${pacifico.variable} ${greatVibes.variable} ${geistMono.variable} scroll-smooth antialiased`}
     >
       <body>{children}</body>
     </html>

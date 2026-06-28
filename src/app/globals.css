@@ -16,6 +16,7 @@
   --font-sans: var(--font-nunito);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair);
+  --font-script: var(--font-great-vibes);
 }
 
 * {
@@ -111,9 +112,20 @@ select {
 }
 
 .party-script {
-  font-family: var(--font-pacifico), "Brush Script MT", cursive;
-  letter-spacing: -0.04em;
+  font-family: var(--font-great-vibes), "Brush Script MT", cursive;
+  letter-spacing: 0;
   text-shadow: 0 4px 0 rgba(255,255,255,.95), 0 10px 20px rgba(217, 112, 145, .28);
+}
+
+/*
+ * Títulos decorativos em Great Vibes.
+ * Aplicar com a classe utilitária `font-script`. Como a Great Vibes só tem
+ * peso 400, removemos negrito (font-black) e o tracking negativo nos títulos,
+ * que quebrariam o traçado da cursiva.
+ */
+.font-script {
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 .watercolor-card {
