@@ -422,7 +422,7 @@ export default function InvitationSite() {
         <div className="pointer-events-none absolute bottom-28 left-[42%] hidden animate-sparkle text-4xl text-[#f4b8c8]/45 lg:block">✨</div>
 
         <nav className="royal-glass mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3">
-          <a className="font-script text-2xl text-[#c15f78]" href="#topo">
+          <a className="font-script text-3xl text-[#c15f78] sm:text-4xl" href="#topo">
             Diana
           </a>
           <div className="hidden gap-6 text-sm font-medium text-[#806562] md:flex">
