@@ -223,7 +223,7 @@ const eventDetails = [
   { label: "Data", value: "11 de outubro" },
   { label: "Horário", value: "13 horas" },
   { label: "Local", value: "Casa de Festas Turma da Kali" },
-  { label: "Endereço", value: "Est. Padre Roser, 765 — Vila da Penha" },
+  { label: "Endereço", value: "Est. Padre Roser, 765 - Vila da Penha" },
 ];
 
 const timeline = [
@@ -417,9 +417,25 @@ export default function InvitationSite() {
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(244,190,206,.42),transparent_30%),radial-gradient(circle_at_86%_8%,rgba(255,224,232,.55),transparent_24%),radial-gradient(circle_at_70%_78%,rgba(255,231,178,.26),transparent_24%),linear-gradient(135deg,#fffdf9_0%,#fff1f5_48%,#fffaf7_100%)]" />
         <div className="absolute left-8 top-28 -z-10 h-44 w-44 rounded-full bg-pink-200/60 blur-3xl" />
         <div className="absolute bottom-10 right-12 -z-10 h-64 w-64 rounded-full bg-amber-200/50 blur-3xl" />
-        <div className="pointer-events-none absolute left-[7%] top-40 hidden animate-float-slow text-5xl text-[#d7ad55]/45 lg:block">✦</div>
-        <div className="pointer-events-none absolute right-[12%] top-28 hidden animate-float-crown text-6xl text-[#d7ad55]/50 lg:block">♛</div>
-        <div className="pointer-events-none absolute bottom-28 left-[42%] hidden animate-sparkle text-4xl text-[#f4b8c8]/45 lg:block">✨</div>
+        {/* Enfeites em aquarela — sutis, atrás do conteúdo */}
+        <img
+          src="/castelo.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-4 left-1 -z-10 hidden w-44 animate-float-slow opacity-[0.18] md:block lg:w-56"
+        />
+        <img
+          src="/coroa.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[9%] top-24 -z-10 hidden w-24 animate-float-crown opacity-40 md:block lg:w-28"
+        />
+        <img
+          src="/sapatinho.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute left-[5%] top-44 -z-10 hidden w-24 animate-float-slow opacity-30 md:block lg:w-28"
+        />
 
         <nav className="royal-glass mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3">
           <a className="font-script text-3xl text-[#c15f78] sm:text-4xl" href="#topo">
@@ -610,31 +626,88 @@ export default function InvitationSite() {
             </p>
           </div>
 
-          <div className="rounded-[2rem] bg-white/58 p-6 shadow-[0_10px_30px_rgba(201,111,135,.06)] sm:p-8">
-            <div className="mb-6 grid gap-4 sm:flex">
-              <input
-                value={recadoNome}
-                onChange={(e) => setRecadoNome(e.target.value)}
-                placeholder="Seu nome"
-                className="rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200 sm:flex-1"
-              />
-              <button
-                onClick={enviarRecado}
-                className="royal-button rounded-full px-6 py-3 font-bold text-white whitespace-nowrap"
-              >
-                Enviar recado 💬
-              </button>
-            </div>
-            <textarea
-              value={recadoMsg}
-              onChange={(e) => setRecadoMsg(e.target.value)}
-              placeholder="Escreva sua mensagem para a Diana..."
-              rows={3}
-              className="w-full rounded-xl border border-[#f1c4d0] bg-[#fffafa] px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-200"
+          <div className="relative overflow-hidden rounded-[2.25rem] border border-white/80 bg-gradient-to-br from-[#fffaf6] via-[#fff3f6] to-[#fff7e8] p-8 shadow-[0_24px_60px_rgba(201,111,135,0.18)] sm:p-10">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-60 [mask-image:radial-gradient(circle_at_top_right,#000,transparent_60%)]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, rgba(223,120,148,0.18) 0 1.5px, transparent 2.5px)",
+                backgroundSize: "22px 22px",
+              }}
             />
+            <span
+              aria-hidden="true"
+              className="absolute -right-6 -top-8 select-none text-7xl text-[#d7ad55]/35 sm:text-8xl"
+            >
+              ♛
+            </span>
+
+            <div className="relative">
+              <label
+                htmlFor="recado-nome"
+                className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[.28em] text-[#d36f8a]"
+              >
+                <span
+                  aria-hidden="true"
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/80 text-[#d36f8a] shadow-inner"
+                >
+                  👑
+                </span>
+                Seu nome
+              </label>
+              <div className="mb-5 grid gap-4 sm:flex">
+                <input
+                  id="recado-nome"
+                  value={recadoNome}
+                  onChange={(e) => setRecadoNome(e.target.value)}
+                  placeholder="Como podemos te chamar?"
+                  className="w-full rounded-2xl border border-[#f4c7d2] bg-white/85 px-5 py-3.5 text-base text-[#5b4a48] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] outline-none transition placeholder:text-[#b78b8c] focus:border-[#df7894] focus:bg-white focus:ring-4 focus:ring-pink-200/70 sm:flex-1"
+                />
+                <button
+                  type="button"
+                  onClick={enviarRecado}
+                  className="royal-button inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-black uppercase tracking-[.18em] text-white whitespace-nowrap shadow-[0_18px_36px_rgba(201,111,135,0.32)] transition-all hover:-translate-y-0.5 hover:shadow-[0_22px_44px_rgba(201,111,135,0.4)] active:translate-y-0"
+                >
+                  <span>Enviar recado</span>
+                  <span aria-hidden="true">💌</span>
+                </button>
+              </div>
+
+              <label
+                htmlFor="recado-mensagem"
+                className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[.28em] text-[#d36f8a]"
+              >
+                <span
+                  aria-hidden="true"
+                  className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/80 text-[#d36f8a] shadow-inner"
+                >
+                  ✨
+                </span>
+                Mensagem carinhosa
+              </label>
+              <textarea
+                id="recado-mensagem"
+                value={recadoMsg}
+                onChange={(e) => setRecadoMsg(e.target.value)}
+                placeholder="Escreva sua mensagem para a princesa Diana..."
+                rows={4}
+                className="w-full rounded-2xl border border-[#f4c7d2] bg-white/85 px-5 py-4 text-base leading-relaxed text-[#5b4a48] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] outline-none transition placeholder:text-[#b78b8c] focus:border-[#df7894] focus:bg-white focus:ring-4 focus:ring-pink-200/70"
+              />
+
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-[#9d6170]">
+                <span className="inline-flex items-center gap-1.5 font-semibold">
+                  <span aria-hidden="true">💝</span>
+                  Sua mensagem aparece aqui para sempre
+                </span>
+                <span className="font-mono text-[#b78b8c]">{recadoMsg.length}/240</span>
+              </div>
+            </div>
+
             {recadoEnviado && (
-              <p className="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-center text-sm font-bold text-emerald-700">
-                Recado enviado com carinho 💝
+              <p className="relative mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-50 px-4 py-3 text-center text-sm font-bold text-emerald-700 ring-1 ring-emerald-200">
+                <span aria-hidden="true">🌷</span>
+                Recado enviado com carinho — obrigada por celebrar com a princesa Diana!
               </p>
             )}
           </div>
@@ -705,7 +778,7 @@ export default function InvitationSite() {
                 </p>
                 <p className="flex items-center gap-2.5">
                   <MapPin className="h-4 w-4 shrink-0 text-[#d36f8a]" strokeWidth={2} />
-                  <span>Est. Padre Roser, 765 — Vila da Penha</span>
+                  <span>Est. Padre Roser, 765 - Vila da Penha</span>
                 </p>
                 <p className="flex items-center gap-2.5">
                   <Castle className="h-4 w-4 shrink-0 text-[#d36f8a]" strokeWidth={2} />
