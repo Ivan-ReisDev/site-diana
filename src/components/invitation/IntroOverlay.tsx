@@ -12,7 +12,7 @@ export interface IntroOverlayProps {
 }
 
 const DEFAULT_MESSAGE =
-  "Mamãe e Papai têm a honra de convidar você para celebrar o 1º aniversário da nossa Princesa.";
+  "Mamãe e Papai têm a honra de convidar você para celebrar o 1º aniversário da nossa Princesa Diana.";
 
 export function IntroOverlay({
   onComplete,
@@ -42,13 +42,13 @@ export function IntroOverlay({
   }, []);
 
   const transition = prefersReducedMotion
-    ? { duration: 0.15 }
-    : { duration: 0.6, ease: "easeOut" as const };
+    ? { duration: 0.2 }
+    : { duration: 0.85, ease: [0.22, 1, 0.36, 1] as const };
 
   const stageVariants = {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
+    initial: { opacity: 0, scale: prefersReducedMotion ? 1 : 1.03 },
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: prefersReducedMotion ? 1 : 1.02 },
   };
 
   return (
@@ -62,9 +62,10 @@ export function IntroOverlay({
           (necessário para iniciar a reprodução com som dentro do gesto). */}
       <div
         className={
-          stage === "video"
-            ? "absolute inset-0 z-10 flex items-center justify-center bg-black"
-            : "pointer-events-none absolute inset-0 -z-10 opacity-0"
+          "absolute inset-0 flex items-center justify-center bg-black transition-opacity duration-700 ease-out " +
+          (stage === "video"
+            ? "z-10 opacity-100"
+            : "-z-10 opacity-0 pointer-events-none")
         }
         aria-hidden={stage !== "video"}
       >
@@ -85,7 +86,7 @@ export function IntroOverlay({
         )}
       </div>
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {stage === "invite" && (
           <motion.section
             key="invite"
@@ -97,6 +98,22 @@ export function IntroOverlay({
             transition={transition}
           >
             <div className="relative max-w-xl text-center">
+              <motion.img
+                src="/sapatinho.png"
+                alt=""
+                aria-hidden="true"
+                className="mx-auto mb-5 w-40 select-none drop-shadow-[0_16px_28px_rgba(201,111,135,0.28)] sm:w-52"
+                animate={
+                  prefersReducedMotion
+                    ? undefined
+                    : { y: [0, -10, 0], rotate: [0, -2, 0] }
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+                }
+              />
               <p className="mb-4 text-sm font-black uppercase tracking-[.3em] text-[#d36f8a]">
                 Convocação Real
               </p>
@@ -180,14 +197,30 @@ export function IntroOverlay({
             transition={transition}
           >
             <div className="relative max-w-xl text-center">
+              <motion.img
+                src="/sapatinho.png"
+                alt=""
+                aria-hidden="true"
+                className="mx-auto mb-5 w-36 select-none drop-shadow-[0_16px_28px_rgba(201,111,135,0.28)] sm:w-44"
+                animate={
+                  prefersReducedMotion
+                    ? undefined
+                    : { y: [0, -10, 0], rotate: [0, -2, 0] }
+                }
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+                }
+              />
               <p className="mb-4 text-sm font-black uppercase tracking-[.3em] text-[#d36f8a]">
                 Convocação Real
               </p>
               <h2 className="font-script text-3xl leading-[1.2] text-[#b85f78] sm:text-4xl md:text-5xl">
-                {inviteMessage}
+                Sua presença será o maior presente!
               </h2>
               <p className="mt-6 text-lg text-[#7e5f5b]">
-                Sua presença será o maior presente!
+                Clique abaixo para confirmar e explorar os detalhes da festa real.
               </p>
               <div className="mt-10">
                 <button
