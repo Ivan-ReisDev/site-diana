@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { BackgroundMusic } from "@/components/invitation/BackgroundMusic";
 import { IntroOverlay } from "@/components/invitation/IntroOverlay";
+import { PhotoGalleryCarousel, galleryPhotos } from "@/components/invitation/PhotoGalleryCarousel";
 
 type RsvpGuest = {
   name: string;
@@ -396,12 +397,6 @@ const eventDetails = [
   { label: "Endereço", value: "Est. Padre Roser, 765 - Vila da Penha" },
 ];
 
-const timeline = [
-  ["13h", "Recepção dos convidados e fotos no castelinho"],
-  ["14h", "Brincadeiras e momento especial da Diana"],
-  ["15h", "Parabéns real da princesa"],
-  ["Até 20/09", "Confirme sua presença para prepararmos tudo com carinho"],
-];
 
 const giftAmounts = ["R$ 50", "R$ 100", "R$ 150", "R$ 250"];
 const princessInspiration = [
@@ -816,19 +811,7 @@ export default function InvitationSite() {
             </div>
           </div>
 
-          <div className="space-y-8 border-l border-[#f0c7d3]/80 pl-7 sm:pl-10">
-            {timeline.map(([time, text]) => (
-              <article key={time} className="relative">
-                <span className="absolute -left-[2.15rem] top-1 h-3 w-3 rounded-full bg-[#df7894] ring-8 ring-[#fff3f7] sm:-left-[2.65rem]" />
-                <span className="text-sm font-black uppercase tracking-[.22em] text-[#d36f8a]">
-                  {time}
-                </span>
-                <p className="mt-2 max-w-xl text-xl font-extrabold leading-8 text-[#7d625f]">
-                  {text}
-                </p>
-              </article>
-            ))}
-          </div>
+          <PhotoGalleryCarousel photos={galleryPhotos} />
         </div>
       </motion.section>
 

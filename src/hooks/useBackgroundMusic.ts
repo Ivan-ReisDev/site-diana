@@ -75,7 +75,7 @@ export function useBackgroundMusic(
         const playPromise = audio.play();
         setIsPlaying(true);
         hasStartedRef.current = true;
-        if (playPromise) {
+        if (playPromise && typeof playPromise.then === "function") {
           playPromise.catch(() => {
             // fail silently
             setIsPlaying(false);

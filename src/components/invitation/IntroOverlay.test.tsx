@@ -32,9 +32,9 @@ describe('IntroOverlay', () => {
 
     await clickStartAndWaitForVideo();
 
-    expect(screen.getByRole('button', { name: /pular vídeo/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /pular vídeo/i })[0]).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /silenciar vídeo|ativar som do vídeo/i })
+      screen.getAllByRole('button', { name: /silenciar vídeo|ativar som do vídeo/i })[0]
     ).toBeInTheDocument();
   });
 
@@ -60,7 +60,7 @@ describe('IntroOverlay', () => {
 
     await clickStartAndWaitForVideo();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /pular vídeo/i }));
+      fireEvent.click(screen.getAllByRole('button', { name: /pular vídeo/i })[0]);
     });
     await waitFor(
       () => {
@@ -78,7 +78,7 @@ describe('IntroOverlay', () => {
 
     await clickStartAndWaitForVideo();
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /pular vídeo/i }));
+      fireEvent.click(screen.getAllByRole('button', { name: /pular vídeo/i })[0]);
     });
     await waitFor(
       () => {
@@ -117,14 +117,14 @@ describe('IntroOverlay', () => {
 
     await clickStartAndWaitForVideo();
 
-    const soundButton = screen.getByRole('button', { name: /silenciar vídeo/i });
+    const soundButton = screen.getAllByRole('button', { name: /silenciar vídeo/i })[0];
     expect(soundButton).toHaveAttribute('aria-pressed', 'true');
 
     await act(async () => {
       fireEvent.click(soundButton);
     });
 
-    const newSoundButton = screen.getByRole('button', { name: /ativar som do vídeo/i });
+    const newSoundButton = screen.getAllByRole('button', { name: /ativar som do vídeo/i })[0];
     expect(newSoundButton).toHaveAttribute('aria-pressed', 'false');
   });
 });

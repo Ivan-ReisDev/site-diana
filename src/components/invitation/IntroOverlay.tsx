@@ -153,7 +153,7 @@ export function IntroOverlay({
             exit="exit"
             transition={transition}
           >
-            <div className="absolute right-4 top-4 hidden gap-3 sm:flex">
+            <div className="absolute right-4 top-4 flex gap-3">
               <button
                 type="button"
                 onClick={toggleSound}
