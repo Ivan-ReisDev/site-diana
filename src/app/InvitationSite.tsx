@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Calendar,
   Heart,
@@ -14,6 +14,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { BackgroundMusic } from "@/components/invitation/BackgroundMusic";
+import { IntroOverlay } from "@/components/invitation/IntroOverlay";
 
 type RsvpGuest = {
   name: string;
@@ -249,6 +250,7 @@ function createEmptyGuest(id: number): GuestForm {
 }
 
 export default function InvitationSite() {
+  const [introDone, setIntroDone] = useState(false);
   const [copied, setCopied] = useState(false);
   const [summary, setSummary] = useState<RsvpSummary | null>(null);
   const [error, setError] = useState("");
@@ -402,7 +404,15 @@ export default function InvitationSite() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#fff8f6] text-[#745b58] floral-wash">
-      <BackgroundMusic />
+      <AnimatePresence>
+        {!introDone && (
+          <IntroOverlay
+            key="intro-overlay"
+            onComplete={() => setIntroDone(true)}
+          />
+        )}
+      </AnimatePresence>
+      {introDone && <BackgroundMusic />}
       <section className="relative isolate px-5 pb-20 pt-6 sm:px-8 lg:px-12">
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(244,190,206,.42),transparent_30%),radial-gradient(circle_at_86%_8%,rgba(255,224,232,.55),transparent_24%),radial-gradient(circle_at_70%_78%,rgba(255,231,178,.26),transparent_24%),linear-gradient(135deg,#fffdf9_0%,#fff1f5_48%,#fffaf7_100%)]" />
         <div className="absolute left-8 top-28 -z-10 h-44 w-44 rounded-full bg-pink-200/60 blur-3xl" />
