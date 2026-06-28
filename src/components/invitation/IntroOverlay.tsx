@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Volume2, VolumeX, SkipForward } from "lucide-react";
+import { Volume2, VolumeX, SkipForward, Sparkles } from "lucide-react";
 import { useIntroSequence } from "@/hooks/useIntroSequence";
 
 export interface IntroOverlayProps {
@@ -41,6 +41,13 @@ export function IntroOverlay({
     };
   }, []);
 
+  // Pré-carrega o vídeo em segundo plano assim que o overlay monta (enquanto a
+  // pessoa lê o convite), para que ao clicar a reprodução comece instantânea —
+  // o vídeo já estará em cache no dispositivo.
+  useEffect(() => {
+    videoRef.current?.load();
+  }, [videoRef]);
+
   const transition = prefersReducedMotion
     ? { duration: 0.2 }
     : { duration: 0.85, ease: [0.22, 1, 0.36, 1] as const };
@@ -72,11 +79,11 @@ export function IntroOverlay({
         <video
           ref={videoRef}
           src={videoSrc}
-          preload="none"
+          preload="auto"
           playsInline
           onEnded={onVideoEnded}
           onError={onVideoError}
-          className="h-full w-full object-contain"
+          className="h-full w-full object-cover sm:object-contain"
           aria-label="Vídeo do convite da princesa Diana"
         />
         {stage === "video" && videoStatus === "loading" && (
@@ -125,11 +132,11 @@ export function IntroOverlay({
                   type="button"
                   onClick={start}
                   autoFocus
-                  className="royal-button inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-8 py-3 text-base font-black text-white shadow-[0_14px_28px_rgba(201,111,135,.22)] transition-transform duration-300 hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#d5a547]/60 active:scale-95"
+                  className="royal-button inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-9 py-3.5 text-base font-black text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-[#d5a547]/60"
                   aria-label="Abrir o vídeo do convite"
                 >
                   <span>Abrir o Convite</span>
-                  <span aria-hidden="true">✨</span>
+                  <Sparkles className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -146,7 +153,7 @@ export function IntroOverlay({
             exit="exit"
             transition={transition}
           >
-            <div className="absolute right-4 top-4 flex gap-3">
+            <div className="absolute right-4 top-4 hidden gap-3 sm:flex">
               <button
                 type="button"
                 onClick={toggleSound}
@@ -164,6 +171,32 @@ export function IntroOverlay({
                 type="button"
                 onClick={skip}
                 className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-white/30 bg-black/40 px-4 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-black/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                aria-label="Pular vídeo"
+              >
+                <SkipForward className="h-4 w-4" aria-hidden="true" />
+                Pular
+              </button>
+            </div>
+
+            {/* Controles flutuantes sutis — apenas mobile */}
+            <div className="absolute inset-x-0 bottom-6 flex items-center justify-center gap-5 px-6 sm:hidden">
+              <button
+                type="button"
+                onClick={toggleSound}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-black/25 text-white/75 backdrop-blur-sm transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                aria-label={soundOn ? "Silenciar vídeo" : "Ativar som do vídeo"}
+                aria-pressed={soundOn}
+              >
+                {soundOn ? (
+                  <Volume2 className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <VolumeX className="h-5 w-5" aria-hidden="true" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={skip}
+                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-black/25 px-4 text-sm font-semibold text-white/75 backdrop-blur-sm transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                 aria-label="Pular vídeo"
               >
                 <SkipForward className="h-4 w-4" aria-hidden="true" />
@@ -219,15 +252,12 @@ export function IntroOverlay({
               <h2 className="font-script text-3xl leading-[1.2] text-[#b85f78] sm:text-4xl md:text-5xl">
                 Sua presença será o maior presente!
               </h2>
-              <p className="mt-6 text-lg text-[#7e5f5b]">
-                Clique abaixo para confirmar e explorar os detalhes da festa real.
-              </p>
               <div className="mt-10">
                 <button
                   type="button"
                   onClick={onComplete}
                   autoFocus
-                  className="royal-button inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-8 py-3 text-base font-black text-white shadow-[0_14px_28px_rgba(201,111,135,.22)] transition-transform duration-300 hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#d5a547]/60 active:scale-95"
+                  className="royal-button inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-9 py-3.5 text-base font-black text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-[#d5a547]/60"
                   aria-label="Confirmar presença e entrar no site"
                 >
                   Confirmar Presença

@@ -946,7 +946,7 @@ export default function InvitationSite() {
                   <input
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    className="w-full rounded-xl border border-[#f0c7d3] bg-white/70 h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-[#f3d3dd]"
+                    className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                     placeholder="Seu nome completo"
                   />
                 </label>
@@ -955,7 +955,7 @@ export default function InvitationSite() {
                   <input
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
-                    className="w-full rounded-xl border border-[#f0c7d3] bg-white/70 h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-[#f3d3dd]"
+                    className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                     placeholder="(21) 99999-9999"
                   />
                 </label>
@@ -1001,7 +1001,7 @@ export default function InvitationSite() {
                     <button
                       type="button"
                       onClick={addAdult}
-                      className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#f0c7d3] bg-white/70 px-4 py-2.5 text-sm font-bold text-[#b85f78] transition hover:bg-[#fff3f7]"
+                      className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-white/70 px-4 py-2.5 text-sm font-bold text-[#b85f78] transition hover:bg-[#fff3f7]"
                       aria-label="Adicionar adulto"
                     >
                       <Plus className="h-4 w-4" aria-hidden="true" />
@@ -1021,7 +1021,7 @@ export default function InvitationSite() {
                             onChange={(event) =>
                               updateAdult(adult.id, "name", event.target.value)
                             }
-                            className="w-full rounded-xl border border-[#f0c7d3] bg-white/70 h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-[#f3d3dd]"
+                            className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                             placeholder={`Adulto ${index + 1}`}
                           />
                         </label>
@@ -1034,7 +1034,7 @@ export default function InvitationSite() {
                             }
                             type="number"
                             min="0"
-                            className="w-full rounded-xl border border-[#f0c7d3] bg-white/70 h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-[#f3d3dd]"
+                            className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                             placeholder="0"
                           />
                         </label>
@@ -1042,7 +1042,7 @@ export default function InvitationSite() {
                           type="button"
                           onClick={() => removeAdult(adult.id)}
                           disabled={adults.length === 1}
-                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#f0c7d3] bg-white/70 text-[#c86f87] transition hover:bg-[#fff3f7] disabled:cursor-not-allowed disabled:opacity-40"
+                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/70 text-[#c86f87] transition hover:bg-[#fff3f7] disabled:cursor-not-allowed disabled:opacity-40"
                           aria-label={`Remover adulto ${index + 1}`}
                         >
                           <Trash2 className="h-4 w-4" aria-hidden="true" />
@@ -1065,7 +1065,7 @@ export default function InvitationSite() {
                     <button
                       type="button"
                       onClick={addChild}
-                      className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#f0c7d3] bg-white/70 px-4 py-2.5 text-sm font-bold text-[#b85f78] transition hover:bg-[#fff3f7]"
+                      className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full bg-white/70 px-4 py-2.5 text-sm font-bold text-[#b85f78] transition hover:bg-[#fff3f7]"
                       aria-label="Adicionar criança"
                     >
                       <Plus className="h-4 w-4" aria-hidden="true" />
@@ -1094,7 +1094,7 @@ export default function InvitationSite() {
                                   event.target.value,
                                 )
                               }
-                              className="w-full rounded-xl border border-[#f0c7d3] bg-white/70 h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-[#f3d3dd]"
+                              className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                               placeholder={`Criança ${index + 1}`}
                             />
                           </label>
@@ -1107,14 +1107,14 @@ export default function InvitationSite() {
                               }
                               type="number"
                               min="0"
-                              className="w-full rounded-xl border border-[#f0c7d3] bg-white/70 h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:border-[#df7894] focus:ring-2 focus:ring-[#f3d3dd]"
+                              className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                               placeholder="0"
                             />
                           </label>
                           <button
                             type="button"
                             onClick={() => removeChild(child.id)}
-                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#f0c7d3] bg-white/70 text-[#c86f87] transition hover:bg-[#fff3f7]"
+                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/70 text-[#c86f87] transition hover:bg-[#fff3f7]"
                             aria-label={`Remover criança ${index + 1}`}
                           >
                             <Trash2 className="h-4 w-4" aria-hidden="true" />
@@ -1359,7 +1359,7 @@ export default function InvitationSite() {
                 value={recadoNome}
                 onChange={(e) => setRecadoNome(e.target.value)}
                 placeholder="Como podemos te chamar?"
-                className="rounded-xl border border-[#f0c7d3] bg-white/70 px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-[#f3d3dd]"
+                className="rounded-xl bg-[#ffe9f0] px-4 py-3 outline-none transition focus:ring-4 focus:ring-[#f3d3dd]"
               />
             </div>
 
@@ -1377,7 +1377,7 @@ export default function InvitationSite() {
                 placeholder="Escreva sua mensagem para a princesa Diana..."
                 rows={5}
                 maxLength={240}
-                className="resize-none rounded-xl border border-[#f0c7d3] bg-white/70 px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-[#f3d3dd]"
+                className="resize-none rounded-xl bg-[#ffe9f0] px-4 py-3 outline-none transition focus:ring-4 focus:ring-[#f3d3dd]"
               />
               <div className="flex items-center justify-between text-xs font-semibold text-[#9d6170]">
                 <span>Sua mensagem aparece no mural para sempre</span>

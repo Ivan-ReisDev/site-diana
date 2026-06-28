@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Great_Vibes, Nunito, Pacifico, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -30,6 +30,11 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#fffafa",
+};
 
 export const metadata: Metadata = {
   title: "Diana faz 1 ano | Convite",

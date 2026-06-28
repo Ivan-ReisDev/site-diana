@@ -1,0 +1,480 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e7]:
+        - link "Diana" [ref=e8] [cursor=pointer]:
+          - /url: "#topo"
+        - generic [ref=e9]:
+          - link "Evento" [ref=e10] [cursor=pointer]:
+            - /url: "#evento"
+          - link "Mural" [ref=e11] [cursor=pointer]:
+            - /url: "#mural"
+          - link "Presença" [ref=e12] [cursor=pointer]:
+            - /url: "#rsvp"
+          - link "Presentes" [ref=e13] [cursor=pointer]:
+            - /url: "#gifts"
+        - link "Confirmar" [ref=e14] [cursor=pointer]:
+          - /url: "#rsvp"
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - heading "Diana faz 1 ano" [level=1] [ref=e17]
+          - paragraph [ref=e18]: "Prepara-se: a festa real está prestes a começar! Um convite em aquarela, rosas e castelo para celebrar o primeiro aninho da Diana."
+        - img "Convite real da Diana — Faz 1 ano" [ref=e21]
+    - generic [ref=e25]: ♛
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - paragraph [ref=e30]: Informações
+        - heading "Informações do convite real" [level=2] [ref=e31]
+      - generic [ref=e32]:
+        - article [ref=e33]:
+          - paragraph [ref=e34]: Data
+          - paragraph [ref=e35]: 11 de outubro
+        - article [ref=e36]:
+          - paragraph [ref=e37]: Horário
+          - paragraph [ref=e38]: 13 horas
+        - article [ref=e39]:
+          - paragraph [ref=e40]: Local
+          - paragraph [ref=e41]: Casa de Festas Turma da Kali
+        - article [ref=e42]:
+          - paragraph [ref=e43]: Endereço
+          - paragraph [ref=e44]: Est. Padre Roser, 765 — Vila da Penha
+    - generic [ref=e48]: ♛
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - paragraph [ref=e53]: Nossa história
+        - heading "A festa real está prestes a começar" [level=2] [ref=e54]
+        - paragraph [ref=e55]: Com flores, castelo rosado e detalhes de princesa, vamos celebrar o primeiro ano da Diana ao lado de pessoas especiais.
+        - generic [ref=e56]:
+          - generic [ref=e57]: 11 de outubro
+          - generic [ref=e58]: 13 horas
+          - generic [ref=e59]: Confirmar até 20/09
+      - generic [ref=e60]:
+        - article [ref=e61]:
+          - text: 13h
+          - paragraph [ref=e63]: Recepção dos convidados e fotos no castelinho
+        - article [ref=e64]:
+          - text: 14h
+          - paragraph [ref=e66]: Brincadeiras e momento especial da Diana
+        - article [ref=e67]:
+          - text: 15h
+          - paragraph [ref=e69]: Parabéns real da princesa
+        - article [ref=e70]:
+          - text: Até 20/09
+          - paragraph [ref=e72]: Confirme sua presença para prepararmos tudo com carinho
+    - generic [ref=e76]: ♛
+    - generic [ref=e79]:
+      - generic [ref=e80]:
+        - paragraph [ref=e81]: Mural de Recados
+        - paragraph [ref=e83]: Deixe uma mensagem carinhosa para a princesa Diana
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - textbox "Seu nome" [ref=e86]
+          - button "Enviar recado 💬" [ref=e87]
+        - textbox "Escreva sua mensagem para a Diana..." [ref=e88]
+      - generic [ref=e89]: 💭 Seja o primeiro a deixar um recado carinhoso!
+    - generic [ref=e91]:
+      - generic [ref=e92]:
+        - heading "Confirme sua Presença" [level=2] [ref=e93]
+        - paragraph [ref=e95]: Sua presença é o maior presente! Responda até 20 de setembro.
+      - generic [ref=e96]:
+        - generic [ref=e97]:
+          - img [ref=e99]
+          - paragraph [ref=e102]: Para prepararmos cada detalhe da festa real com carinho, confirme sua presença.
+          - generic [ref=e103]:
+            - paragraph [ref=e104]:
+              - img [ref=e105]
+              - generic [ref=e107]:
+                - strong [ref=e108]: 11 de outubro
+                - text: — 13h
+            - paragraph [ref=e109]:
+              - img [ref=e110]
+              - generic [ref=e113]: Est. Padre Roser, 765 — Vila da Penha
+            - paragraph [ref=e114]:
+              - img [ref=e115]
+              - generic [ref=e118]: Casa de Festas Turma da Kali
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: Nome completo
+              - textbox "Nome completo" [ref=e123]:
+                - /placeholder: Seu nome completo
+            - generic [ref=e124]:
+              - generic [ref=e125]: Telefone
+              - textbox "Telefone" [ref=e126]:
+                - /placeholder: (21) 99999-9999
+            - generic [ref=e127]:
+              - text: Presença
+              - generic [ref=e128]:
+                - generic [ref=e129]:
+                  - radio "Sim, estarei lá" [checked] [ref=e130]
+                  - text: Sim, estarei lá
+                - generic [ref=e131]:
+                  - radio "Não poderei ir" [ref=e132]
+                  - text: Não poderei ir
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - generic [ref=e135]:
+                  - paragraph [ref=e136]: Adultos
+                  - paragraph [ref=e137]: Informe o nome completo e a idade de cada adulto.
+                - button "Adicionar adulto" [ref=e138]
+              - generic [ref=e140]:
+                - generic [ref=e141]:
+                  - generic [ref=e142]: Nome completo do adulto 1
+                  - textbox "Nome completo do adulto 1" [ref=e143]:
+                    - /placeholder: Adulto 1
+                - generic [ref=e144]:
+                  - generic [ref=e145]: Idade
+                  - spinbutton "Idade" [ref=e146]
+                - button "Remover adulto 1" [disabled] [ref=e148]: Remover
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - paragraph [ref=e152]: Crianças
+                  - paragraph [ref=e153]: Se houver crianças, informe o nome completo e a idade de cada uma.
+                - button "Adicionar criança" [ref=e154]
+              - paragraph [ref=e155]: Nenhuma criança adicionada.
+          - button "Confirmar presença" [ref=e156]:
+            - generic [ref=e157]:
+              - text: Confirmar presença
+              - img [ref=e158]
+    - generic [ref=e163]: ♛
+    - generic [ref=e166]:
+      - generic [ref=e167]:
+        - paragraph [ref=e168]: Sugestões de Presente
+        - paragraph [ref=e170]: Ideias carinhosas para a princesa Diana — cada presente traz sugestões de itens e lojas onde você pode encontrá-los.
+      - generic [ref=e171]:
+        - article [ref=e172]:
+          - generic [ref=e173]:
+            - img "Urso de Pelúcia" [ref=e174]
+            - generic [ref=e175]:
+              - img [ref=e176]
+              - text: Sugestão
+          - generic [ref=e178]:
+            - heading "Urso de Pelúcia" [level=3] [ref=e179]
+            - paragraph [ref=e180]: "Sugestão de valor: R$ 89,90"
+            - list [ref=e181]:
+              - listitem [ref=e182]: Urso de pelúcia macio (≥ 30cm) sem peças pequenas
+              - listitem [ref=e184]: Manta de conforto + ursinho companheiro
+              - listitem [ref=e186]: Ursinho musical para a hora de dormir
+            - generic [ref=e188]:
+              - paragraph [ref=e189]:
+                - img [ref=e190]
+                - text: Onde comprar
+              - generic [ref=e193]:
+                - link "Lojas Renner" [ref=e194] [cursor=pointer]:
+                  - /url: https://www.lojasrenner.com.br/busca?q=urso+pelucia+infantil
+                  - text: Lojas Renner
+                  - img [ref=e195]
+                - link "Shopee" [ref=e199] [cursor=pointer]:
+                  - /url: https://shopee.com.br/search?keyword=urso%20de%20pelucia%20bebe
+                  - text: Shopee
+                  - img [ref=e200]
+        - article [ref=e204]:
+          - generic [ref=e205]:
+            - img "Blocos de Montar" [ref=e206]
+            - generic [ref=e207]:
+              - img [ref=e208]
+              - text: Sugestão
+          - generic [ref=e210]:
+            - heading "Blocos de Montar" [level=3] [ref=e211]
+            - paragraph [ref=e212]: "Sugestão de valor: R$ 59,90"
+            - list [ref=e213]:
+              - listitem [ref=e214]: Blocos de montar grandes (≥ 1 ano, sem engasgo)
+              - listitem [ref=e216]: Blocos de empilhar coloridos (madeira)
+              - listitem [ref=e218]: Cubos com números e letras
+            - generic [ref=e220]:
+              - paragraph [ref=e221]:
+                - img [ref=e222]
+                - text: Onde comprar
+              - generic [ref=e225]:
+                - link "Ri Happy" [ref=e226] [cursor=pointer]:
+                  - /url: https://www.rihappy.com.br/pesquisa?q=blocos+de+montar
+                  - text: Ri Happy
+                  - img [ref=e227]
+                - link "Amazon" [ref=e231] [cursor=pointer]:
+                  - /url: https://www.amazon.com.br/s?k=blocos+de+montar+1+ano
+                  - text: Amazon
+                  - img [ref=e232]
+        - article [ref=e236]:
+          - generic [ref=e237]:
+            - img "Carrinho" [ref=e238]
+            - generic [ref=e239]:
+              - img [ref=e240]
+              - text: Sugestão
+          - generic [ref=e242]:
+            - heading "Carrinho" [level=3] [ref=e243]
+            - paragraph [ref=e244]: "Sugestão de valor: R$ 49,90"
+            - list [ref=e245]:
+              - listitem [ref=e246]: Carrinho de brinquedo resistente (caminhão, passeio)
+              - listitem [ref=e248]: Carrinho empurrador com som e luz
+              - listitem [ref=e250]: Mini veículos de fricção para empurrar
+            - generic [ref=e252]:
+              - paragraph [ref=e253]:
+                - img [ref=e254]
+                - text: Onde comprar
+              - generic [ref=e257]:
+                - link "Toymania" [ref=e258] [cursor=pointer]:
+                  - /url: https://www.toymania.com.br/pesquisa?q=carrinho+brinquedo
+                  - text: Toymania
+                  - img [ref=e259]
+                - link "Shopee" [ref=e263] [cursor=pointer]:
+                  - /url: https://shopee.com.br/search?keyword=carrinho%20de%20brinquedo
+                  - text: Shopee
+                  - img [ref=e264]
+        - article [ref=e268]:
+          - generic [ref=e269]:
+            - img "Boneca" [ref=e270]
+            - generic [ref=e271]:
+              - img [ref=e272]
+              - text: Sugestão
+          - generic [ref=e274]:
+            - heading "Boneca" [level=3] [ref=e275]
+            - paragraph [ref=e276]: "Sugestão de valor: R$ 79,90"
+            - list [ref=e277]:
+              - listitem [ref=e278]: Boneca de pano/corpo mole (segura para 1 ano)
+              - listitem [ref=e280]: Boneca com chocalho e mordedor
+              - listitem [ref=e282]: Boneca da Princesa Diana (faz parte do tema!)
+            - generic [ref=e284]:
+              - paragraph [ref=e285]:
+                - img [ref=e286]
+                - text: Onde comprar
+              - generic [ref=e289]:
+                - link "Maria Filó" [ref=e290] [cursor=pointer]:
+                  - /url: https://www.mariafilo.com.br/pesquisa?q=boneca+infantil
+                  - text: Maria Filó
+                  - img [ref=e291]
+                - link "Amazon" [ref=e295] [cursor=pointer]:
+                  - /url: https://www.amazon.com.br/s?k=boneca+1+ano
+                  - text: Amazon
+                  - img [ref=e296]
+        - article [ref=e300]:
+          - generic [ref=e301]:
+            - img "Quebra-Cabeça" [ref=e302]
+            - generic [ref=e303]:
+              - img [ref=e304]
+              - text: Sugestão
+          - generic [ref=e306]:
+            - heading "Quebra-Cabeça" [level=3] [ref=e307]
+            - paragraph [ref=e308]: "Sugestão de valor: R$ 39,90"
+            - list [ref=e309]:
+              - listitem [ref=e310]: Quebra-cabeça de madeira (peças grandes, 3–6 peças)
+              - listitem [ref=e312]: Quebra-cabeça de animais/contagem
+              - listitem [ref=e314]: Quebra-cabeça progressivo de encaixe
+            - generic [ref=e316]:
+              - paragraph [ref=e317]:
+                - img [ref=e318]
+                - text: Onde comprar
+              - generic [ref=e321]:
+                - link "Grow" [ref=e322] [cursor=pointer]:
+                  - /url: https://www.lojagrow.com.br/pesquisa?q=quebra+cabeca
+                  - text: Grow
+                  - img [ref=e323]
+                - link "Shopee" [ref=e327] [cursor=pointer]:
+                  - /url: https://shopee.com.br/search?keyword=quebra%20cabe%C3%A7a%201%20ano
+                  - text: Shopee
+                  - img [ref=e328]
+        - article [ref=e332]:
+          - generic [ref=e333]:
+            - img "Bola" [ref=e334]
+            - generic [ref=e335]:
+              - img [ref=e336]
+              - text: Sugestão
+          - generic [ref=e338]:
+            - heading "Bola" [level=3] [ref=e339]
+            - paragraph [ref=e340]: "Sugestão de valor: R$ 29,90"
+            - list [ref=e341]:
+              - listitem [ref=e342]: Bola macia de tecido para rolar e chutar
+              - listitem [ref=e344]: Bola texturizada sensorial (mordedor)
+              - listitem [ref=e346]: Conjunto de bolas coloridas empilháveis
+            - generic [ref=e348]:
+              - paragraph [ref=e349]:
+                - img [ref=e350]
+                - text: Onde comprar
+              - generic [ref=e353]:
+                - link "Ri Happy" [ref=e354] [cursor=pointer]:
+                  - /url: https://www.rihappy.com.br/pesquisa?q=bola+infantil
+                  - text: Ri Happy
+                  - img [ref=e355]
+                - link "Amazon" [ref=e359] [cursor=pointer]:
+                  - /url: https://www.amazon.com.br/s?k=bola+infantil+1+ano
+                  - text: Amazon
+                  - img [ref=e360]
+        - article [ref=e364]:
+          - generic [ref=e365]:
+            - img "Kit Pintura" [ref=e366]
+            - generic [ref=e367]:
+              - img [ref=e368]
+              - text: Sugestão
+          - generic [ref=e370]:
+            - heading "Kit Pintura" [level=3] [ref=e371]
+            - paragraph [ref=e372]: "Sugestão de valor: R$ 69,90"
+            - list [ref=e373]:
+              - listitem [ref=e374]: Kit de pintura atóxico (dedo e grossos)
+              - listitem [ref=e376]: Aquarela + papel grosso A3
+              - listitem [ref=e378]: Giz de cera triangular (fácil de segurar)
+            - generic [ref=e380]:
+              - paragraph [ref=e381]:
+                - img [ref=e382]
+                - text: Onde comprar
+              - generic [ref=e385]:
+                - link "Kalunga" [ref=e386] [cursor=pointer]:
+                  - /url: https://www.kalunga.com.br/busca?q=kit+pintura+infantil
+                  - text: Kalunga
+                  - img [ref=e387]
+                - link "Shopee" [ref=e391] [cursor=pointer]:
+                  - /url: https://shopee.com.br/search?keyword=kit%20pintura%20infantil
+                  - text: Shopee
+                  - img [ref=e392]
+        - article [ref=e396]:
+          - generic [ref=e397]:
+            - img "Livro Infantil" [ref=e398]
+            - generic [ref=e399]:
+              - img [ref=e400]
+              - text: Sugestão
+          - generic [ref=e402]:
+            - heading "Livro Infantil" [level=3] [ref=e403]
+            - paragraph [ref=e404]: "Sugestão de valor: R$ 44,90"
+            - list [ref=e405]:
+              - listitem [ref=e406]: Livro cartonado com texturas e cores
+              - listitem [ref=e408]: Livro “Bom dia, Verônica” para 1 ano
+              - listitem [ref=e410]: Livro de banho (PVC) — diversão no banho
+            - generic [ref=e412]:
+              - paragraph [ref=e413]:
+                - img [ref=e414]
+                - text: Onde comprar
+              - generic [ref=e417]:
+                - link "Livraria da Travessa" [ref=e418] [cursor=pointer]:
+                  - /url: https://www.travessa.com.br/busca?termo=livro+infantil+1+ano
+                  - text: Livraria da Travessa
+                  - img [ref=e419]
+                - link "Amazon" [ref=e423] [cursor=pointer]:
+                  - /url: https://www.amazon.com.br/s?k=livro+infantil+1+ano
+                  - text: Amazon
+                  - img [ref=e424]
+        - article [ref=e428]:
+          - generic [ref=e429]:
+            - img "Jogo de Panelinhas" [ref=e430]
+            - generic [ref=e431]:
+              - img [ref=e432]
+              - text: Sugestão
+          - generic [ref=e434]:
+            - heading "Jogo de Panelinhas" [level=3] [ref=e435]
+            - paragraph [ref=e436]: "Sugestão de valor: R$ 54,90"
+            - list [ref=e437]:
+              - listitem [ref=e438]: Panelinhas de madeira (cozinha de brincar)
+              - listitem [ref=e440]: Kit de panelinhas coloridas com utensílios
+              - listitem [ref=e442]: Fogãozinho de madeira com panelinhas
+            - generic [ref=e444]:
+              - paragraph [ref=e445]:
+                - img [ref=e446]
+                - text: Onde comprar
+              - generic [ref=e449]:
+                - link "Toymania" [ref=e450] [cursor=pointer]:
+                  - /url: https://www.toymania.com.br/pesquisa?q=panelinhas
+                  - text: Toymania
+                  - img [ref=e451]
+                - link "Lojas Americanas" [ref=e455] [cursor=pointer]:
+                  - /url: https://www.americanas.com.br/busca/panelinhas
+                  - text: Lojas Americanas
+                  - img [ref=e456]
+        - article [ref=e460]:
+          - generic [ref=e461]:
+            - img "Cavalo de Balanço" [ref=e462]
+            - generic [ref=e463]:
+              - img [ref=e464]
+              - text: Sugestão
+          - generic [ref=e466]:
+            - heading "Cavalo de Balanço" [level=3] [ref=e467]
+            - paragraph [ref=e468]: "Sugestão de valor: R$ 99,90"
+            - list [ref=e469]:
+              - listitem [ref=e470]: Cavalo de balanço de madeira (tema princesa)
+              - listitem [ref=e472]: Pônei/girafa de pelúcia com som
+              - listitem [ref=e474]: Cavalinho com rodinhas
+            - generic [ref=e476]:
+              - paragraph [ref=e477]:
+                - img [ref=e478]
+                - text: Onde comprar
+              - generic [ref=e481]:
+                - link "Toymania" [ref=e482] [cursor=pointer]:
+                  - /url: https://www.toymania.com.br/pesquisa?q=cavalo+balan%C3%A7o
+                  - text: Toymania
+                  - img [ref=e483]
+                - link "Shopee" [ref=e487] [cursor=pointer]:
+                  - /url: https://shopee.com.br/search?keyword=cavalo%20de%20bala%C3%A7o
+                  - text: Shopee
+                  - img [ref=e488]
+        - article [ref=e492]:
+          - generic [ref=e493]:
+            - img "Massinha de Modelar" [ref=e494]
+            - generic [ref=e495]:
+              - img [ref=e496]
+              - text: Sugestão
+          - generic [ref=e498]:
+            - heading "Massinha de Modelar" [level=3] [ref=e499]
+            - paragraph [ref=e500]: "Sugestão de valor: R$ 34,90"
+            - list [ref=e501]:
+              - listitem [ref=e502]: Massinha de modelar atóxica (12 cores)
+              - listitem [ref=e504]: Massinha com formas/moldes
+              - listitem [ref=e506]: Massinha de trigo com cores vivas
+            - generic [ref=e508]:
+              - paragraph [ref=e509]:
+                - img [ref=e510]
+                - text: Onde comprar
+              - generic [ref=e513]:
+                - link "Ri Happy" [ref=e514] [cursor=pointer]:
+                  - /url: https://www.rihappy.com.br/pesquisa?q=massinha+modelar
+                  - text: Ri Happy
+                  - img [ref=e515]
+                - link "Amazon" [ref=e519] [cursor=pointer]:
+                  - /url: https://www.amazon.com.br/s?k=massinha+de+modelar+infantil
+                  - text: Amazon
+                  - img [ref=e520]
+        - article [ref=e524]:
+          - generic [ref=e525]:
+            - img "Fantasia de Princesa" [ref=e526]
+            - generic [ref=e527]:
+              - img [ref=e528]
+              - text: Sugestão
+          - generic [ref=e530]:
+            - heading "Fantasia de Princesa" [level=3] [ref=e531]
+            - paragraph [ref=e532]: "Sugestão de valor: R$ 89,90"
+            - list [ref=e533]:
+              - listitem [ref=e534]: Fantasia de princesa (tema Cinderela/Ariel)
+              - listitem [ref=e536]: Tiara + varinha + saia tutu
+              - listitem [ref=e538]: Fantasia de fada com asas brilhantes
+            - generic [ref=e540]:
+              - paragraph [ref=e541]:
+                - img [ref=e542]
+                - text: Onde comprar
+              - generic [ref=e545]:
+                - link "Lojas Renner" [ref=e546] [cursor=pointer]:
+                  - /url: https://www.lojasrenner.com.br/busca?q=fantasia+princesa
+                  - text: Lojas Renner
+                  - img [ref=e547]
+                - link "Shopee" [ref=e551] [cursor=pointer]:
+                  - /url: https://shopee.com.br/search?keyword=fantasia%20princesa%20infantil
+                  - text: Shopee
+                  - img [ref=e552]
+      - generic [ref=e556]:
+        - paragraph [ref=e557]: 💝
+        - paragraph [ref=e558]: Prefere contribuir via Pix?
+        - paragraph [ref=e559]: Se preferir, você pode contribuir com qualquer valor. Todo carinho é bem-vindo!
+        - generic [ref=e560]:
+          - paragraph [ref=e561]: Chave Pix
+          - paragraph [ref=e562]: pix-da-familia@exemplo.com
+        - generic [ref=e563]:
+          - generic [ref=e564]: R$ 50
+          - generic [ref=e565]: R$ 100
+          - generic [ref=e566]: R$ 150
+          - generic [ref=e567]: R$ 250
+        - button "Copiar chave Pix" [ref=e568]
+    - generic [ref=e569]:
+      - text: —
+      - generic [ref=e571]: 🌸🌹🌺🌷🌸
+      - text: —
+    - generic [ref=e573]:
+      - generic: 🌹
+      - generic: 🌸
+      - text: Feito com carinho para celebrar o primeiro aninho da princesa Diana.
+  - button "Open Next.js Dev Tools" [ref=e579] [cursor=pointer]:
+    - img [ref=e580]

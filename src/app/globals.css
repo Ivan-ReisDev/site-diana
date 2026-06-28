@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  /* Força o tema claro: impede o "dark mode" automático de navegadores
+     (Brave/Chrome no mobile) de inverter as cores do convite. */
+  color-scheme: only light;
   --background: #fffafa;
   --foreground: #745b58;
   --baby-pink: #f5a9bf;
@@ -24,6 +27,7 @@
 }
 
 html {
+  color-scheme: only light;
   background: var(--background);
 }
 
