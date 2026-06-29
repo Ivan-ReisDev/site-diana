@@ -29,6 +29,17 @@ RUN npx prisma generate
 RUN npm run build
 
 # ───────────────────────────────────────────────────────────────
+# 2.5) Migrator — closure isolado do CLI do Prisma p/ rodar `migrate deploy`
+#      no start. Instalado à parte (não o node_modules de 1GB do build) e com
+#      TODAS as deps transitivas (effect, c12, etc.) resolvidas pelo npm —
+#      sem cherry-pick frágil. Engine baixado já é o musl (estágio Alpine).
+# ───────────────────────────────────────────────────────────────
+FROM node:22-alpine AS migrator
+RUN apk add --no-cache libc6-compat openssl
+WORKDIR /opt/prisma
+RUN npm init -y >/dev/null 2>&1 && npm install --omit=dev prisma@7.8.0 dotenv@17.4.2
+
+# ───────────────────────────────────────────────────────────────
 # 3) Runner — imagem final mínima que roda o app
 #    (sem DATABASE_URL embutido: usa a env injetada pelo Coolify em runtime)
 # ───────────────────────────────────────────────────────────────
@@ -38,6 +49,12 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+# openssl: exigido pelo schema-engine do Prisma (libssl) ao rodar `migrate deploy` no Alpine.
+RUN apk add --no-cache openssl
+
+# Closure do CLI do Prisma (instalado no estágio migrator). Copiado PRIMEIRO para
+# que a saída standalone do Next sobreponha seus módulos traçados por cima.
+COPY --from=migrator /opt/prisma/node_modules ./node_modules
 
 # saída standalone do Next (server.js + node_modules mínimo)
 COPY --from=builder /app/public ./public
@@ -50,7 +67,13 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma/adapter-pg ./node_modules/@prisma/adapter-pg
 COPY --from=builder /app/node_modules/@prisma/driver-adapter-utils ./node_modules/@prisma/driver-adapter-utils
 
+# schema + migrations + config + entrypoint (usados pelo `migrate deploy` no start)
+COPY --from=builder /app/prisma ./prisma
+COPY prisma.config.ts ./prisma.config.ts
+COPY docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
+
 # usuário não-root já existente nas imagens oficiais do Node
 USER node
 EXPOSE 3000
-CMD ["node", "server.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]
