@@ -788,14 +788,13 @@ export default function InvitationSite() {
         <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[.9fr_1.1fr]">
           <div className="max-w-xl">
             <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
-              Nossa história
+              Jornada da Nossa Princesa
             </p>
             <h2 className="mt-4 font-script text-5xl text-[#b85f78] sm:text-6xl">
               A festa real está prestes a começar
             </h2>
             <p className="mt-6 text-lg leading-9 text-[#806966]">
-              Com flores, castelo rosado e detalhes de princesa, vamos celebrar
-              o primeiro ano da Diana ao lado de pessoas especiais.
+              Cada fase, cada sorriso e cada descoberta fizeram desse primeiro ano uma verdadeira magia.
             </p>
             <div className="mt-9 flex flex-wrap gap-4 text-sm font-black text-[#c15f78]">
               {["11 de outubro", "13 horas", "Confirmar até 20/09"].map(
@@ -850,7 +849,6 @@ export default function InvitationSite() {
             <h2 className="mb-3 mt-3 font-script text-5xl leading-[1.1] text-[#b85f78] sm:text-6xl">
               Confirme sua Presença
             </h2>
-            <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-xl leading-9 text-[#7e5f5b] sm:text-2xl">
               Sua presença é o maior presente! Responda até 20 de setembro.
             </p>
@@ -1165,7 +1163,6 @@ export default function InvitationSite() {
             <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Sugestões de Presente
             </p>
-            <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
               Ideias carinhosas para a princesa Diana — cada presente traz
               sugestões de itens e lojas onde você pode encontrá-los.
@@ -1270,7 +1267,6 @@ export default function InvitationSite() {
             <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Pix Descomplica
             </p>
-            <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b] flex flex-col">
               Prefere presentear com um valor? <span>É só usar o Pix, rápido, simples e
               com todo carinho.</span> 
@@ -1323,7 +1319,6 @@ export default function InvitationSite() {
             <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Mural de Recados
             </p>
-            <div className="mx-auto mb-5 h-1 w-24 rounded-full bg-gradient-to-r from-[#f3a4b4] via-[#df7894] to-[#d5a547]" />
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
               Deixe uma mensagem carinhosa para a princesa Diana
             </p>
@@ -1445,13 +1440,13 @@ export default function InvitationSite() {
           src="/flor-canto.png"
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 left-0 w-24 select-none opacity-60 sm:w-28"
+          className="pointer-events-none absolute bottom-0 left-0 w-24 rotate-180 select-none opacity-60 sm:w-28"
         />
         <img
           src="/flor-canto.png"
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 right-0 w-24 -scale-x-100 select-none opacity-60 sm:w-28"
+          className="pointer-events-none absolute bottom-0 right-0 w-24 -scale-y-100 select-none opacity-60 sm:w-28"
         />
         <p className="relative font-script text-2xl text-[#b85f78] sm:text-3xl">
           Feito com carinho para celebrar o primeiro aninho da princesa Diana.
