@@ -1,17 +1,24 @@
 import { z } from 'zod';
 
-export const rsvpGuestSchema = z.object({
+import { phoneSchema } from '@/lib/masks/phone';
+
+export const rsvpAdultSchema = z.object({
+  name: z.string().trim().min(1, 'Informe o nome completo.'),
+});
+
+export const rsvpChildSchema = z.object({
   name: z.string().trim().min(1, 'Informe o nome completo.'),
   age: z.coerce.number().int().min(0, 'Informe a idade.').max(120, 'Idade inválida.'),
 });
 
 export const rsvpInputSchema = z.object({
   name: z.string().trim().min(1, 'Informe seu nome completo.'),
-  phone: z.string().trim().min(1, 'Preencha seu telefone.'),
+  phone: phoneSchema,
   attendance: z.enum(['sim', 'nao']).default('sim'),
-  adults: z.array(rsvpGuestSchema).min(1, 'Informe o nome completo e a idade de cada adulto.'),
-  children: z.array(rsvpGuestSchema).default([]),
+  adults: z.array(rsvpAdultSchema).min(1, 'Informe o nome completo de cada adulto.'),
+  children: z.array(rsvpChildSchema).default([]),
 });
 
-export type RsvpGuestInput = z.infer<typeof rsvpGuestSchema>;
+export type RsvpAdultInput = z.infer<typeof rsvpAdultSchema>;
+export type RsvpChildInput = z.infer<typeof rsvpChildSchema>;
 export type RsvpInput = z.infer<typeof rsvpInputSchema>;

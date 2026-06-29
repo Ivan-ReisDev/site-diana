@@ -51,3 +51,12 @@ model Rsvp {
   @@index([createdAt])
   @@index([name])
 }
+
+model Recado {
+  id        String   @id @default(cuid())
+  nome      String
+  mensagem  String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

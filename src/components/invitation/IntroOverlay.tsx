@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Volume2, VolumeX, SkipForward, Sparkles } from "lucide-react";
+import { Volume2, VolumeX, SkipForward } from "lucide-react";
 import { useIntroSequence } from "@/hooks/useIntroSequence";
 
 export interface IntroOverlayProps {
@@ -136,7 +136,6 @@ export function IntroOverlay({
                   aria-label="Abrir o vídeo do convite"
                 >
                   <span>Abrir o Convite</span>
-                  <Sparkles className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
             </div>

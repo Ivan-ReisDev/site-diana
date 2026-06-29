@@ -4,10 +4,18 @@ import { z } from 'zod';
 import { getPrismaClient } from '@/lib/db/prisma';
 
 import { normalizePhone } from './phone';
-import { type RsvpGuestInput, type RsvpInput, rsvpGuestSchema, rsvpInputSchema } from './schema';
+import {
+  type RsvpAdultInput,
+  type RsvpChildInput,
+  type RsvpInput,
+  rsvpAdultSchema,
+  rsvpChildSchema,
+  rsvpInputSchema,
+} from './schema';
 
 export type DashboardStatusFilter = 'all' | 'yes' | 'no';
-export type RsvpGuest = RsvpGuestInput;
+export type RsvpAdult = RsvpAdultInput;
+export type RsvpChild = RsvpChildInput;
 
 export type RsvpSummary = {
   id: string;
@@ -17,8 +25,8 @@ export type RsvpSummary = {
   adults: number;
   children: number;
   total: number;
-  adultsList: RsvpGuest[];
-  childrenList: RsvpGuest[];
+  adultsList: RsvpAdult[];
+  childrenList: RsvpChild[];
   createdAt: Date;
   updatedAt: Date;
 };
@@ -65,12 +73,15 @@ export function calculatePresenceStats(
   );
 }
 
+const adultsStoredSchema = rsvpAdultSchema.array().default([]);
+const childrenStoredSchema = rsvpChildSchema.array().default([]);
+
 const participantsSchema = z.object({
-  adults: rsvpGuestSchema.array().default([]),
-  children: rsvpGuestSchema.array().default([]),
+  adults: adultsStoredSchema,
+  children: childrenStoredSchema,
 });
 
-function parseStoredParticipants(value: Prisma.JsonValue): { adults: RsvpGuest[]; children: RsvpGuest[] } {
+function parseStoredParticipants(value: Prisma.JsonValue): { adults: RsvpAdult[]; children: RsvpChild[] } {
   const parsed = participantsSchema.safeParse(value);
   return parsed.success ? parsed.data : { adults: [], children: [] };
 }

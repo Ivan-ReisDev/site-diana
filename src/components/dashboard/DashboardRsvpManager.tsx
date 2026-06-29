@@ -2,8 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
+import { AlertCircle, CheckCircle2, Plus, Trash2 } from 'lucide-react';
 
+import { Button } from '@/components/ui/Button';
+import { FormField } from '@/components/ui/FormField';
+import { SectionCard } from '@/components/ui/SectionCard';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { maskPhone } from '@/lib/masks/phone';
+import { rsvpInputSchema } from '@/lib/rsvp/schema';
 import type { RsvpSummary } from '@/lib/rsvp/service';
+import { toFieldErrors } from '@/lib/validation/fieldErrors';
+
+type AdultForm = {
+  id: number;
+  name: string;
+};
 
 type ChildForm = {
   id: number;
@@ -15,6 +28,10 @@ type DashboardRsvpManagerProps = {
   initialRows: RsvpSummary[];
 };
 
+function createAdult(id: number): AdultForm {
+  return { id, name: '' };
+}
+
 function createChild(id: number): ChildForm {
   return { id, name: '', age: '' };
 }
@@ -24,22 +41,23 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [attendance, setAttendance] = useState<'sim' | 'nao'>('sim');
-  const [adults, setAdults] = useState<ChildForm[]>([createChild(1)]);
+  const [adults, setAdults] = useState<AdultForm[]>([createAdult(1)]);
   const [nextAdultId, setNextAdultId] = useState(2);
   const [children, setChildren] = useState<ChildForm[]>([]);
   const [nextChildId, setNextChildId] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const knownPhones = useMemo(() => initialRows.map((row) => row.phone), [initialRows]);
 
-  function updateAdult(id: number, field: keyof Omit<ChildForm, 'id'>, value: string) {
+  function updateAdult(id: number, field: keyof Omit<AdultForm, 'id'>, value: string) {
     setAdults((current) => current.map((adult) => (adult.id === id ? { ...adult, [field]: value } : adult)));
   }
 
   function addAdult() {
-    setAdults((current) => [...current, createChild(nextAdultId)]);
+    setAdults((current) => [...current, createAdult(nextAdultId)]);
     setNextAdultId((current) => current + 1);
   }
 
@@ -64,7 +82,7 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
     setName('');
     setPhone('');
     setAttendance('sim');
-    setAdults([createChild(1)]);
+    setAdults([createAdult(1)]);
     setNextAdultId(2);
     setChildren([]);
     setNextChildId(1);
@@ -73,29 +91,36 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const normalizedAdults = adults.map((adult) => ({ name: adult.name.trim(), age: Number(adult.age) }));
-    const normalizedChildren = children
-      .map((child) => ({ name: child.name.trim(), age: Number(child.age) }))
-      .filter((child) => child.name);
+    const payload = {
+      name: name.trim(),
+      phone: phone.trim(),
+      attendance,
+      adults: adults.map((adult) => ({ name: adult.name.trim() })),
+      children: children
+        .map((child) => ({
+          name: child.name.trim(),
+          age: child.age === '' ? Number.NaN : Number(child.age),
+        }))
+        .filter((child) => child.name),
+    };
 
-    if (!name.trim() || !phone.trim()) {
-      setError('Informe o nome completo e o telefone.');
+    const parsed = rsvpInputSchema.safeParse(payload);
+
+    if (!parsed.success) {
+      const errors = toFieldErrors(parsed.error);
+      setFieldErrors(errors);
+      setError(
+        errors.name ||
+          errors.phone ||
+          errors.adults ||
+          errors.children ||
+          'Verifique os campos destacados.',
+      );
       setFeedback('');
       return;
     }
 
-    if (normalizedAdults.some((adult) => !adult.name || Number.isNaN(adult.age))) {
-      setError('Informe o nome completo e a idade de cada adulto.');
-      setFeedback('');
-      return;
-    }
-
-    if (normalizedChildren.some((child) => Number.isNaN(child.age))) {
-      setError('Informe a idade de cada criança.');
-      setFeedback('');
-      return;
-    }
-
+    setFieldErrors({});
     setIsSubmitting(true);
     setError('');
     setFeedback('');
@@ -104,13 +129,7 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
       const response = await fetch('/api/rsvp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          phone: phone.trim(),
-          attendance,
-          adults: normalizedAdults,
-          children: normalizedChildren,
-        }),
+        body: JSON.stringify(parsed.data),
       });
 
       const body = await response.json();
@@ -132,117 +151,100 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
   }
 
   return (
-    <section className="rounded-[1.5rem] bg-white p-5 shadow-[0_12px_32px_rgba(185,75,105,.08)] sm:p-6">
-      <div className="mb-5">
-        <p className="text-sm font-semibold uppercase tracking-[.3em] text-[#d36f8a]">Cadastro manual</p>
-        <h2 className="mt-2 font-serif text-3xl font-black text-[#b85f78]">Adicionar ou atualizar grupo</h2>
-        <p className="mt-2 text-sm leading-6 text-[#806562]">
-          Use o telefone para atualizar um grupo existente ou cadastrar um novo grupo direto pela dashboard.
-        </p>
-      </div>
+    <SectionCard>
+      <SectionHeader
+        eyebrow="Cadastro manual"
+        title="Adicionar ou atualizar grupo"
+        description="Use o telefone para atualizar um grupo existente ou cadastrar um novo grupo direto pela dashboard."
+      />
 
-      <form className="space-y-5" onSubmit={handleSubmit}>
+      <form className="mt-5 space-y-5" onSubmit={handleSubmit}>
         <div className="grid gap-4 md:grid-cols-2">
-          <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-            <span>Nome completo</span>
-            <input
-              className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Nome completo"
-              value={name}
-            />
-          </label>
+          <FormField
+            id="dashboard-name"
+            label="Nome completo"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+              setFieldErrors((current) => ({ ...current, name: '' }));
+            }}
+            placeholder="Nome completo"
+            error={fieldErrors.name}
+          />
 
-          <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-            <span>Telefone</span>
-            <input
-              className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-              onChange={(event) => setPhone(event.target.value)}
-              placeholder="(21) 99999-9999"
-              value={phone}
-            />
-          </label>
+          <FormField
+            id="dashboard-phone"
+            label="Telefone"
+            type="tel"
+            inputMode="tel"
+            value={phone}
+            onChange={(event) => {
+              setPhone(maskPhone(event.target.value));
+              setFieldErrors((current) => ({ ...current, phone: '' }));
+            }}
+            placeholder="(21) 99999-9999"
+            maxLength={16}
+            error={fieldErrors.phone}
+          />
 
-          <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-            <span>Presença</span>
-            <select
-              className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-              onChange={(event) => setAttendance(event.target.value as 'sim' | 'nao')}
-              value={attendance}
-            >
-              <option value="sim">Sim, estarão presentes</option>
-              <option value="nao">Não poderão ir</option>
-            </select>
-          </label>
-
+          <FormField
+            id="dashboard-attendance"
+            label="Presença"
+            as="select"
+            value={attendance}
+            onChange={(event) => setAttendance(event.target.value as 'sim' | 'nao')}
+          >
+            <option value="sim">Sim, estarão presentes</option>
+            <option value="nao">Não poderão ir</option>
+          </FormField>
         </div>
 
-        <div className="rounded-[1.25rem] border border-[#f8d7df] bg-[#fffafc] p-4">
+        <div className="rounded-2xl border border-[#f8d7df] bg-[#fffafc] p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Adultos</p>
-              <p className="mt-1 text-sm text-[#806562]">Adicione o nome completo e a idade de cada adulto.</p>
+              <p className="invite-label">Adultos</p>
+              <p className="mt-1 text-sm text-[#806562]">Adicione o nome completo de cada adulto.</p>
             </div>
-            <button
-              className="rounded-full bg-[#f7dce4] px-4 py-2 text-sm font-bold text-[#a14f67] transition hover:brightness-95"
-              type="button"
-              onClick={addAdult}
-            >
+            <Button variant="ghost" type="button" icon={<Plus className="h-4 w-4" />} onClick={addAdult}>
               Adicionar adulto
-            </button>
+            </Button>
           </div>
 
           <div className="space-y-4">
             {adults.map((adult, index) => (
-              <div key={adult.id} className="grid gap-3 rounded-[1.1rem] border border-[#f3d6de] bg-white p-4 md:grid-cols-[1.3fr_.6fr_auto] md:items-end">
-                <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-                  <span>Nome completo do adulto {index + 1}</span>
-                  <input
-                    className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-                    onChange={(event) => updateAdult(adult.id, 'name', event.target.value)}
-                    placeholder={`Adulto ${index + 1}`}
-                    value={adult.name}
-                  />
-                </label>
+              <div key={adult.id} className="grid gap-3 rounded-[1.1rem] border border-[#f3d6de] bg-white p-4 md:grid-cols-[1.3fr_auto] md:items-end">
+                <FormField
+                  id={`dashboard-adult-${adult.id}`}
+                  label={`Nome completo do adulto ${index + 1}`}
+                  value={adult.name}
+                  onChange={(event) => updateAdult(adult.id, 'name', event.target.value)}
+                  placeholder={`Adulto ${index + 1}`}
+                />
 
-                <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-                  <span>Idade</span>
-                  <input
-                    className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-                    min="0"
-                    onChange={(event) => updateAdult(adult.id, 'age', event.target.value)}
-                    placeholder="0"
-                    type="number"
-                    value={adult.age}
-                  />
-                </label>
-
-                <button
-                  className="rounded-full border border-[#f1c4d0] px-4 py-3 text-sm font-bold text-[#a14f67] transition hover:bg-[#fff4f7] disabled:cursor-not-allowed disabled:opacity-40"
-                  disabled={adults.length === 1}
+                <Button
+                  variant="danger"
                   type="button"
+                  icon={<Trash2 className="h-4 w-4" />}
+                  disabled={adults.length === 1}
                   onClick={() => removeAdult(adult.id)}
+                  aria-label={`Remover adulto ${index + 1}`}
                 >
                   Remover
-                </button>
+                </Button>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-[1.25rem] border border-[#f8d7df] bg-[#fffafc] p-4">
+        <div className="rounded-2xl border border-[#f8d7df] bg-[#fffafc] p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-black uppercase tracking-[.2em] text-[#d36f8a]">Crianças</p>
+              <p className="invite-label">Crianças</p>
               <p className="mt-1 text-sm text-[#806562]">Adicione o nome completo e a idade de cada criança.</p>
             </div>
-            <button
-              className="rounded-full bg-[#f7dce4] px-4 py-2 text-sm font-bold text-[#a14f67] transition hover:brightness-95"
-              type="button"
-              onClick={addChild}
-            >
+            <Button variant="ghost" type="button" icon={<Plus className="h-4 w-4" />} onClick={addChild}>
               Adicionar criança
-            </button>
+            </Button>
           </div>
 
           {children.length === 0 ? (
@@ -251,65 +253,78 @@ export function DashboardRsvpManager({ initialRows }: DashboardRsvpManagerProps)
             <div className="space-y-4">
               {children.map((child, index) => (
                 <div key={child.id} className="grid gap-3 rounded-[1.1rem] border border-[#f3d6de] bg-white p-4 md:grid-cols-[1.3fr_.6fr_auto] md:items-end">
-                  <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-                    <span>Nome completo da criança {index + 1}</span>
-                    <input
-                      className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-                      onChange={(event) => updateChild(child.id, 'name', event.target.value)}
-                      placeholder={`Criança ${index + 1}`}
-                      value={child.name}
-                    />
-                  </label>
+                  <FormField
+                    id={`dashboard-child-${child.id}`}
+                    label={`Nome completo da criança ${index + 1}`}
+                    value={child.name}
+                    onChange={(event) => updateChild(child.id, 'name', event.target.value)}
+                    placeholder={`Criança ${index + 1}`}
+                  />
 
-                  <label className="grid gap-2 text-sm font-semibold text-[#8b5f6b]">
-                    <span>Idade</span>
-                    <input
-                      className="rounded-2xl border border-[#f1c4d0] bg-white px-4 py-3 outline-none transition focus:border-[#df7894] focus:ring-4 focus:ring-pink-100"
-                      min="0"
-                      onChange={(event) => updateChild(child.id, 'age', event.target.value)}
-                      placeholder="0"
-                      type="number"
-                      value={child.age}
-                    />
-                  </label>
+                  <FormField
+                    id={`dashboard-child-age-${child.id}`}
+                    label="Idade"
+                    type="number"
+                    min={0}
+                    value={child.age}
+                    onChange={(event) => updateChild(child.id, 'age', event.target.value)}
+                    placeholder="0"
+                  />
 
-                  <button
-                    className="rounded-full border border-[#f1c4d0] px-4 py-3 text-sm font-bold text-[#a14f67] transition hover:bg-[#fff4f7]"
+                  <Button
+                    variant="danger"
                     type="button"
+                    icon={<Trash2 className="h-4 w-4" />}
                     onClick={() => removeChild(child.id)}
+                    aria-label={`Remover criança ${index + 1}`}
                   >
                     Remover
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {error ? <p className="text-sm font-semibold text-red-600">{error}</p> : null}
-        {feedback ? <p className="text-sm font-semibold text-emerald-700">{feedback}</p> : null}
+        {error ? (
+          <p
+            role="alert"
+            aria-live="polite"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-red-600"
+          >
+            <AlertCircle className="h-4 w-4" aria-hidden="true" />
+            <span>{error}</span>
+          </p>
+        ) : null}
+        {feedback ? (
+          <p
+            role="status"
+            aria-live="polite"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700"
+          >
+            <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+            <span>{feedback}</span>
+          </p>
+        ) : null}
 
         <div className="flex flex-wrap gap-3">
-          <button
-            className="rounded-full bg-[#df7894] px-5 py-3 font-bold text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
-            disabled={isSubmitting}
-            type="submit"
-          >
-            {isSubmitting ? 'Salvando...' : 'Salvar grupo na dashboard'}
-          </button>
-          <button
-            className="rounded-full border border-[#f1c4d0] px-5 py-3 font-bold text-[#a14f67] transition hover:bg-[#fff4f7]"
+          <Button variant="primary" type="submit" loading={isSubmitting} loadingLabel="Salvando…">
+            Salvar grupo na dashboard
+          </Button>
+          <Button
+            variant="secondary"
             type="button"
             onClick={() => {
               resetForm();
               setError('');
               setFeedback('');
+              setFieldErrors({});
             }}
           >
             Limpar formulário
-          </button>
+          </Button>
         </div>
       </form>
-    </section>
+    </SectionCard>
   );
 }

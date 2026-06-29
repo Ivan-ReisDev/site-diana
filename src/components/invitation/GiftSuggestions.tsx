@@ -1,6 +1,23 @@
 "use client";
 
-import { Lightbulb, Sparkles } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+import { Sparkles } from "lucide-react";
+
+const giftReveal: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.08, delayChildren: 0.06 },
+  },
+};
+
+const giftItemReveal: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: "easeOut" },
+  },
+};
 
 export type GiftItem = {
   id: number;
@@ -17,68 +34,42 @@ export const giftItems: GiftItem[] = [
   {
     id: 1,
     nome: "Brinquedos interativos",
-    imagem:
-      "https://images.pexels.com/photos/35579565/pexels-photo-35579565.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/brinquedos.jpeg",
   },
   {
     id: 2,
     nome: "Bichinhos de pelúcia",
-    imagem:
-      "https://images.pexels.com/photos/113559/pexels-photo-113559.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/ursinho.jpeg",
   },
   {
     id: 3,
     nome: "Livrinhos infantis",
-    imagem:
-      "https://images.pexels.com/photos/4887203/pexels-photo-4887203.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/livros.jpeg",
   },
   {
     id: 4,
     nome: "Brinquedos musicais",
-    imagem:
-      "https://images.pexels.com/photos/9644670/pexels-photo-9644670.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/instrumentos-musicais.jpeg",
   },
   {
     id: 5,
     nome: "Brinquedos educativos",
-    imagem:
-      "https://images.pexels.com/photos/6255656/pexels-photo-6255656.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/brinquedos-educativos.jpeg",
   },
   {
     id: 6,
     nome: "Roupinhas e Vestidinhos",
-    imagem:
-      "https://images.pexels.com/photos/3875080/pexels-photo-3875080.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/vestidinhos-roupas.jpeg",
   },
   {
     id: 7,
     nome: "Brinquedos sensoriais",
-    imagem:
-      "https://images.pexels.com/photos/4487869/pexels-photo-4487869.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/brinquedos-sensoriais.jpeg",
   },
   {
     id: 8,
     nome: "Sapatinhos e Sandálias",
-    imagem:
-      "https://images.pexels.com/photos/19471464/pexels-photo-19471464.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 9,
-    nome: "Brinquedos de encaixe ou montar",
-    imagem:
-      "https://images.pexels.com/photos/4491703/pexels-photo-4491703.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 10,
-    nome: "Brinquedos de puxar ou empurrar",
-    imagem:
-      "https://images.pexels.com/photos/6132059/pexels-photo-6132059.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    id: 11,
-    nome: "Instrumentos musicais infantis",
-    imagem:
-      "https://images.pexels.com/photos/6743155/pexels-photo-6743155.jpeg?auto=compress&cs=tinysrgb&w=400",
+    imagem: "/galeria/brinquedos/sapatinhos.jpeg",
   },
 ];
 
@@ -94,8 +85,8 @@ export const giftSuggestions: GiftSuggestion[] = [
   {
     giftId: 2,
     ideias: [
-      "Pelúcia macia (≥ 30cm) sem peças pequenas",
-      "Bichinho de conforto para a hora de dormir",
+      "Um bichinho de pelúcia bem macio e fofinho",
+      "Companhia perfeita para a hora de dormir",
       "Pelúcia com chocalho ou som suave",
     ],
   },
@@ -134,7 +125,7 @@ export const giftSuggestions: GiftSuggestion[] = [
   {
     giftId: 7,
     ideias: [
-      "Massinha de modelar atóxica",
+      "Massinha de modelar segura para bebês",
       "Brinquedo com texturas e mordedor",
       "Bolas e blocos sensoriais coloridos",
     ],
@@ -143,55 +134,38 @@ export const giftSuggestions: GiftSuggestion[] = [
     giftId: 8,
     ideias: [
       "Sapatinho macio para os primeiros passos",
-      "Sandália confortável (tam. 18–22)",
+      "Sandália confortável (tamanho 18 ao 22)",
       "Tênis flexível antiderrapante",
-    ],
-  },
-  {
-    giftId: 9,
-    ideias: [
-      "Blocos de montar grandes (sem engasgo)",
-      "Cubos de empilhar coloridos",
-      "Torre de encaixe progressivo",
-    ],
-  },
-  {
-    giftId: 10,
-    ideias: [
-      "Carrinho ou animal de puxar com cordinha",
-      "Andador empurrador com som e luz",
-      "Bichinho com rodinhas para empurrar",
-    ],
-  },
-  {
-    giftId: 11,
-    ideias: [
-      "Xilofone colorido infantil",
-      "Pianinho ou teclado de brinquedo",
-      "Kit de percussão (pandeiro, chocalho)",
     ],
   },
 ];
 
 export function GiftSuggestions() {
   return (
-    <div className="mx-auto max-w-6xl">
-      <div className="mb-12 text-center">
+    <motion.div
+      className="mx-auto max-w-6xl"
+      variants={giftReveal}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-60px" }}
+    >
+      <motion.div className="mb-12 text-center" variants={giftItemReveal}>
         <h2 className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
           Sugestões de Presente
         </h2>
         <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
-          Ideias carinhosas para a princesa Diana, cada presente é apenas uma
+          Ideias carinhosas para a Princesa Diana, cada presente é apenas uma
           inspiração para quem quiser presentear com carinho.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {giftSuggestions.map((sug) => {
           const item = giftItems.find((g) => g.id === sug.giftId);
           return (
-            <article
+            <motion.article
               key={sug.giftId}
+              variants={giftItemReveal}
               className="flex flex-col overflow-hidden rounded-[1.75rem] bg-white/82 shadow-[0_6px_18px_rgba(201,111,135,.06)] transition-all hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(201,111,135,.12)]"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#fff5f8]">
@@ -207,14 +181,10 @@ export function GiftSuggestions() {
                     <Sparkles className="h-12 w-12" strokeWidth={1.5} aria-hidden="true" />
                   </div>
                 )}
-                <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[.18em] text-[#b85f78] shadow-sm">
-                  <Lightbulb className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
-                  Sugestão
-                </span>
               </div>
 
               <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <h3 className="font-serif text-2xl font-black leading-tight text-[#b85f78]">
+                <h3 className="font-script text-3xl leading-tight text-[#b85f78]">
                   {item?.nome ?? "Presente"}
                 </h3>
 
@@ -230,10 +200,10 @@ export function GiftSuggestions() {
                   ))}
                 </ul>
               </div>
-            </article>
+            </motion.article>
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }

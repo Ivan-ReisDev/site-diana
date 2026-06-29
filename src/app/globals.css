@@ -11,6 +11,12 @@
   --baby-cream: #fff8ef;
   --soft-gold: #d5a547;
   --warm-rose: #c86f87;
+  --field-bg: #ffe9f0;
+  --field-text: #5b4a48;
+  --field-placeholder: #cf93a7;
+  --field-focus-ring: #f3d3dd;
+  --label: #d36f8a;
+  --card-shadow: 0 12px 32px rgba(185, 75, 105, .08);
 }
 
 @theme inline {
@@ -246,6 +252,77 @@ select {
     radial-gradient(circle at 100% 4%, rgba(245, 184, 199, .24), transparent 22%),
     radial-gradient(circle at 0% 92%, rgba(238, 126, 158, .18), transparent 24%),
     linear-gradient(180deg, #fff8f6 0%, #fff2f5 48%, #fffaf7 100%);
+}
+
+/* --- Primitivos compartilhados do painel (Redesign de UI/UX) ---
+ * Centralizam os tokens do formulário público do convite para uso
+ * pelos componentes em src/components/ui/.
+ */
+.invite-field {
+  width: 100%;
+  border-radius: 0.75rem;
+  background-color: var(--field-bg);
+  height: 2.75rem;
+  padding: 0 1rem;
+  font-size: 15px;
+  color: var(--field-text);
+  outline: none;
+  transition: box-shadow 200ms ease, background-color 200ms ease;
+}
+
+.invite-field::placeholder {
+  color: var(--field-placeholder);
+  font-weight: 500;
+}
+
+.invite-field:focus {
+  box-shadow: 0 0 0 2px var(--field-focus-ring);
+}
+
+.invite-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.invite-label {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--label);
+}
+
+.invite-field-error {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.45);
+}
+
+.invite-field-error:focus {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.7);
+}
+
+.invite-field-error-text {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.invite-focus:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--field-focus-ring);
+}
+
+.invite-card {
+  border-radius: 1.5rem;
+  background-color: #fff;
+  padding: 1.25rem;
+  box-shadow: var(--card-shadow);
+}
+
+@media (min-width: 640px) {
+  .invite-card {
+    padding: 1.5rem;
+  }
 }
 
 /* --- Flores decorativas por todo o site --- */

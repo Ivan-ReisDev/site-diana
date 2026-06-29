@@ -31,11 +31,10 @@ describe('DashboardRsvpManager', () => {
     fireEvent.change(screen.getByPlaceholderText('(21) 99999-9999'), { target: { value: '(21) 98888-1111' } });
 
     fireEvent.change(screen.getByPlaceholderText('Adulto 1'), { target: { value: 'Paula Prado' } });
-    fireEvent.change(screen.getAllByPlaceholderText('0')[0], { target: { value: '32' } });
 
     fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }));
     fireEvent.change(screen.getByPlaceholderText('Criança 1'), { target: { value: 'Theo Prado' } });
-    fireEvent.change(screen.getAllByPlaceholderText('0')[1], { target: { value: '5' } });
+    fireEvent.change(screen.getByPlaceholderText('0'), { target: { value: '5' } });
     fireEvent.click(screen.getByRole('button', { name: /salvar grupo na dashboard/i }));
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));

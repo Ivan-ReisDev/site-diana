@@ -19,16 +19,32 @@ describe("GiftSuggestions — US1 (sugestões como ideias puras)", () => {
     ).toBeInTheDocument();
   });
 
-  it("C2: renderiza os 11 nomes de presente de giftItems", () => {
+  it("C2: renderiza os 8 nomes de presente de giftItems", () => {
     render(<GiftSuggestions />);
 
-    expect(giftItems).toHaveLength(11);
-    expect(giftSuggestions).toHaveLength(11);
+    expect(giftItems).toHaveLength(8);
+    expect(giftSuggestions).toHaveLength(8);
 
     for (const item of giftItems) {
       expect(
         screen.getByRole("heading", { name: item.nome, level: 3 }),
       ).toBeInTheDocument();
+    }
+  });
+
+  it("C2b: toda imagem renderizada aponta para /galeria/brinquedos/ (sem pexels/http externo)", () => {
+    const { container } = render(<GiftSuggestions />);
+
+    const imgs = Array.from(
+      container.querySelectorAll<HTMLImageElement>("img"),
+    );
+    expect(imgs.length).toBeGreaterThan(0);
+
+    for (const img of imgs) {
+      const src = img.getAttribute("src") ?? "";
+      expect(src.startsWith("/galeria/brinquedos/")).toBe(true);
+      expect(src).not.toMatch(/pexels/i);
+      expect(src).not.toMatch(/^https?:\/\//i);
     }
   });
 

@@ -1,7 +1,5 @@
 "use client";
 
-import { Navigation } from "lucide-react";
-
 export type Venue = {
   name: string;
   address: string;
@@ -32,9 +30,8 @@ export function LocationMap({ venue }: LocationMapProps) {
         href={`https://www.google.com/maps/dir/?api=1&destination=${target}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="royal-button inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-7 py-3 text-base font-black text-white shadow-[0_8px_24px_rgba(223,120,148,.24)] transition-all hover:scale-[1.02]"
+        className="royal-button inline-flex min-h-[44px] items-center justify-center rounded-full px-7 py-3 text-base font-normal text-white shadow-[0_8px_24px_rgba(223,120,148,.24)] transition-all hover:scale-[1.02]"
       >
-        <Navigation className="h-5 w-5" strokeWidth={2.25} aria-hidden="true" />
         Como chegar
       </a>
     </div>

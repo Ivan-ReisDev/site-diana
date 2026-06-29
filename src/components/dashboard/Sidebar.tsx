@@ -1,18 +1,38 @@
 "use client";
 
 import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { LogoutButton } from '@/components/auth/LogoutButton';
 
-const NAV_LINKS = [
-  { href: '#visao-geral', label: 'Visão geral' },
-  { href: '#cadastro-manual', label: 'Cadastro manual' },
-  { href: '#confirmacoes', label: 'Lista de confirmações' },
+type NavMatch = 'exact' | 'prefix';
+
+type NavLink = {
+  href: string;
+  label: string;
+  match: NavMatch;
+};
+
+const NAV_LINKS: NavLink[] = [
+  { href: '/dashboard', label: 'Visão geral', match: 'exact' },
+  { href: '/dashboard/cadastro-manual', label: 'Cadastro manual', match: 'exact' },
+  { href: '/dashboard/confirmacoes', label: 'Lista de confirmações', match: 'prefix' },
+  { href: '/dashboard/mural', label: 'Mural de recados', match: 'exact' },
 ];
+
+function isActive(link: NavLink, pathname: string): boolean {
+  if (link.match === 'exact') {
+    return pathname === link.href;
+  }
+
+  return pathname === link.href || pathname.startsWith(`${link.href}/`);
+}
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   function close() {
     setIsOpen(false);
@@ -60,16 +80,24 @@ export function Sidebar() {
         </div>
 
         <nav aria-label="Navegação do painel" className="flex flex-1 flex-col gap-1 px-4">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={close}
-              className="rounded-2xl px-4 py-3 font-semibold text-[#8b5f6b] transition hover:bg-[#fff0f4] hover:text-[#c76a85]"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = isActive(link, pathname);
+            const className = active
+              ? 'rounded-2xl px-4 py-3 font-semibold bg-[#fff0f4] text-[#c76a85] transition invite-focus'
+              : 'rounded-2xl px-4 py-3 font-semibold text-[#8b5f6b] transition hover:bg-[#fff0f4] hover:text-[#c76a85] invite-focus';
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={close}
+                aria-current={active ? 'page' : undefined}
+                className={className}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="px-4 pb-6 pt-4">

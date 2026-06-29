@@ -1,10 +1,9 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
   Calendar,
-  Heart,
   Mail,
   MapPin,
   Castle,
@@ -16,8 +15,16 @@ import { IntroOverlay } from "@/components/invitation/IntroOverlay";
 import { LocationMap } from "@/components/invitation/LocationMap";
 import { PhotoGalleryCarousel, galleryPhotos } from "@/components/invitation/PhotoGalleryCarousel";
 import { GiftSuggestions } from "@/components/invitation/GiftSuggestions";
+import { maskPhone } from "@/lib/masks/phone";
+import { recadoInputSchema } from "@/lib/recados/schema";
+import { rsvpInputSchema } from "@/lib/rsvp/schema";
+import { toFieldErrors } from "@/lib/validation/fieldErrors";
 
-type RsvpGuest = {
+type RsvpAdult = {
+  name: string;
+};
+
+type RsvpChild = {
   name: string;
   age: number;
 };
@@ -27,20 +34,26 @@ type RsvpSummary = {
   attendance: string;
   adults: number;
   children: number;
-  adultsList: RsvpGuest[];
-  childrenList: RsvpGuest[];
+  adultsList: RsvpAdult[];
+  childrenList: RsvpChild[];
 };
 
-type GuestForm = {
+type AdultForm = {
+  id: number;
+  name: string;
+};
+
+type ChildForm = {
   id: number;
   name: string;
   age: string;
 };
 
 type Recado = {
+  id: string;
   nome: string;
   mensagem: string;
-  data: string;
+  createdAt: string;
 };
 
 const eventDetails = [
@@ -57,9 +70,41 @@ const venue = {
 
 
 const giftAmounts = ["R$ 50", "R$ 100", "R$ 150", "R$ 250"];
-const pixKey = "pix-da-familia@exemplo.com";
+const pixKey = "(21) 96996-2029";
 
-function createEmptyGuest(id: number): GuestForm {
+// Reveal em cascata conforme o scroll: a seção é o "container" que escalona
+// a entrada dos filhos (itemReveal). Filhos com `variants={itemReveal}` herdam
+// automaticamente o estado do container — não precisam de initial/whileInView.
+const sectionReveal: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.14, delayChildren: 0.08 },
+  },
+};
+
+const itemReveal: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+function formatRecadoDate(value: string) {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return "";
+  return parsed.toLocaleDateString("pt-BR");
+}
+
+function createEmptyAdult(id: number): AdultForm {
+  return {
+    id,
+    name: "",
+  };
+}
+
+function createEmptyChild(id: number): ChildForm {
   return {
     id,
     name: "",
@@ -76,14 +121,56 @@ export default function InvitationSite() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [attendance, setAttendance] = useState<"sim" | "nao">("sim");
-  const [adults, setAdults] = useState<GuestForm[]>([createEmptyGuest(1)]);
+  const [adults, setAdults] = useState<AdultForm[]>([createEmptyAdult(1)]);
   const [nextAdultId, setNextAdultId] = useState(2);
-  const [children, setChildren] = useState<GuestForm[]>([]);
+  const [children, setChildren] = useState<ChildForm[]>([]);
   const [nextChildId, setNextChildId] = useState(1);
   const [recados, setRecados] = useState<Recado[]>([]);
+  const [recadosLoading, setRecadosLoading] = useState(true);
+  const [recadosError, setRecadosError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [recadoNome, setRecadoNome] = useState("");
   const [recadoMsg, setRecadoMsg] = useState("");
+  const [enviandoRecado, setEnviandoRecado] = useState(false);
+  const [recadoError, setRecadoError] = useState("");
+  const [recadoFieldErrors, setRecadoFieldErrors] = useState<Record<string, string>>({});
   const [recadoEnviado, setRecadoEnviado] = useState(false);
+
+  useEffect(() => {
+    if (!introDone) return;
+    let cancelled = false;
+
+    async function loadRecados() {
+      setRecadosLoading(true);
+      setRecadosError("");
+
+      try {
+        const response = await fetch("/api/recados", { method: "GET" });
+        const body = await response.json();
+
+        if (cancelled) return;
+
+        if (!response.ok || !body.ok || !Array.isArray(body.recados)) {
+          setRecadosError(body.message || "Não foi possível carregar os recados agora.");
+          return;
+        }
+
+        setRecados(body.recados);
+      } catch {
+        if (!cancelled) {
+          setRecadosError("Não foi possível carregar os recados agora.");
+        }
+      } finally {
+        if (!cancelled) setRecadosLoading(false);
+      }
+    }
+
+    loadRecados();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [introDone]);
 
   const guestsLabel = useMemo(() => {
     if (!summary) return "";
@@ -99,7 +186,7 @@ export default function InvitationSite() {
 
   function updateAdult(
     id: number,
-    field: keyof Omit<GuestForm, "id">,
+    field: keyof Omit<AdultForm, "id">,
     value: string,
   ) {
     setAdults((current) =>
@@ -110,7 +197,7 @@ export default function InvitationSite() {
   }
 
   function addAdult() {
-    setAdults((current) => [...current, createEmptyGuest(nextAdultId)]);
+    setAdults((current) => [...current, createEmptyAdult(nextAdultId)]);
     setNextAdultId((current) => current + 1);
   }
 
@@ -122,7 +209,7 @@ export default function InvitationSite() {
 
   function updateChild(
     id: number,
-    field: keyof Omit<GuestForm, "id">,
+    field: keyof Omit<ChildForm, "id">,
     value: string,
   ) {
     setChildren((current) =>
@@ -133,7 +220,7 @@ export default function InvitationSite() {
   }
 
   function addChild() {
-    setChildren((current) => [...current, createEmptyGuest(nextChildId)]);
+    setChildren((current) => [...current, createEmptyChild(nextChildId)]);
     setNextChildId((current) => current + 1);
   }
 
@@ -144,33 +231,35 @@ export default function InvitationSite() {
   async function handleRsvp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const normalizedAdults = adults.map((adult) => ({
-      name: adult.name.trim(),
-      age: Number(adult.age),
-    }));
-    const normalizedChildren = children
-      .map((child) => ({ name: child.name.trim(), age: Number(child.age) }))
-      .filter((child) => child.name);
+    const payload = {
+      name: name.trim(),
+      phone: phone.trim(),
+      attendance,
+      adults: adults.map((adult) => ({ name: adult.name.trim() })),
+      children: children
+        .map((child) => ({
+          name: child.name.trim(),
+          age: child.age === "" ? Number.NaN : Number(child.age),
+        }))
+        .filter((child) => child.name),
+    };
 
-    if (!name.trim() || !phone.trim()) {
+    const parsed = rsvpInputSchema.safeParse(payload);
+
+    if (!parsed.success) {
+      const errors = toFieldErrors(parsed.error);
+      setFieldErrors(errors);
       setError(
-        "Informe seu nome completo e telefone para confirmar com carinho.",
+        errors.name ||
+          errors.phone ||
+          errors.adults ||
+          errors.children ||
+          "Verifique os campos destacados.",
       );
       return;
     }
 
-    if (
-      normalizedAdults.some((adult) => !adult.name || Number.isNaN(adult.age))
-    ) {
-      setError("Informe o nome completo e a idade de cada adulto.");
-      return;
-    }
-
-    if (normalizedChildren.some((child) => Number.isNaN(child.age))) {
-      setError("Informe a idade de cada criança.");
-      return;
-    }
-
+    setFieldErrors({});
     setError("");
     setIsSubmitting(true);
 
@@ -180,13 +269,7 @@ export default function InvitationSite() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: name.trim(),
-          phone: phone.trim(),
-          attendance,
-          adults: normalizedAdults,
-          children: normalizedChildren,
-        }),
+        body: JSON.stringify(parsed.data),
       });
 
       const body = await response.json();
@@ -198,25 +281,29 @@ export default function InvitationSite() {
         return;
       }
 
+      const adultsList = Array.isArray(body.rsvp?.adultsList)
+        ? body.rsvp.adultsList
+        : [];
+      const childrenList = Array.isArray(body.rsvp?.childrenList)
+        ? body.rsvp.childrenList
+        : [];
+
       setSummary({
         name: body.rsvp.name,
         attendance: body.rsvp.attendance,
         adults: Number(body.rsvp.adults || 0),
         children: Number(body.rsvp.children || 0),
-        adultsList: Array.isArray(body.rsvp.adultsList)
-          ? body.rsvp.adultsList
-          : [],
-        childrenList: Array.isArray(body.rsvp.childrenList)
-          ? body.rsvp.childrenList
-          : [],
+        adultsList,
+        childrenList,
       });
       setName("");
       setPhone("");
       setAttendance("sim");
-      setAdults([createEmptyGuest(1)]);
+      setAdults([createEmptyAdult(1)]);
       setNextAdultId(2);
       setChildren([]);
       setNextChildId(1);
+      setFieldErrors({});
     } catch {
       setError("Não foi possível registrar sua presença agora.");
     } finally {
@@ -233,18 +320,55 @@ export default function InvitationSite() {
     setCopied(true);
   }
 
-  function enviarRecado() {
-    if (!recadoNome.trim() || !recadoMsg.trim()) return;
-    const novo: Recado = {
+  async function enviarRecado() {
+    setRecadoError("");
+
+    const payload = {
       nome: recadoNome.trim(),
       mensagem: recadoMsg.trim(),
-      data: new Date().toLocaleDateString("pt-BR"),
     };
-    setRecados((prev) => [novo, ...prev]);
-    setRecadoNome("");
-    setRecadoMsg("");
-    setRecadoEnviado(true);
-    setTimeout(() => setRecadoEnviado(false), 3000);
+
+    const parsed = recadoInputSchema.safeParse(payload);
+
+    if (!parsed.success) {
+      const errors = toFieldErrors(parsed.error);
+      setRecadoFieldErrors(errors);
+      setRecadoError(errors.nome || errors.mensagem || "Verifique os campos destacados.");
+      return;
+    }
+
+    setRecadoFieldErrors({});
+    setEnviandoRecado(true);
+
+    try {
+      const response = await fetch("/api/recados", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+
+      const body = await response.json();
+
+      if (response.status === 429 || (body && body.message && /muitos recados/i.test(body.message))) {
+        setRecadoError(body.message || "Você enviou muitos recados em pouco tempo. Tente novamente em alguns minutos.");
+        return;
+      }
+
+      if (!response.ok || !body.ok || !body.recado) {
+        setRecadoError(body.message || "Não foi possível enviar seu recado agora.");
+        return;
+      }
+
+      setRecados((prev) => [body.recado, ...prev]);
+      setRecadoMsg("");
+      setRecadoFieldErrors({});
+      setRecadoEnviado(true);
+      setTimeout(() => setRecadoEnviado(false), 3000);
+    } catch {
+      setRecadoError("Não foi possível enviar seu recado agora.");
+    } finally {
+      setEnviandoRecado(false);
+    }
   }
 
   return (
@@ -258,6 +382,12 @@ export default function InvitationSite() {
         )}
       </AnimatePresence>
       {introDone && <BackgroundMusic />}
+      {/* O reveal das seções só deve começar DEPOIS que a intro sai. Como o
+          IntroOverlay é apenas uma camada por cima, o conteúdo já está na
+          viewport e o whileInView dispararia escondido atrás da intro. Trocar
+          a key quando introDone vira true remonta o conteúdo e reinicia as
+          animações no momento em que ficam de fato visíveis. */}
+      <div key={introDone ? "revealed" : "pending"} className="contents">
       <section className="relative isolate flex flex-col px-5 pb-20 pt-6 sm:px-8 lg:min-h-screen lg:px-12">
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_12%,rgba(244,190,206,.42),transparent_30%),radial-gradient(circle_at_86%_8%,rgba(255,224,232,.55),transparent_24%),radial-gradient(circle_at_70%_78%,rgba(255,231,178,.26),transparent_24%),linear-gradient(135deg,#fffdf9_0%,#fff1f5_48%,#fffaf7_100%)]" />
         <div className="absolute left-8 top-28 -z-10 h-44 w-44 rounded-full bg-pink-200/60 blur-3xl" />
@@ -290,15 +420,14 @@ export default function InvitationSite() {
             Diana
           </a>
           <div className="hidden gap-6 text-sm font-medium text-[#806562] md:flex">
-            <a href="#evento">Evento</a>
-            <a href="#local">Local</a>
             <a href="#rsvp">Presença</a>
             <a href="#gifts">Presentes</a>
-            <a href="#mural">Mural</a>
             <a href="#pix">Pix</a>
+            <a href="#evento">Evento</a>
+            <a href="#mural">Mural</a>
           </div>
           <a
-            className="royal-button rounded-full px-4 py-2 text-sm font-semibold text-white"
+            className="royal-button rounded-full px-4 py-2 text-sm font-normal text-white"
             href="#rsvp"
           >
             Confirmar
@@ -363,97 +492,25 @@ export default function InvitationSite() {
       </motion.div>
 
       <motion.section
-        id="evento"
-        className="px-5 py-24 sm:px-8 lg:px-12"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        className="flex flex-col justify-center px-5 py-16 sm:px-8 lg:px-12"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="show"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-10 text-center">
-            <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
-              Informações
-            </p>
-            <h2 className="mt-3 font-script text-5xl text-[#b85f78] sm:text-6xl">
-              Informações do convite real
-            </h2>
-          </div>
-          <div className="mx-auto grid max-w-5xl gap-8 rounded-[2rem] bg-white/45 px-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
-            {eventDetails.map((item) => (
-              <article
-                key={item.label}
-                className="border-l border-[#f0c7d3]/70 pl-5 first:border-l-0 first:pl-0 sm:first:border-l sm:first:pl-5 lg:first:border-l-0 lg:first:pl-0"
-              >
-                <p className="text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]">
-                  {item.label}
-                </p>
-                <p className="mt-3 text-lg font-extrabold leading-snug text-[#7d625f]">
-                  {item.value}
-                </p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mx-auto mt-10 max-w-5xl">
-            <LocationMap venue={venue} />
-          </div>
-        </div>
-      </motion.section>
-
-      <motion.div
-        className="flex items-center justify-center py-6"
-        aria-hidden="true"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
-          <img
-            src="/coroa.png"
-            alt=""
-            aria-hidden="true"
-            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
-          />
-          <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
-        </div>
-      </motion.div>
-
-      <motion.section
-        className="px-5 py-24 sm:px-8 lg:px-12"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-      >
-        <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[.9fr_1.1fr]">
-          <div className="max-w-xl">
-            <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
+        <div className="mx-auto w-full max-w-6xl">
+          <motion.div className="mb-8 text-center" variants={itemReveal}>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
               Jornada da Nossa Princesa
             </p>
-            <h2 className="mt-4 font-script text-5xl text-[#b85f78] sm:text-6xl">
-              A festa real está prestes a começar
+            <h2 className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
+              Uma doce retrospectiva do primeiro aninho
             </h2>
-            <p className="mt-6 text-lg leading-9 text-[#806966]">
-              Cada fase, cada sorriso e cada descoberta fizeram desse primeiro ano uma verdadeira magia.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-4 text-sm font-black text-[#c15f78]">
-              {["11 de outubro", "13 horas", "Confirmar até 20/09"].map(
-                (item) => (
-                  <span
-                    key={item}
-                    className="rounded-full bg-[#fff0f5] px-5 py-3"
-                  >
-                    {item}
-                  </span>
-                ),
-              )}
-            </div>
-          </div>
+          </motion.div>
 
-          <PhotoGalleryCarousel photos={galleryPhotos} />
+          <motion.div className="mx-auto w-full max-w-2xl" variants={itemReveal}>
+            <PhotoGalleryCarousel photos={galleryPhotos} />
+          </motion.div>
         </div>
       </motion.section>
 
@@ -482,23 +539,26 @@ export default function InvitationSite() {
       <motion.section
         id="rsvp"
         className="relative px-5 py-28 sm:px-8 lg:px-12"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="show"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <div className="mx-auto max-w-6xl">
-          <div className="mb-14 text-center">
+          <motion.div className="mb-14 text-center" variants={itemReveal}>
             <h2 className="mb-3 mt-3 font-script text-5xl leading-[1.1] text-[#b85f78] sm:text-6xl">
               Confirme sua Presença
             </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-9 text-[#7e5f5b] sm:text-2xl">
-              Sua presença é o maior presente! Responda até 20 de setembro.
+            <p className="mx-auto max-w-2xl text-xl leading-9 text-[#7e5f5b] sm:text-2xl flex flex-col gap-1">
+              Sua presença é o maior presente! <span> Responda até 20 de setembro.</span>
             </p>
-          </div>
+          </motion.div>
 
           <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.4fr]">
-            <div className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fce4eb] to-[#fff1f4] p-8 text-[#7d625f] shadow-[0_10px_30px_rgba(201,111,135,.08)]">
+            <motion.div
+              variants={itemReveal}
+              className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fce4eb] to-[#fff1f4] p-8 text-[#7d625f] shadow-[0_10px_30px_rgba(201,111,135,.08)]"
+            >
               <img
                 src="/flor-canto.png"
                 alt=""
@@ -558,9 +618,10 @@ export default function InvitationSite() {
                   <span>Casa de Festas Turma da Kali</span>
                 </p>
               </div>
-            </div>
+            </motion.div>
 
-            <form
+            <motion.form
+              variants={itemReveal}
               onSubmit={handleRsvp}
               className="rounded-[2rem] bg-white/68 p-7 shadow-[0_10px_30px_rgba(201,111,135,.06)] sm:p-8"
             >
@@ -569,19 +630,36 @@ export default function InvitationSite() {
                   <span>Nome completo</span>
                   <input
                     value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
+                    onChange={(event) => {
+                      setName(event.target.value);
+                      if (fieldErrors.name) setFieldErrors((cur) => ({ ...cur, name: "" }));
+                    }}
+                    className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd] aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-400"
                     placeholder="Seu nome completo"
+                    aria-invalid={fieldErrors.name ? true : undefined}
                   />
+                  {fieldErrors.name && (
+                    <span className="text-xs font-semibold text-red-600">{fieldErrors.name}</span>
+                  )}
                 </label>
                 <label className="grid gap-2 text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a]">
                   <span>Telefone</span>
                   <input
                     value={phone}
-                    onChange={(event) => setPhone(event.target.value)}
-                    className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
+                    onChange={(event) => {
+                      setPhone(maskPhone(event.target.value));
+                      if (fieldErrors.phone) setFieldErrors((cur) => ({ ...cur, phone: "" }));
+                    }}
+                    type="tel"
+                    inputMode="tel"
+                    maxLength={16}
+                    className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd] aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-400"
                     placeholder="(21) 99999-9999"
+                    aria-invalid={fieldErrors.phone ? true : undefined}
                   />
+                  {fieldErrors.phone && (
+                    <span className="text-xs font-semibold text-red-600">{fieldErrors.phone}</span>
+                  )}
                 </label>
                 <div className="sm:col-span-2">
                   <span className="text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a]">
@@ -595,7 +673,7 @@ export default function InvitationSite() {
                         value="sim"
                         checked={attendance === "sim"}
                         onChange={() => setAttendance("sim")}
-                        className="h-4 w-4 accent-[#df7894]"
+                        className="h-4 w-4 cursor-pointer accent-[#d8547a]"
                       />
                       Sim, estarei lá
                     </label>
@@ -606,7 +684,7 @@ export default function InvitationSite() {
                         value="nao"
                         checked={attendance === "nao"}
                         onChange={() => setAttendance("nao")}
-                        className="h-4 w-4 accent-[#df7894]"
+                        className="h-4 w-4 cursor-pointer accent-[#d8547a]"
                       />
                       Não poderei ir
                     </label>
@@ -619,7 +697,7 @@ export default function InvitationSite() {
                         Adultos
                       </p>
                       <p className="mt-1 text-sm text-[#9d8786]">
-                        Informe o nome completo e a idade de cada adulto.
+                        Informe o nome completo de cada adulto.
                       </p>
                     </div>
                     <button
@@ -642,24 +720,12 @@ export default function InvitationSite() {
                           <span>Nome completo do adulto {index + 1}</span>
                           <input
                             value={adult.name}
-                            onChange={(event) =>
-                              updateAdult(adult.id, "name", event.target.value)
-                            }
-                            className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
+                            onChange={(event) => {
+                              updateAdult(adult.id, "name", event.target.value);
+                              if (fieldErrors.adults) setFieldErrors((cur) => ({ ...cur, adults: "" }));
+                            }}
+                            className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                             placeholder={`Adulto ${index + 1}`}
-                          />
-                        </label>
-                        <label className="grid w-20 gap-2 text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a]">
-                          <span>Idade</span>
-                          <input
-                            value={adult.age}
-                            onChange={(event) =>
-                              updateAdult(adult.id, "age", event.target.value)
-                            }
-                            type="number"
-                            min="0"
-                            className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
-                            placeholder="0"
                           />
                         </label>
                         <button
@@ -674,6 +740,9 @@ export default function InvitationSite() {
                       </div>
                     ))}
                   </div>
+                  {fieldErrors.adults && (
+                    <p className="mt-3 text-xs font-semibold text-red-600">{fieldErrors.adults}</p>
+                  )}
                 </div>
                 <div className="sm:col-span-2 rounded-2xl bg-white/40 p-5">
                   <div className="mb-4 flex items-center justify-between gap-4">
@@ -711,14 +780,11 @@ export default function InvitationSite() {
                             <span>Nome completo da criança {index + 1}</span>
                             <input
                               value={child.name}
-                              onChange={(event) =>
-                                updateChild(
-                                  child.id,
-                                  "name",
-                                  event.target.value,
-                                )
-                              }
-                              className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
+                              onChange={(event) => {
+                                updateChild(child.id, "name", event.target.value);
+                                if (fieldErrors.children) setFieldErrors((cur) => ({ ...cur, children: "" }));
+                              }}
+                              className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                               placeholder={`Criança ${index + 1}`}
                             />
                           </label>
@@ -726,12 +792,13 @@ export default function InvitationSite() {
                             <span>Idade</span>
                             <input
                               value={child.age}
-                              onChange={(event) =>
-                                updateChild(child.id, "age", event.target.value)
-                              }
+                              onChange={(event) => {
+                                updateChild(child.id, "age", event.target.value);
+                                if (fieldErrors.children) setFieldErrors((cur) => ({ ...cur, children: "" }));
+                              }}
                               type="number"
                               min="0"
-                              className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
+                              className="w-full rounded-xl bg-[#ffe9f0] h-11 px-4 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd]"
                               placeholder="0"
                             />
                           </label>
@@ -747,6 +814,9 @@ export default function InvitationSite() {
                       ))}
                     </div>
                   )}
+                  {fieldErrors.children && (
+                    <p className="mt-3 text-xs font-semibold text-red-600">{fieldErrors.children}</p>
+                  )}
                 </div>
               </div>
               {error && (
@@ -759,16 +829,9 @@ export default function InvitationSite() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                <span className="flex items-center justify-center gap-2">
-                  {isSubmitting ? "Confirmando..." : "Confirmar presença"}{" "}
-                  <Heart
-                    className="h-5 w-5"
-                    strokeWidth={2.25}
-                    fill="currentColor"
-                  />
-                </span>
+                {isSubmitting ? "Confirmando..." : "Confirmar presença"}
               </button>
-            </form>
+            </motion.form>
           </div>
         </div>
       </motion.section>
@@ -793,36 +856,32 @@ export default function InvitationSite() {
         </div>
       </motion.div>
 
-      <motion.section
-        id="gifts"
-        className="px-5 pb-32 pt-24 sm:px-8 lg:px-12"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-      >
+      <section id="gifts" className="px-5 pb-32 pt-24 sm:px-8 lg:px-12">
         <GiftSuggestions />
-      </motion.section>
+      </section>
 
       <motion.section
         id="pix"
         className="px-5 pb-32 sm:px-8 lg:px-12"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="show"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <div className="mx-auto max-w-6xl">
-          <div className="mb-12 text-center">
+          <motion.div className="mb-12 text-center" variants={itemReveal}>
             <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Pix Descomplica
             </p>
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b] flex flex-col">
               Prefere presentear com um valor? <span>É só usar o Pix, rápido, simples e
-              com todo carinho.</span> 
+              com todo carinho.</span>
             </p>
-          </div>
-          <div className="mx-auto max-w-2xl rounded-[2rem] bg-white/45 p-8 text-center shadow-[0_8px_30px_rgba(201,111,135,.06)]">
+          </motion.div>
+          <motion.div
+            variants={itemReveal}
+            className="mx-auto max-w-2xl rounded-[2rem] bg-white/45 p-8 text-center shadow-[0_8px_30px_rgba(201,111,135,.06)]"
+          >
             <div className="rounded-2xl bg-white/70 p-5">
               <p className="text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a]">
                 Chave Pix
@@ -852,29 +911,115 @@ export default function InvitationSite() {
                 Chave Pix copiada!
               </p>
             )}
-          </div>
+          </motion.div>
         </div>
       </motion.section>
+
+      <motion.div
+        className="flex items-center justify-center py-6"
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
+          <img
+            src="/coroa.png"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
+          />
+          <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
+        </div>
+      </motion.div>
+
+      <motion.section
+        id="evento"
+        className="px-5 py-24 sm:px-8 lg:px-12"
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-60px" }}
+      >
+        <div className="mx-auto max-w-6xl">
+          <motion.div className="mb-10 text-center" variants={itemReveal}>
+            <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
+              Informações
+            </p>
+            <h2 className="mt-3 font-script text-5xl text-[#b85f78] sm:text-6xl">
+              Informações do convite real
+            </h2>
+          </motion.div>
+          <motion.div
+            variants={sectionReveal}
+            className="mx-auto grid max-w-5xl gap-8 rounded-[2rem] bg-white/45 px-6 py-8 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {eventDetails.map((item) => (
+              <motion.article
+                key={item.label}
+                variants={itemReveal}
+                className="border-l border-[#f0c7d3]/70 pl-5 first:border-l-0 first:pl-0 sm:first:border-l sm:first:pl-5 lg:first:border-l-0 lg:first:pl-0"
+              >
+                <p className="text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]">
+                  {item.label}
+                </p>
+                <p className="mt-3 text-lg font-extrabold leading-snug text-[#7d625f]">
+                  {item.value}
+                </p>
+              </motion.article>
+            ))}
+          </motion.div>
+
+          <motion.div className="mx-auto mt-10 max-w-5xl" variants={itemReveal}>
+            <LocationMap venue={venue} />
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <motion.div
+        className="flex items-center justify-center py-6"
+        aria-hidden="true"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="flex items-center gap-3 w-full max-w-xs mx-auto">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#d7ad55]/30 to-[#d7ad55]/60" />
+          <img
+            src="/coroa.png"
+            alt=""
+            aria-hidden="true"
+            className="flex-shrink-0 h-7 w-7 sm:h-8 sm:w-8 drop-shadow-[0_4px_10px_rgba(215,173,85,0.35)]"
+          />
+          <div className="flex-1 h-px bg-gradient-to-r from-[#d7ad55]/60 via-[#d7ad55]/30 to-transparent" />
+        </div>
+      </motion.div>
 
       <motion.section
         id="mural"
         className="px-5 py-24 sm:px-8 lg:px-12"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="show"
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <div className="mx-auto max-w-5xl">
-          <div className="mb-12 text-center">
+          <motion.div className="mb-12 text-center" variants={itemReveal}>
             <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
               Mural de Recados
             </p>
             <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
               Deixe uma mensagem carinhosa para a princesa Diana
             </p>
-          </div>
+          </motion.div>
 
-          <div className="mx-auto flex max-w-2xl flex-col gap-6 rounded-[2rem] bg-white/45 px-6 py-8 shadow-[0_8px_30px_rgba(201,111,135,.06)] sm:px-9 sm:py-10">
+          <motion.div
+            variants={itemReveal}
+            className="mx-auto flex max-w-2xl flex-col gap-6 rounded-[2rem] bg-white/45 px-6 py-8 shadow-[0_8px_30px_rgba(201,111,135,.06)] sm:px-9 sm:py-10"
+          >
             <div className="flex flex-col gap-2">
               <label
                 htmlFor="recado-nome"
@@ -885,10 +1030,17 @@ export default function InvitationSite() {
               <input
                 id="recado-nome"
                 value={recadoNome}
-                onChange={(e) => setRecadoNome(e.target.value)}
+                onChange={(e) => {
+                  setRecadoNome(e.target.value);
+                  if (recadoFieldErrors.nome) setRecadoFieldErrors((cur) => ({ ...cur, nome: "" }));
+                }}
                 placeholder="Como podemos te chamar?"
-                className="rounded-xl bg-[#ffe9f0] px-4 py-3 outline-none transition focus:ring-4 focus:ring-[#f3d3dd]"
+                className="h-11 w-full rounded-xl bg-[#ffe9f0] px-4 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd] aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-400"
+                aria-invalid={recadoFieldErrors.nome ? true : undefined}
               />
+              {recadoFieldErrors.nome && (
+                <span className="text-xs font-semibold text-red-600">{recadoFieldErrors.nome}</span>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -901,12 +1053,19 @@ export default function InvitationSite() {
               <textarea
                 id="recado-mensagem"
                 value={recadoMsg}
-                onChange={(e) => setRecadoMsg(e.target.value)}
+                onChange={(e) => {
+                  setRecadoMsg(e.target.value);
+                  if (recadoFieldErrors.mensagem) setRecadoFieldErrors((cur) => ({ ...cur, mensagem: "" }));
+                }}
                 placeholder="Escreva sua mensagem para a princesa Diana..."
                 rows={5}
                 maxLength={240}
-                className="resize-none rounded-xl bg-[#ffe9f0] px-4 py-3 outline-none transition focus:ring-4 focus:ring-[#f3d3dd]"
+                className="w-full resize-none rounded-xl bg-[#ffe9f0] px-4 py-3 text-[15px] text-[#5b4a48] placeholder:text-[#cf93a7] placeholder:font-medium outline-none transition focus:ring-2 focus:ring-[#f3d3dd] aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-400"
+                aria-invalid={recadoFieldErrors.mensagem ? true : undefined}
               />
+              {recadoFieldErrors.mensagem && (
+                <span className="text-xs font-semibold text-red-600">{recadoFieldErrors.mensagem}</span>
+              )}
               <div className="flex items-center justify-between text-xs font-semibold text-[#9d6170]">
                 <span>Sua mensagem aparece no mural para sempre</span>
                 <span className="font-mono text-[#b78b8c]">
@@ -919,9 +1078,10 @@ export default function InvitationSite() {
               <button
                 type="button"
                 onClick={enviarRecado}
-                className="royal-button inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-sm font-black uppercase tracking-[.18em] text-white"
+                disabled={enviandoRecado}
+                className="royal-button inline-flex w-full items-center justify-center rounded-full px-6 py-3.5 text-base font-normal text-white disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Enviar recado
+                {enviandoRecado ? "Enviando..." : "Enviar recado"}
               </button>
               {recadoEnviado && (
                 <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-center text-sm font-bold text-emerald-700">
@@ -929,32 +1089,63 @@ export default function InvitationSite() {
                   princesa Diana!
                 </p>
               )}
+              {recadoError && (
+                <p className="rounded-2xl bg-red-50 px-4 py-3 text-center text-sm font-bold text-red-700">
+                  {recadoError}
+                </p>
+              )}
             </div>
-          </div>
+          </motion.div>
 
-          {recados.length > 0 && (
+          {recadosLoading ? (
+            <p
+              className="mt-10 text-center text-sm text-[#b78b8c]"
+              aria-live="polite"
+            >
+              Carregando recados...
+            </p>
+          ) : null}
+
+          {!recadosLoading && recadosError ? (
+            <p
+              className="mt-10 text-center text-sm text-[#b78b8c]"
+              role="status"
+            >
+              {recadosError}
+            </p>
+          ) : null}
+
+          {!recadosLoading && !recadosError && recados.length > 0 ? (
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {recados.map((r, i) => (
+              {recados.map((r) => (
                 <div
-                  key={i}
-                  className="animate-rise rounded-[1.5rem] bg-white/72 p-5 shadow-[0_6px_18px_rgba(201,111,135,.06)]"
-                  style={{ animationDelay: `${i * 80}ms` }}
+                  key={r.id}
+                  className="animate-rise flex min-w-0 flex-col rounded-[1.5rem] bg-white/72 p-5 shadow-[0_6px_18px_rgba(201,111,135,.06)]"
                 >
-                  <p className="text-sm font-black text-[#d36f8a]">{r.nome}</p>
-                  <p className="mt-2 leading-7 text-[#7d625f]">{r.mensagem}</p>
-                  <p className="mt-3 text-xs font-semibold text-[#b78b8c]">
-                    📅 {r.data}
+                  <p className="break-words text-sm font-black text-[#d36f8a]">
+                    {r.nome}
+                  </p>
+                  <p className="mt-2 whitespace-pre-line break-words leading-7 text-[#7d625f]">
+                    {r.mensagem}
+                  </p>
+                  <p className="mt-auto flex items-center gap-1.5 pt-4 text-xs font-semibold text-[#b78b8c]">
+                    <Calendar
+                      className="h-3.5 w-3.5 text-[#d36f8a]"
+                      strokeWidth={2.25}
+                      aria-hidden="true"
+                    />
+                    {formatRecadoDate(r.createdAt)}
                   </p>
                 </div>
               ))}
             </div>
-          )}
+          ) : null}
 
-          {recados.length === 0 && (
+          {!recadosLoading && !recadosError && recados.length === 0 ? (
             <div className="mt-10 text-center text-lg text-[#b78b8c]">
               💭 Seja o primeiro a deixar um recado carinhoso!
             </div>
-          )}
+          ) : null}
         </div>
       </motion.section>
 
@@ -1026,6 +1217,7 @@ export default function InvitationSite() {
           </a>
         </p>
       </motion.footer>
+      </div>
     </main>
   );
 }

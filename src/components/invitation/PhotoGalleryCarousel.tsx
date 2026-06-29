@@ -76,7 +76,7 @@ export function PhotoGalleryCarousel({
     <div className="w-full" aria-roledescription="carrossel" aria-label="Galeria de fotos da Diana">
       <div className="flex flex-col gap-4 lg:flex-row lg:gap-5">
         {/* Foto em destaque */}
-        <div className="relative w-full overflow-hidden rounded-[2rem] bg-[#fff0f5] shadow-[0_10px_30px_rgba(201,111,135,.08)] aspect-[4/5] sm:aspect-square lg:aspect-[4/5]">
+        <div className="relative h-[44vh] max-h-[520px] w-full overflow-hidden rounded-[2rem] bg-[#fff0f5] shadow-[0_10px_30px_rgba(201,111,135,.08)] sm:h-[50vh] lg:h-[58vh]">
           <AnimatePresence initial={false}>
             <motion.div
               key={activePhoto.src}

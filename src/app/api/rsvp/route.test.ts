@@ -27,18 +27,16 @@ describe('POST /api/rsvp', () => {
 
     expect(response.status).toBe(400);
     expect(body.ok).toBe(false);
+    expect(body.message).toMatch(/nome completo/i);
   });
 
-  it('persiste RSVP válido', async () => {
+  it('persiste RSVP válido com adultos sem idade e crianças com idade', async () => {
     upsertRsvp.mockResolvedValue({
       name: 'João Reis',
       attendance: 'sim',
       adults: 2,
       children: 1,
-      adultsList: [
-        { name: 'João Reis', age: 32 },
-        { name: 'Ana Reis', age: 30 },
-      ],
+      adultsList: [{ name: 'João Reis' }, { name: 'Ana Reis' }],
       childrenList: [{ name: 'Lia Reis', age: 7 }],
     });
 
@@ -49,10 +47,7 @@ describe('POST /api/rsvp', () => {
         name: 'João Reis',
         phone: '(21) 99999-0000',
         attendance: 'sim',
-        adults: [
-          { name: 'João Reis', age: 32 },
-          { name: 'Ana Reis', age: 30 },
-        ],
+        adults: [{ name: 'João Reis' }, { name: 'Ana Reis' }],
         children: [{ name: 'Lia Reis', age: 7 }],
       }),
       headers: { 'content-type': 'application/json' },
@@ -63,6 +58,11 @@ describe('POST /api/rsvp', () => {
 
     expect(response.status).toBe(200);
     expect(body.ok).toBe(true);
+    expect(body.rsvp.adultsList).toEqual([
+      { name: 'João Reis' },
+      { name: 'Ana Reis' },
+    ]);
+    expect(body.rsvp.childrenList).toEqual([{ name: 'Lia Reis', age: 7 }]);
     expect(upsertRsvp).toHaveBeenCalled();
-  });
+  })
 })

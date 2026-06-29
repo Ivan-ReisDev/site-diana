@@ -1,8 +1,16 @@
 import type { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
 
 import { Sidebar } from '@/components/dashboard/Sidebar';
+import { getCurrentAdminSession } from '@/lib/auth/session';
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
+  const session = await getCurrentAdminSession();
+
+  if (!session) {
+    redirect('/login');
+  }
+
   return (
     <div className="min-h-screen bg-[#fff8f6] text-[#745b58] lg:flex">
       <Sidebar />

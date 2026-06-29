@@ -29,8 +29,8 @@ describe('InvitationSite', () => {
           adults: 2,
           children: 1,
           adultsList: [
-            { name: 'João Reis', age: 32 },
-            { name: 'Ana Reis', age: 30 },
+            { name: 'João Reis' },
+            { name: 'Ana Reis' },
           ],
           childrenList: [{ name: 'Lia Reis', age: 7 }],
         },
@@ -46,15 +46,13 @@ describe('InvitationSite', () => {
     fireEvent.change(screen.getByPlaceholderText('(21) 99999-9999'), { target: { value: '(21) 99999-0000' } });
 
     fireEvent.change(screen.getByPlaceholderText('Adulto 1'), { target: { value: 'João Reis' } });
-    fireEvent.change(screen.getAllByPlaceholderText('0')[0], { target: { value: '32' } });
 
     fireEvent.click(screen.getByRole('button', { name: /adicionar adulto/i }));
     fireEvent.change(screen.getByPlaceholderText('Adulto 2'), { target: { value: 'Ana Reis' } });
-    fireEvent.change(screen.getAllByPlaceholderText('0')[1], { target: { value: '30' } });
 
     fireEvent.click(screen.getByRole('button', { name: /adicionar criança/i }));
     fireEvent.change(screen.getByPlaceholderText('Criança 1'), { target: { value: 'Lia Reis' } });
-    fireEvent.change(screen.getAllByPlaceholderText('0')[2], { target: { value: '7' } });
+    fireEvent.change(screen.getByPlaceholderText('0'), { target: { value: '7' } });
 
     fireEvent.click(screen.getByRole('button', { name: /confirmar presença/i }));
 
