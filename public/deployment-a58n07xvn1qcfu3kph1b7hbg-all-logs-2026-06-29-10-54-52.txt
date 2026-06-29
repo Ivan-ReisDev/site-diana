@@ -1,0 +1,108 @@
+2026-Jun-29 10:54:14.443927 Docker 29.5.3 with BuildKit and Buildx detected on deployment server (localhost).
+2026-Jun-29 10:54:14.452281 Starting deployment of Ivan-ReisDev/site-diana:main to localhost.
+2026-Jun-29 10:54:14.740430 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-29 10:54:14.853219 [DEBUG] [CMD]: docker stop --time=30 a58n07xvn1qcfu3kph1b7hbg
+2026-Jun-29 10:54:14.853219 [DEBUG] Flag --time has been deprecated, use --timeout instead
+2026-Jun-29 10:54:14.857693 [DEBUG] Error response from daemon: No such container: a58n07xvn1qcfu3kph1b7hbg
+2026-Jun-29 10:54:15.094230 [DEBUG] [CMD]: docker run -d --network 'coolify' --name a58n07xvn1qcfu3kph1b7hbg  --rm -v /root/.docker/buildx:/root/.docker/buildx -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-29 10:54:15.094230 [DEBUG] eea05743d083242dea3308febb1fec963b8a5e254c4f8c94019f3b25ab41a99c
+2026-Jun-29 10:54:16.857119 [DEBUG] [CMD]: docker exec a58n07xvn1qcfu3kph1b7hbg bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote '\''https://x-access-token:<REDACTED>@github.com/Ivan-ReisDev/site-diana.git'\'' '\''refs/heads/main'\'''
+2026-Jun-29 10:54:16.857119 [DEBUG] c1b1ec7e636da9f80446a7eb0f0078059a5f747a	refs/heads/main
+2026-Jun-29 10:54:17.088491 ----------------------------------------
+2026-Jun-29 10:54:17.095688 Importing Ivan-ReisDev/site-diana:main (commit sha c1b1ec7e636da9f80446a7eb0f0078059a5f747a) to /artifacts/a58n07xvn1qcfu3kph1b7hbg.
+2026-Jun-29 10:54:17.250080 [DEBUG] [CMD]: docker exec a58n07xvn1qcfu3kph1b7hbg bash -c 'git -c '\''url.https://x-access-token:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 clone --depth=1 --recurse-submodules --shallow-submodules -b '\''main'\'' '\''https:<REDACTED>@github.com/Ivan-ReisDev/site-diana.git'\'' '\''/artifacts/a58n07xvn1qcfu3kph1b7hbg'\'' && cd '\''/artifacts/a58n07xvn1qcfu3kph1b7hbg'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https://x-access-token:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 fetch --depth=1 origin '\''c1b1ec7e636da9f80446a7eb0f0078059a5f747a'\'' && git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 -c advice.detachedHead=false checkout '\''c1b1ec7e636da9f80446a7eb0f0078059a5f747a'\'' >/dev/null 2>&1 && cd '\''/artifacts/a58n07xvn1qcfu3kph1b7hbg'\'' && if [ -f .gitmodules ]; then git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 submodule sync && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 submodule update --init --recursive --depth=1; fi && cd '\''/artifacts/a58n07xvn1qcfu3kph1b7hbg'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git -c '\''url.https:<REDACTED>@github.com/.insteadOf=https://github.com/'\'' -c http.version=HTTP/1.1 lfs pull'
+2026-Jun-29 10:<REDACTED>@localhost:5432/build"
+2026-Jun-29 10:54:20.428244 [DEBUG] ENV DATABASE_URL=$DATABASE_URL
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=deps /app/node_modules ./node_modules
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY . .
+2026-Jun-29 10:54:20.428244 [DEBUG] RUN npx prisma generate
+2026-Jun-29 10:54:20.428244 [DEBUG] RUN npm run build
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # ───────────────────────────────────────────────────────────────
+2026-Jun-29 10:54:20.428244 [DEBUG] # 2.5) Migrator — closure isolado do CLI do Prisma p/ rodar `migrate deploy`
+2026-Jun-29 10:54:20.428244 [DEBUG] #      no start. Instalado à parte (não o node_modules de 1GB do build) e com
+2026-Jun-29 10:54:20.428244 [DEBUG] #      TODAS as deps transitivas (effect, c12, etc.) resolvidas pelo npm —
+2026-Jun-29 10:54:20.428244 [DEBUG] #      sem cherry-pick frágil. Engine baixado já é o musl (estágio Alpine).
+2026-Jun-29 10:54:20.428244 [DEBUG] # ───────────────────────────────────────────────────────────────
+2026-Jun-29 10:54:20.428244 [DEBUG] FROM node:22-alpine AS migrator
+2026-Jun-29 10:54:20.428244 [DEBUG] RUN apk add --no-cache libc6-compat openssl
+2026-Jun-29 10:54:20.428244 [DEBUG] WORKDIR /opt/prisma
+2026-Jun-29 10:54:20.428244 [DEBUG] RUN npm init -y >/dev/null 2>&1 && npm install --omit=dev prisma@7.8.0 dotenv@17.4.2
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # ───────────────────────────────────────────────────────────────
+2026-Jun-29 10:54:20.428244 [DEBUG] # 3) Runner — imagem final mínima que roda o app
+2026-Jun-29 10:54:20.428244 [DEBUG] #    (sem DATABASE_URL embutido: usa a env injetada pelo Coolify em runtime)
+2026-Jun-29 10:54:20.428244 [DEBUG] # ───────────────────────────────────────────────────────────────
+2026-Jun-29 10:54:20.428244 [DEBUG] FROM node:22-alpine AS runner
+2026-Jun-29 10:54:20.428244 [DEBUG] WORKDIR /app
+2026-Jun-29 10:54:20.428244 [DEBUG] ENV NODE_ENV=production
+2026-Jun-29 10:54:20.428244 [DEBUG] ENV NEXT_TELEMETRY_DISABLED=1
+2026-Jun-29 10:54:20.428244 [DEBUG] ENV PORT=3000
+2026-Jun-29 10:54:20.428244 [DEBUG] ENV HOSTNAME=0.0.0.0
+2026-Jun-29 10:54:20.428244 [DEBUG] # openssl: exigido pelo schema-engine do Prisma (libssl) ao rodar `migrate deploy` no Alpine.
+2026-Jun-29 10:54:20.428244 [DEBUG] RUN apk add --no-cache openssl
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # Closure do CLI do Prisma (instalado no estágio migrator). Copiado PRIMEIRO para
+2026-Jun-29 10:54:20.428244 [DEBUG] # que a saída standalone do Next sobreponha seus módulos traçados por cima.
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=migrator /opt/prisma/node_modules ./node_modules
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # saída standalone do Next (server.js + node_modules mínimo)
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/public ./public
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/.next/standalone ./
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/.next/static ./.next/static
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # Prisma Client gerado + adapters que o Next não traça sozinho (driver adapter, sem engine nativo).
+2026-Jun-29 10:54:20.428244 [DEBUG] # @prisma/client, pg e postgres-array já entram via tracing do standalone.
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/node_modules/@prisma/adapter-pg ./node_modules/@prisma/adapter-pg
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/node_modules/@prisma/driver-adapter-utils ./node_modules/@prisma/driver-adapter-utils
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # schema + migrations + config + entrypoint (usados pelo `migrate deploy` no start)
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY --from=builder /app/prisma ./prisma
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY prisma.config.ts ./prisma.config.ts
+2026-Jun-29 10:54:20.428244 [DEBUG] COPY docker-entrypoint.sh ./docker-entrypoint.sh
+2026-Jun-29 10:54:20.428244 [DEBUG] RUN chmod +x ./docker-entrypoint.sh
+2026-Jun-29 10:54:20.428244 [DEBUG] 
+2026-Jun-29 10:54:20.428244 [DEBUG] # usuário não-root já existente nas imagens oficiais do Node
+2026-Jun-29 10:54:20.428244 [DEBUG] USER node
+2026-Jun-29 10:54:20.428244 [DEBUG] EXPOSE 3000
+2026-Jun-29 10:54:20.428244 [DEBUG] ENTRYPOINT ["./docker-entrypoint.sh"]
+2026-Jun-29 10:54:20.631029 [DEBUG] Creating .env file with runtime variables for container.
+2026-Jun-29 10:54:20.884062 ----------------------------------------
+2026-Jun-29 10:54:20.891216 Rolling update started.
+2026-Jun-29 10:54:21.295766 [DEBUG] [CMD]: docker exec a58n07xvn1qcfu3kph1b7hbg bash -c 'COOLIFY_URL=https://m128m3l1fnoyedgmrmi4ty4w.136.248.103.132.sslip.io COOLIFY_FQDN=m128m3l1fnoyedgmrmi4ty4w.136.248.103.132.sslip.io COOLIFY_BRANCH='\''main'\'' COOLIFY_RESOURCE_UUID=m128m3l1fnoyedgmrmi4ty4w  docker compose --project-name m128m3l1fnoyedgmrmi4ty4w --project-directory /artifacts/a58n07xvn1qcfu3kph1b7hbg -f /artifacts/a58n07xvn1qcfu3kph1b7hbg/docker-compose.yaml up --build -d'
+2026-Jun-29 10:54:21.295766 [DEBUG] time="2026-06-29T10:54:21Z" level=warning msg="Found orphan containers ([m128m3l1fnoyedgmrmi4ty4w-104945926009]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+2026-Jun-29 10:54:21.299937 [DEBUG] Container m128m3l1fnoyedgmrmi4ty4w-105412413342  Creating
+2026-Jun-29 10:54:21.305229 [DEBUG] Container m128m3l1fnoyedgmrmi4ty4w-105412413342  Error response from daemon: Requested CPUs are not available - requested 1024, available: 0-1
+2026-Jun-29 10:54:21.309205 [DEBUG] Error response from daemon: Requested CPUs are not available - requested 1024, available: 0-1
+2026-Jun-29 10:54:21.315593 [DEBUG] exit status 1
+2026-Jun-29 10:54:21.359695 ========================================
+2026-Jun-29 10:54:21.368486 Deployment failed: Rolling update failed (App\Exceptions\DeploymentException): Failed to start container: Command execution failed (exit code 1): docker exec a58n07xvn1qcfu3kph1b7hbg bash -c 'COOLIFY_URL=https://m128m3l1fnoyedgmrmi4ty4w.136.248.103.132.sslip.io COOLIFY_FQDN=m128m3l1fnoyedgmrmi4ty4w.136.248.103.132.sslip.io COOLIFY_BRANCH='\''main'\'' COOLIFY_RESOURCE_UUID=m128m3l1fnoyedgmrmi4ty4w  docker compose --project-name m128m3l1fnoyedgmrmi4ty4w --project-directory /artifacts/a58n07xvn1qcfu3kph1b7hbg -f /artifacts/a58n07xvn1qcfu3kph1b7hbg/docker-compose.yaml up --build -d'
+2026-Jun-29 10:54:21.368486 Error: time="2026-06-29T10:54:21Z" level=warning msg="Found orphan containers ([m128m3l1fnoyedgmrmi4ty4w-104945926009]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+2026-Jun-29 10:54:21.368486 Container m128m3l1fnoyedgmrmi4ty4w-105412413342  Creating
+2026-Jun-29 10:54:21.368486 Container m128m3l1fnoyedgmrmi4ty4w-105412413342  Error response from daemon: Requested CPUs are not available - requested 1024, available: 0-1
+2026-Jun-29 10:54:21.368486 Error response from daemon: Requested CPUs are not available - requested 1024, available: 0-1
+2026-Jun-29 10:54:21.368486 exit status 1
+2026-Jun-29 10:54:21.375524 [DEBUG] Error type: App\Exceptions\DeploymentException
+2026-Jun-29 10:54:21.382612 [DEBUG] Error code: 0
+2026-Jun-29 10:54:21.389541 [DEBUG] Location: /var/www/html/app/Jobs/ApplicationDeploymentJob.php:1951
+2026-Jun-29 10:54:21.396578 [DEBUG] Caused by:
+2026-Jun-29 10:54:21.403539 [DEBUG] App\Exceptions\DeploymentException: Failed to start container: Command execution failed (exit code 1): docker exec a58n07xvn1qcfu3kph1b7hbg bash -c 'COOLIFY_URL=https://m128m3l1fnoyedgmrmi4ty4w.136.248.103.132.sslip.io COOLIFY_FQDN=m128m3l1fnoyedgmrmi4ty4w.136.248.103.132.sslip.io COOLIFY_BRANCH='\''main'\'' COOLIFY_RESOURCE_UUID=m128m3l1fnoyedgmrmi4ty4w  docker compose --project-name m128m3l1fnoyedgmrmi4ty4w --project-directory /artifacts/a58n07xvn1qcfu3kph1b7hbg -f /artifacts/a58n07xvn1qcfu3kph1b7hbg/docker-compose.yaml up --build -d'
+2026-Jun-29 10:54:21.403539 [DEBUG] Error: time="2026-06-29T10:54:21Z" level=warning msg="Found orphan containers ([m128m3l1fnoyedgmrmi4ty4w-104945926009]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+2026-Jun-29 10:54:21.403539 [DEBUG] Container m128m3l1fnoyedgmrmi4ty4w-105412413342  Creating
+2026-Jun-29 10:54:21.403539 [DEBUG] Container m128m3l1fnoyedgmrmi4ty4w-105412413342  Error response from daemon: Requested CPUs are not available - requested 1024, available: 0-1
+2026-Jun-29 10:54:21.403539 [DEBUG] Error response from daemon: Requested CPUs are not available - requested 1024, available: 0-1
+2026-Jun-29 10:54:21.403539 [DEBUG] exit status 1
+2026-Jun-29 10:54:21.410554 [DEBUG] at /var/www/html/app/Jobs/ApplicationDeploymentJob.php:3933
+2026-Jun-29 10:54:21.417476 [DEBUG] Stack trace (first 5 lines):
+2026-Jun-29 10:54:21.425452 [DEBUG] #0 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(1271): App\Jobs\ApplicationDeploymentJob->rolling_update()
+2026-Jun-29 10:54:21.433119 [DEBUG] #1 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(900): App\Jobs\ApplicationDeploymentJob->should_skip_build()
+2026-Jun-29 10:54:21.440321 [DEBUG] #2 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(499): App\Jobs\ApplicationDeploymentJob->deploy_dockerfile_buildpack()
+2026-Jun-29 10:54:21.447539 [DEBUG] #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(363): App\Jobs\ApplicationDeploymentJob->decide_what_to_do()
+2026-Jun-29 10:54:21.454662 [DEBUG] #4 /var/www/html/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): App\Jobs\ApplicationDeploymentJob->handle()
+2026-Jun-29 10:54:21.461489 ========================================
+2026-Jun-29 10:54:21.468323 Deployment failed. Removing the new version of your application.
+2026-Jun-29 10:54:21.890838 Gracefully shutting down build container: a58n07xvn1qcfu3kph1b7hbg
+2026-Jun-29 10:54:22.004301 [DEBUG] [CMD]: docker stop --time=30 a58n07xvn1qcfu3kph1b7hbg
+2026-Jun-29 10:54:22.004301 [DEBUG] Flag --time has been deprecated, use --timeout instead
+2026-Jun-29 10:54:22.265919 [DEBUG] a58n07xvn1qcfu3kph1b7hbg

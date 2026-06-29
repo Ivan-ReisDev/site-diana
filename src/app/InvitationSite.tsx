@@ -8,16 +8,14 @@ import {
   Mail,
   MapPin,
   Castle,
-  Sparkles,
-  Lightbulb,
-  ExternalLink,
-  ShoppingBag,
   Plus,
   Trash2,
 } from "lucide-react";
 import { BackgroundMusic } from "@/components/invitation/BackgroundMusic";
 import { IntroOverlay } from "@/components/invitation/IntroOverlay";
+import { LocationMap } from "@/components/invitation/LocationMap";
 import { PhotoGalleryCarousel, galleryPhotos } from "@/components/invitation/PhotoGalleryCarousel";
+import { GiftSuggestions } from "@/components/invitation/GiftSuggestions";
 
 type RsvpGuest = {
   name: string;
@@ -45,351 +43,6 @@ type Recado = {
   data: string;
 };
 
-type GiftItem = {
-  id: number;
-  nome: string;
-  imagem: string;
-  preco: string;
-  reservado: boolean;
-  reservadoPor: string;
-};
-
-const giftItems: GiftItem[] = [
-  {
-    id: 1,
-    nome: "Urso de Pelúcia",
-    imagem:
-      "https://images.pexels.com/photos/113559/pexels-photo-113559.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 89,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 2,
-    nome: "Blocos de Montar",
-    imagem:
-      "https://images.pexels.com/photos/4491703/pexels-photo-4491703.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 59,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 3,
-    nome: "Carrinho",
-    imagem:
-      "https://images.pexels.com/photos/6132059/pexels-photo-6132059.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 49,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 4,
-    nome: "Boneca",
-    imagem:
-      "https://images.pexels.com/photos/20020284/pexels-photo-20020284.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 79,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 5,
-    nome: "Quebra-Cabeça",
-    imagem:
-      "https://images.pexels.com/photos/6255656/pexels-photo-6255656.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 39,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 6,
-    nome: "Bola",
-    imagem:
-      "https://images.pexels.com/photos/209861/pexels-photo-209861.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 29,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 7,
-    nome: "Kit Pintura",
-    imagem:
-      "https://images.pexels.com/photos/13755613/pexels-photo-13755613.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 69,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 8,
-    nome: "Livro Infantil",
-    imagem:
-      "https://images.pexels.com/photos/4887203/pexels-photo-4887203.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 44,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 9,
-    nome: "Jogo de Panelinhas",
-    imagem:
-      "https://images.pexels.com/photos/4484893/pexels-photo-4484893.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 54,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 10,
-    nome: "Cavalo de Balanço",
-    imagem:
-      "https://images.pexels.com/photos/712857/pexels-photo-712857.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 99,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 11,
-    nome: "Massinha de Modelar",
-    imagem:
-      "https://images.pexels.com/photos/4487869/pexels-photo-4487869.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 34,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-  {
-    id: 12,
-    nome: "Fantasia de Princesa",
-    imagem:
-      "https://images.pexels.com/photos/19230196/pexels-photo-19230196.jpeg?auto=compress&cs=tinysrgb&w=400",
-    preco: "R$ 89,90",
-    reservado: false,
-    reservadoPor: "",
-  },
-];
-
-type GiftSuggestion = {
-  giftId: number;
-  ideias: string[];
-  lojas: { nome: string; busca: string }[];
-};
-
-const giftSuggestions: GiftSuggestion[] = [
-  {
-    giftId: 1,
-    ideias: [
-      "Urso de pelúcia macio (≥ 30cm) sem peças pequenas",
-      "Manta de conforto + ursinho companheiro",
-      "Ursinho musical para a hora de dormir",
-    ],
-    lojas: [
-      {
-        nome: "Lojas Renner",
-        busca: "https://www.lojasrenner.com.br/busca?q=urso+pelucia+infantil",
-      },
-      {
-        nome: "Shopee",
-        busca:
-          "https://shopee.com.br/search?keyword=urso%20de%20pelucia%20bebe",
-      },
-    ],
-  },
-  {
-    giftId: 2,
-    ideias: [
-      "Blocos de montar grandes (≥ 1 ano, sem engasgo)",
-      "Blocos de empilhar coloridos (madeira)",
-      "Cubos com números e letras",
-    ],
-    lojas: [
-      {
-        nome: "Ri Happy",
-        busca: "https://www.rihappy.com.br/pesquisa?q=blocos+de+montar",
-      },
-      {
-        nome: "Amazon",
-        busca: "https://www.amazon.com.br/s?k=blocos+de+montar+1+ano",
-      },
-    ],
-  },
-  {
-    giftId: 3,
-    ideias: [
-      "Carrinho de brinquedo resistente (caminhão, passeio)",
-      "Carrinho empurrador com som e luz",
-      "Mini veículos de fricção para empurrar",
-    ],
-    lojas: [
-      {
-        nome: "Toymania",
-        busca: "https://www.toymania.com.br/pesquisa?q=carrinho+brinquedo",
-      },
-      {
-        nome: "Shopee",
-        busca: "https://shopee.com.br/search?keyword=carrinho%20de%20brinquedo",
-      },
-    ],
-  },
-  {
-    giftId: 4,
-    ideias: [
-      "Boneca de pano/corpo mole (segura para 1 ano)",
-      "Boneca com chocalho e mordedor",
-      "Boneca da Princesa Diana (faz parte do tema!)",
-    ],
-    lojas: [
-      {
-        nome: "Maria Filó",
-        busca: "https://www.mariafilo.com.br/pesquisa?q=boneca+infantil",
-      },
-      { nome: "Amazon", busca: "https://www.amazon.com.br/s?k=boneca+1+ano" },
-    ],
-  },
-  {
-    giftId: 5,
-    ideias: [
-      "Quebra-cabeça de madeira (peças grandes, 3–6 peças)",
-      "Quebra-cabeça de animais/contagem",
-      "Quebra-cabeça progressivo de encaixe",
-    ],
-    lojas: [
-      {
-        nome: "Grow",
-        busca: "https://www.lojagrow.com.br/pesquisa?q=quebra+cabeca",
-      },
-      {
-        nome: "Shopee",
-        busca:
-          "https://shopee.com.br/search?keyword=quebra%20cabe%C3%A7a%201%20ano",
-      },
-    ],
-  },
-  {
-    giftId: 6,
-    ideias: [
-      "Bola macia de tecido para rolar e chutar",
-      "Bola texturizada sensorial (mordedor)",
-      "Conjunto de bolas coloridas empilháveis",
-    ],
-    lojas: [
-      {
-        nome: "Ri Happy",
-        busca: "https://www.rihappy.com.br/pesquisa?q=bola+infantil",
-      },
-      {
-        nome: "Amazon",
-        busca: "https://www.amazon.com.br/s?k=bola+infantil+1+ano",
-      },
-    ],
-  },
-  {
-    giftId: 7,
-    ideias: [
-      "Kit de pintura atóxico (dedo e grossos)",
-      "Aquarela + papel grosso A3",
-      "Giz de cera triangular (fácil de segurar)",
-    ],
-    lojas: [
-      {
-        nome: "Kalunga",
-        busca: "https://www.kalunga.com.br/busca?q=kit+pintura+infantil",
-      },
-      {
-        nome: "Shopee",
-        busca: "https://shopee.com.br/search?keyword=kit%20pintura%20infantil",
-      },
-    ],
-  },
-  {
-    giftId: 8,
-    ideias: [
-      "Livro cartonado com texturas e cores",
-      "Livro “Bom dia, Verônica” para 1 ano",
-      "Livro de banho (PVC) — diversão no banho",
-    ],
-    lojas: [
-      {
-        nome: "Livraria da Travessa",
-        busca: "https://www.travessa.com.br/busca?termo=livro+infantil+1+ano",
-      },
-      {
-        nome: "Amazon",
-        busca: "https://www.amazon.com.br/s?k=livro+infantil+1+ano",
-      },
-    ],
-  },
-  {
-    giftId: 9,
-    ideias: [
-      "Panelinhas de madeira (cozinha de brincar)",
-      "Kit de panelinhas coloridas com utensílios",
-      "Fogãozinho de madeira com panelinhas",
-    ],
-    lojas: [
-      {
-        nome: "Toymania",
-        busca: "https://www.toymania.com.br/pesquisa?q=panelinhas",
-      },
-      {
-        nome: "Lojas Americanas",
-        busca: "https://www.americanas.com.br/busca/panelinhas",
-      },
-    ],
-  },
-  {
-    giftId: 10,
-    ideias: [
-      "Cavalo de balanço de madeira (tema princesa)",
-      "Pônei/girafa de pelúcia com som",
-      "Cavalinho com rodinhas",
-    ],
-    lojas: [
-      {
-        nome: "Toymania",
-        busca: "https://www.toymania.com.br/pesquisa?q=cavalo+balan%C3%A7o",
-      },
-      {
-        nome: "Shopee",
-        busca: "https://shopee.com.br/search?keyword=cavalo%20de%20bala%C3%A7o",
-      },
-    ],
-  },
-  {
-    giftId: 11,
-    ideias: [
-      "Massinha de modelar atóxica (12 cores)",
-      "Massinha com formas/moldes",
-      "Massinha de trigo com cores vivas",
-    ],
-    lojas: [
-      {
-        nome: "Ri Happy",
-        busca: "https://www.rihappy.com.br/pesquisa?q=massinha+modelar",
-      },
-      {
-        nome: "Amazon",
-        busca: "https://www.amazon.com.br/s?k=massinha+de+modelar+infantil",
-      },
-    ],
-  },
-  {
-    giftId: 12,
-    ideias: [
-      "Fantasia de princesa (tema Cinderela/Ariel)",
-      "Tiara + varinha + saia tutu",
-      "Fantasia de fada com asas brilhantes",
-    ],
-    lojas: [
-      {
-        nome: "Lojas Renner",
-        busca: "https://www.lojasrenner.com.br/busca?q=fantasia+princesa",
-      },
-      {
-        nome: "Shopee",
-        busca:
-          "https://shopee.com.br/search?keyword=fantasia%20princesa%20infantil",
-      },
-    ],
-  },
-];
-
 const eventDetails = [
   { label: "Data", value: "11 de outubro" },
   { label: "Horário", value: "13 horas" },
@@ -397,28 +50,13 @@ const eventDetails = [
   { label: "Endereço", value: "Est. Padre Roser, 765 - Vila da Penha" },
 ];
 
+const venue = {
+  name: "Casa de Festas Turma da Kali",
+  address: "Est. Padre Roser, 765 - Vila da Penha, Rio de Janeiro",
+};
+
 
 const giftAmounts = ["R$ 50", "R$ 100", "R$ 150", "R$ 250"];
-const princessInspiration = [
-  {
-    name: "Rosas",
-    tone: "Flores delicadas",
-    icon: "🌹",
-    colors: "from-[#ffd6e1] to-[#fff0f4]",
-  },
-  {
-    name: "Castelo",
-    tone: "Festa real",
-    icon: "🏰",
-    colors: "from-[#ffe1ea] to-[#fff1d4]",
-  },
-  {
-    name: "Sapatinho",
-    tone: "Toque de princesa",
-    icon: "👠",
-    colors: "from-[#fff0f4] to-[#ffe1ea]",
-  },
-];
 const pixKey = "pix-da-familia@exemplo.com";
 
 function createEmptyGuest(id: number): GuestForm {
@@ -653,6 +291,7 @@ export default function InvitationSite() {
           </a>
           <div className="hidden gap-6 text-sm font-medium text-[#806562] md:flex">
             <a href="#evento">Evento</a>
+            <a href="#local">Local</a>
             <a href="#rsvp">Presença</a>
             <a href="#gifts">Presentes</a>
             <a href="#mural">Mural</a>
@@ -681,7 +320,7 @@ export default function InvitationSite() {
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#7e5f5b] sm:text-xl">
               Convocação Real... Mamãe e Papai tem a honra de convidar você para
-              celebrar o 1 aniversário da Nosso Princesa Diana
+              celebrar o 1 aniversário da nossa Princesa Diana
             </p>
           </motion.div>
 
@@ -754,6 +393,10 @@ export default function InvitationSite() {
                 </p>
               </article>
             ))}
+          </div>
+
+          <div className="mx-auto mt-10 max-w-5xl">
+            <LocationMap venue={venue} />
           </div>
         </div>
       </motion.section>
@@ -854,13 +497,13 @@ export default function InvitationSite() {
             </p>
           </div>
 
-          <div className="mx-auto grid max-w-4xl gap-10 lg:grid-cols-[1fr_1.2fr]">
+          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.4fr]">
             <div className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fce4eb] to-[#fff1f4] p-8 text-[#7d625f] shadow-[0_10px_30px_rgba(201,111,135,.08)]">
               <img
                 src="/flor-canto.png"
                 alt=""
                 aria-hidden="true"
-                className="pointer-events-none absolute bottom-0 left-0 -z-10 w-72 rotate-180 select-none opacity-95 sm:w-80"
+                className="pointer-events-none absolute bottom-0 left-0 -z-10 w-24 rotate-180 select-none opacity-40 sm:w-72 sm:opacity-95"
               />
               <div className="mb-4 grid h-12 w-12 place-items-center rounded-2xl bg-white/70 text-[#df7894]">
                 <Mail className="h-6 w-6" strokeWidth={2} />
@@ -922,7 +565,7 @@ export default function InvitationSite() {
               className="rounded-[2rem] bg-white/68 p-7 shadow-[0_10px_30px_rgba(201,111,135,.06)] sm:p-8"
             >
               <div className="grid gap-5 sm:grid-cols-2">
-                <label className="grid gap-2 text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a] sm:col-span-2">
+                <label className="grid gap-2 text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a]">
                   <span>Nome completo</span>
                   <input
                     value={name}
@@ -931,7 +574,7 @@ export default function InvitationSite() {
                     placeholder="Seu nome completo"
                   />
                 </label>
-                <label className="grid gap-2 text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a] sm:col-span-2">
+                <label className="grid gap-2 text-[11px] font-black uppercase tracking-[.22em] text-[#d36f8a]">
                   <span>Telefone</span>
                   <input
                     value={phone}
@@ -1158,100 +801,7 @@ export default function InvitationSite() {
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-12 text-center">
-            <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
-              Sugestões de Presente
-            </p>
-            <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
-              Ideias carinhosas para a princesa Diana — cada presente traz
-              sugestões de itens e lojas onde você pode encontrá-los.
-            </p>
-          </div>
-
-          {/* Grid de 12 cards de Sugestões, todos sempre abertos */}
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {giftSuggestions.map((sug) => {
-              const item = giftItems.find((g) => g.id === sug.giftId);
-              return (
-                <article
-                  key={sug.giftId}
-                  className="flex flex-col overflow-hidden rounded-[1.75rem] bg-white/82 shadow-[0_6px_18px_rgba(201,111,135,.06)] transition-all hover:-translate-y-0.5 hover:shadow-[0_10px_28px_rgba(201,111,135,.12)]"
-                >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#fff5f8]">
-                    {item?.imagem ? (
-                      <img
-                        src={item.imagem}
-                        alt={item.nome}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-5xl text-[#df7894]">
-                        <Sparkles className="h-12 w-12" strokeWidth={1.5} />
-                      </div>
-                    )}
-                    <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[.18em] text-[#b85f78] shadow-sm">
-                      <Lightbulb className="h-3.5 w-3.5" strokeWidth={2.25} />
-                      Sugestão
-                    </span>
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <h3 className="font-serif text-2xl font-black leading-tight text-[#b85f78]">
-                      {item?.nome ?? "Presente"}
-                    </h3>
-                    {item?.preco && (
-                      <p className="mt-1 text-sm font-bold text-[#d5a547]">
-                        Sugestão de valor: {item.preco}
-                      </p>
-                    )}
-
-                    <ul className="mt-4 space-y-2">
-                      {sug.ideias.map((ideia, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2 text-sm leading-6 text-[#806966] sm:text-base"
-                        >
-                          <span className="mt-2 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#df7894]" />
-                          {ideia}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-5 flex-1 border-t border-[#f0c7d3]/60 pt-4">
-                      <p className="mb-3 flex items-center gap-1.5 text-xs font-black uppercase tracking-[.2em] text-[#d36f8a]">
-                        <ShoppingBag
-                          className="h-3.5 w-3.5"
-                          strokeWidth={2.25}
-                        />
-                        Onde comprar
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {sug.lojas.map((loja) => (
-                          <a
-                            key={loja.nome}
-                            href={loja.busca}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-full bg-[#fff1f4] px-3 py-1.5 text-xs font-bold text-[#b85f78] transition hover:bg-[#df7894] hover:text-white sm:text-sm"
-                          >
-                            {loja.nome}
-                            <ExternalLink
-                              className="h-3.5 w-3.5"
-                              strokeWidth={2.25}
-                            />
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-
-        </div>
+        <GiftSuggestions />
       </motion.section>
 
       <motion.section
