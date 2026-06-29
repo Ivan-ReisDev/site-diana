@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, type ReactNode, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import {
   Calendar,
@@ -110,6 +110,32 @@ function createEmptyChild(id: number): ChildForm {
     name: "",
     age: "",
   };
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: ReactNode;
+}) {
+  return (
+    <>
+      <p className="mb-3 text-sm font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
+        {eyebrow}
+      </p>
+      <h2 className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
+        {title}
+      </h2>
+      {description ? (
+        <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b] sm:text-xl">
+          {description}
+        </p>
+      ) : null}
+    </>
+  );
 }
 
 export default function InvitationSite() {
@@ -500,12 +526,10 @@ export default function InvitationSite() {
       >
         <div className="mx-auto w-full max-w-6xl">
           <motion.div className="mb-8 text-center" variants={itemReveal}>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
-              Jornada da Nossa Princesa
-            </p>
-            <h2 className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
-              Uma doce retrospectiva do primeiro aninho
-            </h2>
+            <SectionHeading
+              eyebrow="Jornada da Nossa Princesa"
+              title="Uma doce retrospectiva do primeiro aninho"
+            />
           </motion.div>
 
           <motion.div className="mx-auto w-full max-w-2xl" variants={itemReveal}>
@@ -546,12 +570,16 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <motion.div className="mb-14 text-center" variants={itemReveal}>
-            <h2 className="mb-3 mt-3 font-script text-5xl leading-[1.1] text-[#b85f78] sm:text-6xl">
-              Confirme sua Presença
-            </h2>
-            <p className="mx-auto max-w-2xl text-xl leading-9 text-[#7e5f5b] sm:text-2xl flex flex-col gap-1">
-              Sua presença é o maior presente! <span> Responda até 20 de setembro.</span>
-            </p>
+            <SectionHeading
+              eyebrow="Confirmação de Presença"
+              title="Confirme sua Presença"
+              description={
+                <>
+                  Sua presença é o maior presente!{" "}
+                  <span className="block">Responda até 20 de setembro.</span>
+                </>
+              }
+            />
           </motion.div>
 
           <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.4fr]">
@@ -870,13 +898,18 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <motion.div className="mb-12 text-center" variants={itemReveal}>
-            <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
-              Pix Descomplica
-            </p>
-            <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b] flex flex-col">
-              Prefere presentear com um valor? <span>É só usar o Pix, rápido, simples e
-              com todo carinho.</span>
-            </p>
+            <SectionHeading
+              eyebrow="Presente por Pix"
+              title="Pix Descomplica"
+              description={
+                <>
+                  Prefere presentear com um valor?{" "}
+                  <span className="block">
+                    É só usar o Pix, rápido, simples e com todo carinho.
+                  </span>
+                </>
+              }
+            />
           </motion.div>
           <motion.div
             variants={itemReveal}
@@ -945,12 +978,10 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-6xl">
           <motion.div className="mb-10 text-center" variants={itemReveal}>
-            <p className="font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
-              Informações
-            </p>
-            <h2 className="mt-3 font-script text-5xl text-[#b85f78] sm:text-6xl">
-              Informações do convite real
-            </h2>
+            <SectionHeading
+              eyebrow="Informações"
+              title="Informações do convite real"
+            />
           </motion.div>
           <motion.div
             variants={sectionReveal}
@@ -1008,12 +1039,11 @@ export default function InvitationSite() {
       >
         <div className="mx-auto max-w-5xl">
           <motion.div className="mb-12 text-center" variants={itemReveal}>
-            <p className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
-              Mural de Recados
-            </p>
-            <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
-              Deixe uma mensagem carinhosa para a princesa Diana
-            </p>
+            <SectionHeading
+              eyebrow="Recados da Família"
+              title="Mural de Recados"
+              description="Deixe uma mensagem carinhosa para a princesa Diana"
+            />
           </motion.div>
 
           <motion.div

@@ -150,10 +150,13 @@ export function GiftSuggestions() {
       viewport={{ once: true, margin: "-60px" }}
     >
       <motion.div className="mb-12 text-center" variants={giftItemReveal}>
+        <p className="mb-3 text-sm font-semibold uppercase tracking-[.3em] text-[#d36f8a]">
+          Lista de Presentes
+        </p>
         <h2 className="mb-3 font-script text-6xl leading-[1.1] text-[#b85f78] sm:text-7xl">
           Sugestões de Presente
         </h2>
-        <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b]">
+        <p className="mx-auto max-w-2xl text-lg leading-8 text-[#7e5f5b] sm:text-xl">
           Ideias carinhosas para a Princesa Diana, cada presente é apenas uma
           inspiração para quem quiser presentear com carinho.
         </p>
