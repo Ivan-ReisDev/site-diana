@@ -1042,7 +1042,7 @@ export default function InvitationSite() {
             <SectionHeading
               eyebrow="Recados da Família"
               title="Mural de Recados"
-              description="Deixe uma mensagem carinhosa para a princesa Diana"
+              description="Deixe uma mensagem carinhosa para a Princesa Diana"
             />
           </motion.div>
 
