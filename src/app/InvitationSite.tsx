@@ -475,7 +475,7 @@ export default function InvitationSite() {
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#7e5f5b] sm:text-xl">
               Convocação Real... Mamãe e Papai tem a honra de convidar você para
-              celebrar o 1 aniversário da nossa Princesa Diana
+              celebrar o 1º aniversário da nossa Princesa Diana
             </p>
           </motion.div>
 
