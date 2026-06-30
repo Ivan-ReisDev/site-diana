@@ -117,7 +117,7 @@ export const giftSuggestions: GiftSuggestion[] = [
   {
     giftId: 6,
     ideias: [
-      "Vestidinho para 1–2 anos (tema princesa)",
+      "Vestidinho para 1–2 anos ou 18 a 24 meses",
       "Conjuntinho confortável de algodão",
       "Body ou macacão fofinho",
     ],
