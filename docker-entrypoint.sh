@@ -7,5 +7,8 @@ set -e
 echo "→ Aplicando migrations do banco (prisma migrate deploy)..."
 node node_modules/prisma/build/index.js migrate deploy
 
+echo "→ Aplicando seed do administrador..."
+node prisma/seed-admin.mjs
+
 echo "→ Iniciando servidor Next (server.js)..."
 exec node server.js
