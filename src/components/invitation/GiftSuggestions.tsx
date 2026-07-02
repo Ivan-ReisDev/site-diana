@@ -33,7 +33,7 @@ export type GiftSuggestion = {
 export const giftItems: GiftItem[] = [
   {
     id: 1,
-    nome: "Brinquedos interativos",
+    nome: "Brinquedo de empurrar",
     imagem: "/galeria/brinquedos/brinquedos.jpeg",
   },
   {
