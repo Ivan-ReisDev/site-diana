@@ -991,7 +991,7 @@ export default function InvitationSite() {
               <motion.article
                 key={item.label}
                 variants={itemReveal}
-                className="border-l border-[#f0c7d3]/70 pl-5 first:border-l-0 first:pl-0 sm:first:border-l sm:first:pl-5 lg:first:border-l-0 lg:first:pl-0"
+                className="border-l border-[#f0c7d3]/70 pl-5 lg:first:border-l-0 lg:first:pl-0"
               >
                 <p className="text-[11px] font-black uppercase tracking-[.28em] text-[#d36f8a]">
                   {item.label}
