@@ -1,5 +1,6 @@
 import { CheckCircle2, XCircle } from 'lucide-react';
 
+import { RsvpRowActions } from '@/components/dashboard/RsvpRowActions';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { SectionCard } from '@/components/ui/SectionCard';
 import type { RsvpSummary } from '@/lib/rsvp/service';
@@ -26,13 +27,14 @@ export function RsvpTable({ rows }: { rows: RsvpSummary[] }) {
 
   return (
     <SectionCard className="overflow-hidden !p-0">
-      <div className="hidden grid-cols-[1.6fr_1fr_.8fr_1.3fr_1.3fr_1.2fr] gap-4 border-b border-[#f5d8e0] px-6 py-4 text-xs font-bold uppercase tracking-[.2em] text-[#c77b8f] md:grid">
+      <div className="hidden grid-cols-[1.6fr_1fr_.8fr_1.3fr_1.3fr_1.2fr_auto] gap-4 border-b border-[#f5d8e0] px-6 py-4 text-xs font-bold uppercase tracking-[.2em] text-[#c77b8f] md:grid">
         <span>Nome completo</span>
         <span>Telefone</span>
         <span>Status</span>
         <span>Adultos</span>
         <span>Crianças</span>
         <span>Atualizado</span>
+        <span className="text-right">Ações</span>
       </div>
 
       <div className="divide-y divide-[#f7e4ea]">
@@ -41,7 +43,7 @@ export function RsvpTable({ rows }: { rows: RsvpSummary[] }) {
           return (
             <article
               key={row.id}
-              className="grid gap-4 px-5 py-5 sm:px-6 md:grid-cols-[1.6fr_1fr_.8fr_1.3fr_1.3fr_1.2fr] md:items-start"
+              className="grid gap-4 px-5 py-5 sm:px-6 md:grid-cols-[1.6fr_1fr_.8fr_1.3fr_1.3fr_1.2fr_auto] md:items-start"
             >
               <div className="space-y-1">
                 <p className="text-lg font-black text-[#b85f78]">{row.name}</p>
@@ -105,6 +107,10 @@ export function RsvpTable({ rows }: { rows: RsvpSummary[] }) {
                 <span className="invite-label mr-1 md:hidden">Atualizado:</span>
                 {formatDate(new Date(row.updatedAt))}
               </p>
+
+              <div className="md:justify-self-end">
+                <RsvpRowActions row={row} />
+              </div>
             </article>
           );
         })}

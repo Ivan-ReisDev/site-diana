@@ -134,7 +134,7 @@ export const giftSuggestions: GiftSuggestion[] = [
     giftId: 8,
     ideias: [
       "Sapatinho macio para os primeiros passos",
-      "Sandália confortável (tamanho 18 ao 22)",
+      "Sandália confortável (tamanho 20 ao 22)",
       "Tênis flexível antiderrapante",
     ],
   },

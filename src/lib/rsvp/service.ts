@@ -1,4 +1,5 @@
-import type { Attendance, Prisma, PrismaClient, Rsvp } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import type { Attendance, PrismaClient, Rsvp } from '@prisma/client';
 import { z } from 'zod';
 
 import { getPrismaClient } from '@/lib/db/prisma';
@@ -129,6 +130,65 @@ function buildRsvpMutation(parsed: RsvpInput, phoneNormalized: string) {
     participants: { adults: parsed.adults, children: parsed.children },
     message: null,
   };
+}
+
+export async function deleteRsvp(
+  id: string,
+  db: PrismaClient = getPrismaClient(),
+): Promise<boolean> {
+  const result = await db.rsvp.deleteMany({
+    where: { id },
+  });
+
+  return result.count > 0;
+}
+
+/** Sinaliza que a confirmação alvo do update não existe (Prisma P2025). */
+export class RsvpNotFoundError extends Error {
+  constructor() {
+    super('Confirmação não encontrada.');
+    this.name = 'RsvpNotFoundError';
+  }
+}
+
+/** Sinaliza que o telefone informado já pertence a outra confirmação (Prisma P2002). */
+export class RsvpPhoneConflictError extends Error {
+  constructor() {
+    super('Já existe uma confirmação com esse telefone.');
+    this.name = 'RsvpPhoneConflictError';
+  }
+}
+
+export async function updateRsvp(
+  id: string,
+  input: unknown,
+  db: PrismaClient = getPrismaClient(),
+): Promise<RsvpSummary> {
+  const parsed = rsvpInputSchema.parse(input);
+  const phoneNormalized = normalizePhone(parsed.phone);
+
+  try {
+    const rsvp = await db.rsvp.update({
+      where: { id },
+      data: {
+        name: parsed.name.trim(),
+        phone: parsed.phone,
+        phoneNormalized,
+        attendance: toAttendanceEnum(parsed.attendance),
+        adults: parsed.adults.length,
+        children: parsed.children.length,
+        participants: { adults: parsed.adults, children: parsed.children },
+      },
+    });
+
+    return serializeRsvp(rsvp);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') throw new RsvpPhoneConflictError();
+      if (error.code === 'P2025') throw new RsvpNotFoundError();
+    }
+    throw error;
+  }
 }
 
 export async function listRsvps(

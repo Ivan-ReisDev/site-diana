@@ -1,8 +1,14 @@
+import { Prisma } from '@prisma/client';
+import { ZodError } from 'zod';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   calculatePresenceStats,
+  deleteRsvp,
+  RsvpNotFoundError,
+  RsvpPhoneConflictError,
   toAttendanceEnum,
+  updateRsvp,
   upsertRsvp,
 } from './service';
 
@@ -157,5 +163,105 @@ describe('upsertRsvp', () => {
     expect(result.adults).toBe(3);
     expect(result.children).toBe(2);
     expect(result.total).toBe(5);
+  });
+})
+
+describe('deleteRsvp', () => {
+  it('retorna true e remove quando o id existe', async () => {
+    const deleteMany = vi.fn().mockResolvedValue({ count: 1 });
+    const prisma = { rsvp: { deleteMany } };
+
+    const result = await deleteRsvp('r1', prisma as never);
+
+    expect(result).toBe(true);
+    expect(deleteMany).toHaveBeenCalledWith({ where: { id: 'r1' } });
+  });
+
+  it('retorna false quando o id não existe', async () => {
+    const deleteMany = vi.fn().mockResolvedValue({ count: 0 });
+    const prisma = { rsvp: { deleteMany } };
+
+    const result = await deleteRsvp('missing', prisma as never);
+
+    expect(result).toBe(false);
+  });
+})
+
+describe('updateRsvp', () => {
+  const validInput = {
+    name: 'Maria Silva',
+    phone: '(21) 99999-0000',
+    attendance: 'sim' as const,
+    adults: [{ name: 'Maria Silva' }],
+    children: [{ name: 'João Silva', age: '4' }],
+  };
+
+  it('atualiza e retorna o RsvpSummary serializado', async () => {
+    const update = vi.fn().mockResolvedValue({
+      id: 'r1',
+      name: 'Maria Silva',
+      phone: '(21) 99999-0000',
+      attendance: 'YES',
+      adults: 1,
+      children: 1,
+      participants: {
+        adults: [{ name: 'Maria Silva' }],
+        children: [{ name: 'João Silva', age: 4 }],
+      },
+      createdAt: new Date('2026-06-29T12:00:00Z'),
+      updatedAt: new Date('2026-06-30T12:00:00Z'),
+    });
+    const prisma = { rsvp: { update } };
+
+    const result = await updateRsvp('r1', validInput, prisma as never);
+
+    expect(update).toHaveBeenCalledOnce();
+    const args = update.mock.calls[0][0];
+    expect(args.where).toEqual({ id: 'r1' });
+    expect(args.data.adults).toBe(1);
+    expect(args.data.children).toBe(1);
+    expect(args.data.phoneNormalized).toBe('21999990000');
+    expect(args.data).not.toHaveProperty('message');
+    expect(args.data).not.toHaveProperty('groupName');
+    expect(result.id).toBe('r1');
+    expect(result.childrenList).toEqual([{ name: 'João Silva', age: 4 }]);
+  });
+
+  it('lança RsvpNotFoundError quando o Prisma retorna P2025', async () => {
+    const update = vi.fn().mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError('not found', {
+        code: 'P2025',
+        clientVersion: 'test',
+      }),
+    );
+    const prisma = { rsvp: { update } };
+
+    await expect(updateRsvp('missing', validInput, prisma as never)).rejects.toBeInstanceOf(
+      RsvpNotFoundError,
+    );
+  });
+
+  it('lança RsvpPhoneConflictError quando o Prisma retorna P2002', async () => {
+    const update = vi.fn().mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError('unique', {
+        code: 'P2002',
+        clientVersion: 'test',
+      }),
+    );
+    const prisma = { rsvp: { update } };
+
+    await expect(updateRsvp('r1', validInput, prisma as never)).rejects.toBeInstanceOf(
+      RsvpPhoneConflictError,
+    );
+  });
+
+  it('lança ZodError quando a entrada é inválida', async () => {
+    const update = vi.fn();
+    const prisma = { rsvp: { update } };
+
+    await expect(
+      updateRsvp('r1', { ...validInput, name: '' }, prisma as never),
+    ).rejects.toBeInstanceOf(ZodError);
+    expect(update).not.toHaveBeenCalled();
   });
 })
